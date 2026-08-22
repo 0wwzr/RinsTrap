@@ -1563,7 +1563,7 @@ namespace RinsTrap
 
                         Frontend.ShowConnectivityDialog(
                             Strings.Dialog_Connectivity_UnableToDownload,
-                            String.Format(Strings.Dialog_Connectivity_UnableToDownloadReason, "[https://bloxstraplabs.com/wiki/help/bloxstrap-cannot-download-roblox/](https://bloxstraplabs.com/wiki/help/bloxstrap-cannot-download-roblox/)"),
+                            Strings.Dialog_Connectivity_UnableToDownloadReason,
                             MessageBoxImage.Error,
                             ex
                         );

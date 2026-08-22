@@ -70,18 +70,6 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die These are the people who&apos;ve supported RinsTrap through Ko-fi. A massive thank you to everyone here!
-        ///Every person here is ranked by their overall pledge. ähnelt.
-        /// </summary>
-        public static string About_Supporters_Description
-        {
-            get
-            {
-                return ResourceManager.GetString("About.Supporters.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The server location could not be queried. You may be joining games too quickly. ähnelt.
         /// </summary>
         public static string ActivityWatcher_LocationQueryFailed
@@ -1538,7 +1526,7 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Examples of custom bootstrappers can be found at {0} ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Examples of custom bootstrappers can be found in the project repository. ähnelt.
         /// </summary>
         public static string CustomTheme_Templates_Blank_MoreExamples
         {
@@ -1560,7 +1548,7 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Find more custom bootstrapper examples at {0} ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Find more custom bootstrapper examples in the project repository. ähnelt.
         /// </summary>
         public static string CustomTheme_Templates_Simple_MoreExamples
         {
@@ -1714,7 +1702,7 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Roblox cannot be downloaded at this time. Please read the following help page for more information: {0} ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Roblox cannot be downloaded at this time. Please try again later, or check your internet connection. ähnelt.
         /// </summary>
         public static string Dialog_Connectivity_UnableToDownloadReason
         {
@@ -3307,7 +3295,7 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Direct3D [exclusive fullscreen]({0}) using Alt+Enter is enabled by default. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Direct3D exclusive fullscreen using Alt+Enter is enabled by default. ähnelt.
         /// </summary>
         public static string Menu_FastFlags_Presets_D3DExclusiveFullscreenInfo
         {
@@ -3588,7 +3576,7 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Roblox will fully close when you leave a game instead of going back to the app. [Will break some things!]({0}) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Roblox will fully close when you leave a game instead of going back to the app. ähnelt.
         /// </summary>
         public static string Menu_Integrations_DesktopApp_Description
         {
@@ -3676,7 +3664,7 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die This feature requires activity tracking to be enabled and the Discord desktop app to be installed and running. [Find out more]({0}). ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die This feature requires activity tracking to be enabled and the Discord desktop app to be installed and running. ähnelt.
         /// </summary>
         public static string Menu_Integrations_RequiresActivityTracking
         {
@@ -3709,7 +3697,7 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The Roblox game you&apos;re playing will be shown on your Discord profile. [Not working?]({0}) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The Roblox game you&apos;re playing will be shown on your Discord profile. ähnelt.
         /// </summary>
         public static string Menu_Integrations_ShowGameActivity_Description
         {
@@ -4127,7 +4115,7 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die It&apos;s anonymous and nothing evil, promise. For insight on what we collect and why, see our [privacy policy]({0}). ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die It&apos;s anonymous and nothing evil, promise. ähnelt.
         /// </summary>
         public static string Menu_RinsTrap_Analytics_Description
         {
@@ -4292,7 +4280,7 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Allows you to use RinsTrap&apos;s range of Roblox icons for your shortcuts. [See how.]({0}) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Allows you to use RinsTrap&apos;s range of Roblox icons for your shortcuts. ähnelt.
         /// </summary>
         public static string Menu_Shortcuts_ExtractIcons_Description
         {

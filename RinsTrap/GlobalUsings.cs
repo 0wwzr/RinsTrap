@@ -17,7 +17,6 @@ global using RinsTrap.Enums;
 global using RinsTrap.Exceptions;
 global using RinsTrap.Extensions;
 global using RinsTrap.Models;
-global using RinsTrap.Models.APIs.Config;
 global using RinsTrap.Models.APIs.GitHub;
 global using RinsTrap.Models.APIs.Roblox;
 global using RinsTrap.Models.Attributes;

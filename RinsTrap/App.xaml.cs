@@ -20,9 +20,7 @@ namespace RinsTrap
 #endif
         public const string ProjectOwner = "RinsTrap";
         public const string ProjectRepository = "0wwzr/RinsTrap";
-        public const string ProjectDownloadLink = "https://bloxstraplabs.com";
-        public const string ProjectHelpLink = "https://bloxstraplabs.com/wiki/help/";
-        public const string ProjectSupportLink = "https://github.com/bloxstraplabs/bloxstrap/issues/new";
+
 
         public const string RobloxPlayerAppName = "RobloxPlayerBeta";
         public const string RobloxStudioAppName = "RobloxStudioBeta";
@@ -148,12 +146,7 @@ namespace RinsTrap
 
         public static string ConstructRinsTrapWebUrl()
         {
-            // dont let user switch web environment if debug mode is not on
-            if (Settings.Prop.WebEnvironment == WebEnvironment.Production || !Settings.Prop.DeveloperMode)
-                return "services.bloxstraplabs.com";
-
-            string? sub = Settings.Prop.WebEnvironment.GetDescription();
-            return $"services-{sub}.bloxstraplabs.com";
+            return "";
         }
 
         public static bool CanSendLogs()
@@ -191,7 +184,7 @@ namespace RinsTrap
 
         public static async void SendStat(string key, string value)
         {
-            if (!Settings.Prop.EnableAnalytics)
+            if (!Settings.Prop.EnableAnalytics || String.IsNullOrEmpty(WebUrl))
                 return;
 
             try
@@ -206,7 +199,7 @@ namespace RinsTrap
 
         public static async void SendLog()
         {
-            if (!Settings.Prop.EnableAnalytics || !CanSendLogs())
+            if (!Settings.Prop.EnableAnalytics || !CanSendLogs() || String.IsNullOrEmpty(WebUrl))
                 return;
 
             try

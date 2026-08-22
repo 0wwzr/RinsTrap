@@ -603,7 +603,7 @@ Sigurado ka bang gusto mo magtuloy?</value>
     <value>Hindi maaring i-install ang RinsTrap dito. Mangyaring pumili ng ibang location, o mapilitang gamitin ang Default location sa pamamagitan ng pagpindot ng reset button.</value>
   </data>
   <data name="Menu.InstallLocation.NotEmpty" xml:space="preserve">
-    <value>Ang iyong piniling folder upang i-install ang bloxstrap ay umiiral na at HINDI walang laman. Ito ay malakas na ni rerecommenda para ma install ang RinsTrap sa kanyang independent na folder.
+    <value>Ang iyong piniling folder upang i-install ang RinsTrap ay umiiral na at HINDI walang laman. Ito ay malakas na ni rerecommenda para ma install ang RinsTrap sa kanyang independent na folder.
 
 Iminumungkahi na palitan ito sa:
 {0}

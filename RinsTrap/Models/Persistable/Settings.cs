@@ -4,7 +4,7 @@ namespace RinsTrap.Models.Persistable
 {
     public class Settings
     {
-        // bloxstrap configuration
+        // bootstrapper configuration
         public BootstrapperStyle BootstrapperStyle { get; set; } = BootstrapperStyle.FluentDialog;
         public BootstrapperIcon BootstrapperIcon { get; set; } = BootstrapperIcon.IconRinsTrap;
         public string BootstrapperTitle { get; set; } = App.ProjectName;

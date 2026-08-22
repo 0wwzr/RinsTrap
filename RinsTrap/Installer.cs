@@ -68,12 +68,10 @@ namespace RinsTrap
                 uninstallKey.SetValueSafe("ModifyPath", $"\"{Paths.Application}\" -settings");
                 uninstallKey.SetValueSafe("QuietUninstallString", $"\"{Paths.Application}\" -uninstall -quiet");
                 uninstallKey.SetValueSafe("UninstallString", $"\"{Paths.Application}\" -uninstall");
-                uninstallKey.SetValueSafe("HelpLink", App.ProjectHelpLink);
-                uninstallKey.SetValueSafe("URLInfoAbout", App.ProjectSupportLink);
-                uninstallKey.SetValueSafe("URLUpdateInfo", App.ProjectDownloadLink);
+                uninstallKey.SetValueSafe("URLUpdateInfo", $"https://github.com/{App.ProjectRepository}");
             }
 
-            // only register player, for the scenario where the user installs bloxstrap, closes it,
+            // only register player, for the scenario where the user installs RinsTrap, closes it,
             // and then launches from the website expecting it to work
             // studio can be implicitly registered when it's first launched manually or if its configuration files are present
             WindowsRegistry.RegisterPlayer();
@@ -438,9 +436,7 @@ namespace RinsTrap
                 uninstallKey.SetValueSafe("DisplayVersion", App.Version);
 
                 uninstallKey.SetValueSafe("Publisher", App.ProjectOwner);
-                uninstallKey.SetValueSafe("HelpLink", App.ProjectHelpLink);
-                uninstallKey.SetValueSafe("URLInfoAbout", App.ProjectSupportLink);
-                uninstallKey.SetValueSafe("URLUpdateInfo", App.ProjectDownloadLink);
+                uninstallKey.SetValueSafe("URLUpdateInfo", $"https://github.com/{App.ProjectRepository}");
             }
 
             // update migrations

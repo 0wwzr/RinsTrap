@@ -4,8 +4,6 @@ namespace RinsTrap.Extensions
 {
     static class CustomThemeTemplateEx
     {
-        const string EXAMPLES_URL = "https://github.com/bloxstraplabs/custom-bootstrapper-examples";
-
         public static string GetFileName(this CustomThemeTemplate template)
         {
             return $"CustomBootstrapperTemplate_{template}.xml";
@@ -19,13 +17,11 @@ namespace RinsTrap.Extensions
             {
                 case CustomThemeTemplate.Blank:
                     {
-                        string moreText = string.Format(Strings.CustomTheme_Templates_Blank_MoreExamples, EXAMPLES_URL);
-                        return contents.Replace("{0}", Strings.CustomTheme_Templates_Blank_UIElements).Replace("{1}", moreText);
+                        return contents.Replace("{0}", Strings.CustomTheme_Templates_Blank_UIElements).Replace("{1}", Strings.CustomTheme_Templates_Blank_MoreExamples);
                     }
                 case CustomThemeTemplate.Simple:
                     {
-                        string moreText = string.Format(Strings.CustomTheme_Templates_Simple_MoreExamples, EXAMPLES_URL);
-                        return contents.Replace("{0}", moreText);
+                        return contents.Replace("{0}", Strings.CustomTheme_Templates_Simple_MoreExamples);
                     }
                 default:
                     Debug.Assert(false);

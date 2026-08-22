@@ -50,7 +50,7 @@ namespace RinsTrap.Models.Entities
 
         public DateTime? TimeLeft { get; set; }
 
-        // everything below here is optional strictly for bloxstraprpc, discord rich presence, or game history
+        // everything below here is optional for rich presence, or game history
 
         /// <summary>
         /// This is intended only for other people to use, i.e. context menu invite link, rich presence joining
