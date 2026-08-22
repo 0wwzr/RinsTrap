@@ -38,6 +38,9 @@ namespace RinsTrap.Models.Persistable
         public bool KillRobloxBackgroundProcesses { get; set; } = false;
         public bool StreamerMode { get; set; } = false;
 
+        // Multi-instance
+        public bool AllowMultipleInstances { get; set; } = false;
+
         // OBS integration
         public bool UseObsIntegration { get; set; } = false;
         public string ObsPassword { get; set; } = "";

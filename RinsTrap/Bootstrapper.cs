@@ -73,7 +73,9 @@ namespace RinsTrap
 
         public bool IsStudioLaunch => _launchMode != LaunchMode.Player;
 
-        public string MutexName => $"{MutexNamePrefix}-{_launchMode}";
+        public string MutexName => App.Settings.Prop.AllowMultipleInstances
+            ? $"{MutexNamePrefix}-{_launchMode}-{Environment.ProcessId}"
+            : $"{MutexNamePrefix}-{_launchMode}";
         public string BackgroundUpdaterMutexName => $"RinsTrap-BackgroundUpdater-{_launchMode}";
 
         public string MutexNamePrefix { get; set; } = "RinsTrap-Bootstrapper";

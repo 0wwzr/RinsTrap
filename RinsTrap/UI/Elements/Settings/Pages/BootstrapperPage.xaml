@@ -36,6 +36,12 @@
         </controls:OptionControl>
 
         <controls:OptionControl 
+            Header="Allow Multiple Instances"
+            Description="Run multiple Roblox instances with different accounts simultaneously">
+            <ui:ToggleSwitch IsChecked="{Binding AllowMultipleInstances, Mode=TwoWay}" />
+        </controls:OptionControl>
+
+        <controls:OptionControl 
             Header="{x:Static resources:Strings.Menu_Behaviour_ForceRobloxReinstall_Title}"
             Description="{x:Static resources:Strings.Menu_Behaviour_ForceRobloxReinstall_Description}">
             <controls:OptionControl.Style>

@@ -20,6 +20,12 @@ namespace RinsTrap.UI.ViewModels.Settings
             set => App.Settings.Prop.StreamerMode = value;
         }
 
+        public bool AllowMultipleInstances
+        {
+            get => App.Settings.Prop.AllowMultipleInstances;
+            set => App.Settings.Prop.AllowMultipleInstances = value;
+        }
+
         public bool IsRobloxInstallationMissing => !App.IsPlayerInstalled && !App.IsStudioInstalled;
 
         public bool ForceRobloxReinstallation

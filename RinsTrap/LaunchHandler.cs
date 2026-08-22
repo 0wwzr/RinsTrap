@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Windows;
 
 using Windows.Win32;
@@ -220,18 +221,29 @@ namespace RinsTrap
                 App.Terminate(ErrorCode.ERROR_FILE_NOT_FOUND);
             }
 
+            // Multi-instance: kill existing Roblox processes to allow new instance
+            if (App.Settings.Prop.AllowMultipleInstances && launchMode != LaunchMode.Studio)
+            {
+                App.Logger.WriteLine(LOG_IDENT, "Multi-instance mode enabled, killing existing Roblox processes");
+                KillExistingRobloxProcesses();
+            }
+
             if (App.Settings.Prop.ConfirmLaunches && launchMode != LaunchMode.Studio && Mutex.TryOpenExisting("ROBLOX_singletonMutex", out var _))
             {
                 // this currently doesn't work very well since it relies on checking the existence of the singleton mutex
                 // which often hangs around for a few seconds after the window closes
                 // it would be better to have this rely on the activity tracker when we implement IPC in the planned refactoring
 
-                var result = Frontend.ShowMessageBox(Strings.Bootstrapper_ConfirmLaunch, MessageBoxImage.Warning, MessageBoxButton.YesNo);
-
-                if (result != MessageBoxResult.Yes)
+                // Skip confirmation in multi-instance mode
+                if (!App.Settings.Prop.AllowMultipleInstances)
                 {
-                    App.Terminate();
-                    return;
+                    var result = Frontend.ShowMessageBox(Strings.Bootstrapper_ConfirmLaunch, MessageBoxImage.Warning, MessageBoxButton.YesNo);
+
+                    if (result != MessageBoxResult.Yes)
+                    {
+                        App.Terminate();
+                        return;
+                    }
                 }
             }
 
@@ -266,6 +278,32 @@ namespace RinsTrap
             dialog?.ShowBootstrapper();
 
             App.Logger.WriteLine(LOG_IDENT, "Exiting");
+        }
+
+        private static void KillExistingRobloxProcesses()
+        {
+            const string LOG_IDENT = "LaunchHandler::KillExistingRobloxProcesses";
+
+            try
+            {
+                foreach (var process in Process.GetProcessesByName("RobloxPlayerBeta"))
+                {
+                    App.Logger.WriteLine(LOG_IDENT, $"Killing Roblox process (PID {process.Id})");
+                    try
+                    {
+                        process.Kill();
+                        process.WaitForExit(5000);
+                    }
+                    catch (Exception ex)
+                    {
+                        App.Logger.WriteException(LOG_IDENT, ex);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException(LOG_IDENT, ex);
+            }
         }
 
         public static void LaunchWatcher()
