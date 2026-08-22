@@ -1488,10 +1488,4 @@ Defaulting to {1}.</value>
   <data name="Skybox.Errors.MissingFaces" xml:space="preserve">
     <value>Could not find images for the following skybox faces: {faces}</value>
   </data>
-  <data name="Menu.Appearance.SkyboxColor.Toggle" xml:space="preserve">
-    <value>Skybox Color Preset</value>
-  </data>
-  <data name="Menu.Appearance.SkyboxColor.Description" xml:space="preserve">
-    <value>Pick a preset sky color to generate a gradient skybox. Applied on the next launch.</value>
-  </data>
 </root>

@@ -110,6 +110,8 @@ namespace RinsTrap.UI.Elements.Bootstrapper
             Title = App.Settings.Prop.BootstrapperTitle;
             Icon = App.Settings.Prop.BootstrapperIcon.GetIcon().GetImageSource();
 
+            bool hasCustomImage = !String.IsNullOrEmpty(App.Settings.Prop.BootstrapperImagePath) && File.Exists(App.Settings.Prop.BootstrapperImagePath);
+
             if (App.Settings.Prop.Theme.GetFinal() == Theme.Light)
             {
                 // Matching the roblox website light theme as close as possible.
@@ -118,7 +120,14 @@ namespace RinsTrap.UI.Elements.Bootstrapper
                 _viewModel.Foreground = new SolidColorBrush(Color.FromRgb(57, 59, 61));
                 _viewModel.IconColor = new SolidColorBrush(Color.FromRgb(57, 59, 61));
                 _viewModel.ProgressBarBackground = new SolidColorBrush(Color.FromRgb(189, 190, 190));
-                _viewModel.ByfronLogoLocation = new BitmapImage(new Uri("pack://application:,,,/Resources/BootstrapperStyles/ByfronDialog/ByfronLogoLight.jpg"));
+                _viewModel.ByfronLogoLocation = hasCustomImage
+                    ? new BitmapImage(new Uri(App.Settings.Prop.BootstrapperImagePath))
+                    : new BitmapImage(new Uri("pack://application:,,,/Resources/BootstrapperStyles/ByfronDialog/ByfronLogoLight.jpg"));
+            }
+            else
+            {
+                if (hasCustomImage)
+                    _viewModel.ByfronLogoLocation = new BitmapImage(new Uri(App.Settings.Prop.BootstrapperImagePath));
             }
 
             InitializeComponent();

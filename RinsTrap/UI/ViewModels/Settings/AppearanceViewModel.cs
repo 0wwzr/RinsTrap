@@ -28,30 +28,13 @@ namespace RinsTrap.UI.ViewModels.Settings
         public ICommand ExportCustomThemeCommand => new RelayCommand(ExportCustomTheme);
 
         public ICommand ChooseSkyboxCommand => new RelayCommand(ChooseSkybox);
+        public ICommand ChooseSkyboxImageCommand => new RelayCommand(ChooseSkyboxImage);
         public ICommand RemoveSkyboxCommand => new RelayCommand(RemoveSkybox);
 
+        public ICommand ChooseBootstrapperImageCommand => new RelayCommand(ChooseBootstrapperImage);
+        public ICommand RemoveBootstrapperImageCommand => new RelayCommand(RemoveBootstrapperImage);
+
         public SkyboxTask SkyboxTask { get; } = new();
-
-        public SkyboxPresetTask SkyboxPresetTask { get; } = new();
-
-        public IEnumerable<Enums.SkyboxColor> SkyboxColors => SkyboxPresetTask.Selections;
-
-        public Enums.SkyboxColor SelectedSkyboxColor
-        {
-            get => SkyboxPresetTask.NewState;
-            set
-            {
-                SkyboxPresetTask.NewState = value;
-
-                if (value != Enums.SkyboxColor.None && !String.IsNullOrEmpty(SkyboxTask.NewState))
-                {
-                    SkyboxTask.NewState = "";
-                    OnPropertyChanged(nameof(SelectedSkyboxFolder));
-                    OnPropertyChanged(nameof(ChooseSkyboxVisibility));
-                    OnPropertyChanged(nameof(RemoveSkyboxVisibility));
-                }
-            }
-        }
 
         public string SelectedSkyboxFolder => String.IsNullOrEmpty(SkyboxTask.NewState) ? Strings.Menu_Appearance_Skybox_Empty : SkyboxTask.NewState;
 
@@ -76,13 +59,37 @@ namespace RinsTrap.UI.ViewModels.Settings
 
             SkyboxTask.NewState = dialog.SelectedPath;
 
-            if (SkyboxPresetTask.NewState != Enums.SkyboxColor.None)
-                SkyboxPresetTask.NewState = Enums.SkyboxColor.None;
+            OnPropertyChanged(nameof(SelectedSkyboxFolder));
+            OnPropertyChanged(nameof(ChooseSkyboxVisibility));
+            OnPropertyChanged(nameof(RemoveSkyboxVisibility));
+        }
+
+        private void ChooseSkyboxImage()
+        {
+            var dialog = new OpenFileDialog
+            {
+                Filter = "Image files|*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.webp|All files|*.*"
+            };
+
+            if (dialog.ShowDialog() != true)
+                return;
+
+            string tempDir = Path.Combine(Paths.Temp, "SkyboxImage");
+            Directory.CreateDirectory(tempDir);
+
+            string[] faceNames = { "ft", "bk", "lf", "rt", "up", "dn" };
+
+            foreach (string face in faceNames)
+            {
+                string dest = Path.Combine(tempDir, $"sky512_{face}{Path.GetExtension(dialog.FileName)}");
+                File.Copy(dialog.FileName, dest, true);
+            }
+
+            SkyboxTask.NewState = tempDir;
 
             OnPropertyChanged(nameof(SelectedSkyboxFolder));
             OnPropertyChanged(nameof(ChooseSkyboxVisibility));
             OnPropertyChanged(nameof(RemoveSkyboxVisibility));
-            OnPropertyChanged(nameof(SelectedSkyboxColor));
         }
 
         private void RemoveSkybox()
@@ -92,6 +99,51 @@ namespace RinsTrap.UI.ViewModels.Settings
             OnPropertyChanged(nameof(SelectedSkyboxFolder));
             OnPropertyChanged(nameof(ChooseSkyboxVisibility));
             OnPropertyChanged(nameof(RemoveSkyboxVisibility));
+        }
+
+        public string BootstrapperImagePath
+        {
+            get => App.Settings.Prop.BootstrapperImagePath;
+            set
+            {
+                App.Settings.Prop.BootstrapperImagePath = value;
+                OnPropertyChanged(nameof(BootstrapperImagePath));
+                OnPropertyChanged(nameof(BootstrapperImageVisibility));
+                OnPropertyChanged(nameof(ChooseBootstrapperImageVisibility));
+            }
+        }
+
+        public Visibility BootstrapperImageVisibility => String.IsNullOrEmpty(App.Settings.Prop.BootstrapperImagePath) ? Visibility.Collapsed : Visibility.Visible;
+
+        public Visibility ChooseBootstrapperImageVisibility => String.IsNullOrEmpty(App.Settings.Prop.BootstrapperImagePath) ? Visibility.Visible : Visibility.Collapsed;
+
+        private void ChooseBootstrapperImage()
+        {
+            var dialog = new OpenFileDialog
+            {
+                Filter = "Image files|*.png;*.jpg;*.jpeg|All files|*.*"
+            };
+
+            if (dialog.ShowDialog() != true)
+                return;
+
+            string destDir = Path.Combine(Paths.Base, "BootstrapperImage");
+            Directory.CreateDirectory(destDir);
+
+            string ext = Path.GetExtension(dialog.FileName);
+            string dest = Path.Combine(destDir, $"custom_logo{ext}");
+            File.Copy(dialog.FileName, dest, true);
+
+            BootstrapperImagePath = dest;
+        }
+
+        private void RemoveBootstrapperImage()
+        {
+            string dir = Path.Combine(Paths.Base, "BootstrapperImage");
+            if (Directory.Exists(dir))
+                Directory.Delete(dir, true);
+
+            BootstrapperImagePath = "";
         }
 
         private void PreviewBootstrapper()

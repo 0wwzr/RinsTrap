@@ -1,8 +1,6 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 
-using RinsTrap.Enums;
-
 namespace RinsTrap.Utility
 {
     public static class SkyboxConverter
@@ -37,74 +35,6 @@ namespace RinsTrap.Utility
             using var resized = new Bitmap(bitmap, new Size(FaceSize, FaceSize));
 
             ConvertBitmap(resized, outputPath);
-        }
-
-        public static void GeneratePreset(SkyboxColor color, string face, string outputPath)
-        {
-            const string LOG_IDENT = "SkyboxConverter::GeneratePreset";
-
-            App.Logger.WriteLine(LOG_IDENT, $"Generating preset skybox face '{face}' ({color}) to '{outputPath}'");
-
-            (Color top, Color horizon, Color ground) = GetPresetColors(color);
-
-            using var gradient = new Bitmap(FaceSize, FaceSize, PixelFormat.Format32bppArgb);
-
-            for (int y = 0; y < FaceSize; y++)
-            {
-                Color rowColor;
-
-                if (face == "up")
-                {
-                    // slightly darker at the very top of the sky
-                    rowColor = Lerp(top, horizon, 0.08f + (y / (float)FaceSize) * 0.12f);
-                }
-                else if (face == "dn")
-                {
-                    rowColor = ground;
-                }
-                else
-                {
-                    // vertical gradient from zenith at the top to horizon at the bottom
-                    float t = y / (float)(FaceSize - 1);
-                    rowColor = Lerp(top, horizon, t);
-                }
-
-                for (int x = 0; x < FaceSize; x++)
-                    gradient.SetPixel(x, y, rowColor);
-            }
-
-            ConvertBitmap(gradient, outputPath);
-        }
-
-        private static (Color, Color, Color) GetPresetColors(SkyboxColor color)
-        {
-            return color switch
-            {
-                SkyboxColor.Day       => (Color.FromArgb(0x1E, 0x90, 0xFF), Color.FromArgb(0x87, 0xCE, 0xEB), Color.FromArgb(0x22, 0x8B, 0x22)),
-                SkyboxColor.Sunset    => (Color.FromArgb(0xFF, 0x45, 0x00), Color.FromArgb(0xFF, 0xDA, 0xB9), Color.FromArgb(0x8B, 0x45, 0x13)),
-                SkyboxColor.Night     => (Color.FromArgb(0x0B, 0x10, 0x26), Color.FromArgb(0x1C, 0x2A, 0x4A), Color.FromArgb(0x10, 0x14, 0x18)),
-                SkyboxColor.Dawn      => (Color.FromArgb(0xFF, 0x7F, 0x50), Color.FromArgb(0xFF, 0xE4, 0xE1), Color.FromArgb(0x6B, 0x42, 0x26)),
-                SkyboxColor.Dusk      => (Color.FromArgb(0x2E, 0x08, 0x54), Color.FromArgb(0xFF, 0x8C, 0x69), Color.FromArgb(0x3B, 0x2F, 0x2F)),
-                SkyboxColor.Emerald   => (Color.FromArgb(0x00, 0xA8, 0x6B), Color.FromArgb(0xB2, 0xFF, 0xE0), Color.FromArgb(0x2E, 0x8B, 0x57)),
-                SkyboxColor.Ocean     => (Color.FromArgb(0x00, 0x69, 0x94), Color.FromArgb(0x7E, 0xC8, 0xE3), Color.FromArgb(0x1E, 0x4D, 0x5B)),
-                SkyboxColor.Lavender  => (Color.FromArgb(0x96, 0x7B, 0xB6), Color.FromArgb(0xE6, 0xE6, 0xFA), Color.FromArgb(0x6A, 0x5A, 0xCD)),
-                SkyboxColor.Candy     => (Color.FromArgb(0xFF, 0x69, 0xB4), Color.FromArgb(0xFF, 0xF0, 0xF5), Color.FromArgb(0xDB, 0x70, 0x93)),
-                SkyboxColor.Golden    => (Color.FromArgb(0xDA, 0xA5, 0x20), Color.FromArgb(0xFF, 0xF8, 0xDC), Color.FromArgb(0xB8, 0x86, 0x0B)),
-                SkyboxColor.Crimson   => (Color.FromArgb(0xDC, 0x14, 0x3C), Color.FromArgb(0xFF, 0xC0, 0xCB), Color.FromArgb(0x8B, 0x00, 0x00)),
-                SkyboxColor.Midnight  => (Color.FromArgb(0x00, 0x00, 0x00), Color.FromArgb(0x19, 0x19, 0x70), Color.FromArgb(0x00, 0x00, 0x00)),
-                _                     => (Color.FromArgb(0x1E, 0x90, 0xFF), Color.FromArgb(0x87, 0xCE, 0xEB), Color.FromArgb(0x22, 0x8B, 0x22)),
-            };
-        }
-
-        private static Color Lerp(Color a, Color b, float t)
-        {
-            t = Math.Clamp(t, 0f, 1f);
-
-            return Color.FromArgb(
-                (int)Math.Round(a.R + (b.R - a.R) * t),
-                (int)Math.Round(a.G + (b.G - a.G) * t),
-                (int)Math.Round(a.B + (b.B - a.B) * t)
-            );
         }
 
         private static void ConvertBitmap(Bitmap bitmap, string outputPath)
