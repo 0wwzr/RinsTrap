@@ -40,6 +40,8 @@ namespace RinsTrap.Models.Persistable
 
         // Multi-instance
         public bool AllowMultipleInstances { get; set; } = false;
+        public ObservableCollection<MultiInstanceAccount> MultiInstanceAccounts { get; set; } = new();
+        public bool ShowInstanceMonitor { get; set; } = true;
 
         // OBS integration
         public bool UseObsIntegration { get; set; } = false;

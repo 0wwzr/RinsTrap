@@ -134,6 +134,19 @@ namespace RinsTrap
             }
         }
 
+        public static bool IsProcessRunning(int processId)
+        {
+            try
+            {
+                var process = Process.GetProcessById(processId);
+                return !process.HasExited;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static bool DoesMutexExist(string name)
         {
             try
