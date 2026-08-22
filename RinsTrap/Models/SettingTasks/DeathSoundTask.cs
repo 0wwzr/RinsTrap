@@ -3,9 +3,6 @@ using RinsTrap.Utility;
 
 namespace RinsTrap.Models.SettingTasks
 {
-    /// <summary>
-    /// Applies a user-chosen audio file as the death sound.
-    /// </summary>
     public class DeathSoundTask : StringBaseTask
     {
         public const string TargetRelativePath = @"content\sounds\ouch.ogg";
@@ -13,6 +10,11 @@ namespace RinsTrap.Models.SettingTasks
         public static string Target => Path.Combine(Paths.Modifications, TargetRelativePath);
 
         public const int MaxDurationSeconds = 30;
+
+        private static readonly HashSet<string> SupportedExtensions = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ".ogg", ".mp3", ".wav", ".flac", ".wma", ".aac", ".m4a", ".aiff"
+        };
 
         public DeathSoundTask() : base("ModPreset", "DeathSound")
         {
@@ -27,9 +29,32 @@ namespace RinsTrap.Models.SettingTasks
                 if (String.Compare(NewState, Target, StringComparison.InvariantCultureIgnoreCase) != 0 && File.Exists(NewState))
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(Target)!);
-
                     Filesystem.AssertReadOnly(Target);
-                    File.Copy(NewState, Target, true);
+
+                    string ext = Path.GetExtension(NewState).ToLowerInvariant();
+
+                    if (ext == ".ogg")
+                    {
+                        File.Copy(NewState, Target, true);
+                    }
+                    else
+                    {
+                        string tempWav = Path.Combine(Paths.Temp, "death_sound_convert.wav");
+
+                        using (var reader = new NAudio.Wave.AudioFileReader(NewState))
+                        {
+                            int channels = Math.Min(reader.WaveFormat.Channels, 2);
+                            var outFormat = new NAudio.Wave.WaveFormat(44100, 16, channels);
+                            using var resampler = new NAudio.Wave.MediaFoundationResampler(reader, outFormat) { ResamplerQuality = 60 };
+
+                            NAudio.Wave.WaveFileWriter.CreateWaveFile(tempWav, resampler);
+                        }
+
+                        AudioConverter.ConvertToOgg(tempWav, Target);
+
+                        if (File.Exists(tempWav))
+                            File.Delete(tempWav);
+                    }
                 }
             }
             else if (File.Exists(Target))
@@ -41,7 +66,31 @@ namespace RinsTrap.Models.SettingTasks
             OriginalState = NewState;
         }
 
-        public static double GetOggDurationSeconds(string filePath)
+        public static bool IsSupportedAudioFile(string filePath)
+        {
+            string ext = Path.GetExtension(filePath);
+            return SupportedExtensions.Contains(ext);
+        }
+
+        public static double GetAudioDurationSeconds(string filePath)
+        {
+            try
+            {
+                string ext = Path.GetExtension(filePath).ToLowerInvariant();
+
+                if (ext == ".ogg")
+                    return GetOggDurationSeconds(filePath);
+
+                using var reader = new NAudio.Wave.AudioFileReader(filePath);
+                return reader.TotalTime.TotalSeconds;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+        private static double GetOggDurationSeconds(string filePath)
         {
             try
             {

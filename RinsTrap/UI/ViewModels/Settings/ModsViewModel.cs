@@ -75,8 +75,6 @@ namespace RinsTrap.UI.ViewModels.Settings
 
         public ICommand ManageDeathSoundCommand => new RelayCommand(ManageDeathSound);
 
-        private static readonly string[] AudioExtensions = { ".ogg", ".mp3", ".wav" };
-
         private static bool HasClientStructure(string path) =>
             Directory.Exists(Path.Combine(path, "content")) || Directory.Exists(Path.Combine(path, "ExtraContent"));
 
@@ -134,21 +132,19 @@ namespace RinsTrap.UI.ViewModels.Settings
             {
                 var dialog = new OpenFileDialog
                 {
-                    Filter = $"{Strings.Menu_AudioFiles}|*.ogg"
+                    Filter = $"{Strings.Menu_AudioFiles}|*.ogg;*.mp3;*.wav;*.flac;*.wma;*.aac;*.m4a;*.aiff|All files|*.*"
                 };
 
                 if (dialog.ShowDialog() != true)
                     return;
 
-                string ext = Path.GetExtension(dialog.FileName).ToLowerInvariant();
-
-                if (ext != ".ogg")
+                if (!DeathSoundTask.IsSupportedAudioFile(dialog.FileName))
                 {
                     Frontend.ShowMessageBox(Strings.Menu_Mods_Misc_CustomDeathSound_Invalid, MessageBoxImage.Error);
                     return;
                 }
 
-                double duration = DeathSoundTask.GetOggDurationSeconds(dialog.FileName);
+                double duration = DeathSoundTask.GetAudioDurationSeconds(dialog.FileName);
 
                 if (duration < 0)
                 {

@@ -684,7 +684,7 @@ Selecting 'No' will ignore this warning and continue installation.</value>
     <value>Custom death sound</value>
   </data>
   <data name="Menu.Mods.Misc.CustomDeathSound.Description" xml:space="preserve">
-    <value>Pick any audio file from your computer to use as your death sound. Applied on the next launch.</value>
+    <value>Pick any audio file (OGG, MP3, WAV, FLAC, etc.) to use as your death sound. Non-OGG files are automatically converted. Maximum 30 seconds.</value>
   </data>
   <data name="Menu.Mods.Misc.CustomDeathSound.Choose" xml:space="preserve">
     <value>Choose audio...</value>
@@ -693,7 +693,7 @@ Selecting 'No' will ignore this warning and continue installation.</value>
     <value>Remove applied audio</value>
   </data>
   <data name="Menu.Mods.Misc.CustomDeathSound.Invalid" xml:space="preserve">
-    <value>The file you have chosen is not a valid OGG audio file. Please pick an OGG file.</value>
+    <value>The file you have chosen is not a supported audio file. Please pick an OGG, MP3, WAV, FLAC, WMA, AAC, M4A or AIFF file.</value>
   </data>
   <data name="Menu.Mods.Misc.CustomDeathSound.TooLong" xml:space="preserve">
     <value>The audio file is too long. Maximum duration is 30 seconds.</value>

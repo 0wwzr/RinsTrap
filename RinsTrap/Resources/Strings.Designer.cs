@@ -3840,7 +3840,7 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Pick any audio file from your computer to use as your death sound. Applied on the next launch. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Pick any audio file (OGG, MP3, WAV, FLAC, etc.) to use as your death sound. Non-OGG files are automatically converted. Maximum 30 seconds. ähnelt.
         /// </summary>
         public static string Menu_Mods_Misc_CustomDeathSound_Description
         {
@@ -3851,7 +3851,7 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The file you have chosen is not a valid OGG audio file. Please pick an OGG file. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The file you have chosen is not a supported audio file. Please pick an OGG, MP3, WAV, FLAC, WMA, AAC, M4A or AIFF file. ähnelt.
         /// </summary>
         public static string Menu_Mods_Misc_CustomDeathSound_Invalid
         {
