@@ -10,6 +10,8 @@ namespace RinsTrap.Models.Persistable
         public string BootstrapperTitle { get; set; } = App.ProjectName;
         public string BootstrapperIconCustomLocation { get; set; } = "";
         public string BootstrapperImagePath { get; set; } = "";
+        public string CustomCursorArrowPath { get; set; } = "";
+        public string CustomCursorArrowFarPath { get; set; } = "";
         public Theme Theme { get; set; } = Theme.Default;
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool DeveloperMode { get; set; } = false;
@@ -34,6 +36,7 @@ namespace RinsTrap.Models.Persistable
         public bool ShowGamePageButton { get; set; } = true;
         public bool ShowPlaytimeOnRichPresence { get; set; } = true;
         public bool KillRobloxBackgroundProcesses { get; set; } = false;
+        public bool StreamerMode { get; set; } = false;
         public ObservableCollection<CustomIntegration> CustomIntegrations { get; set; } = new();
 
         // mod preset configuration

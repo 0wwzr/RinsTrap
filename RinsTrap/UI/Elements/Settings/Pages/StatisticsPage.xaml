@@ -205,7 +205,6 @@
             Description="{x:Static resources:Strings.Menu_Statistics_Screenshots_Description}">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <ui:Button Content="{x:Static resources:Strings.Menu_Statistics_OpenScreenshotsFolder}" Icon="Folder24" Command="{Binding OpenScreenshotsFolderCommand}" />
-                <ui:Button Content="{x:Static resources:Strings.Menu_Statistics_Reset}" Appearance="Danger" Icon="Delete24" Margin="8,0,0,0" Command="{Binding ResetStatisticsCommand}" />
             </StackPanel>
         </controls:OptionControl>
     </StackPanel>

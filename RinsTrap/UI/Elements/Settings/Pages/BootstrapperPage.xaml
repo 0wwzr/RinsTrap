@@ -30,6 +30,12 @@
         </controls:OptionControl>
 
         <controls:OptionControl 
+            Header="Streamer Mode"
+            Description="Hide sensitive information like account names and game details when streaming or recording">
+            <ui:ToggleSwitch IsChecked="{Binding StreamerMode, Mode=TwoWay}" />
+        </controls:OptionControl>
+
+        <controls:OptionControl 
             Header="{x:Static resources:Strings.Menu_Behaviour_ForceRobloxReinstall_Title}"
             Description="{x:Static resources:Strings.Menu_Behaviour_ForceRobloxReinstall_Description}">
             <controls:OptionControl.Style>

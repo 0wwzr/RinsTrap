@@ -14,6 +14,12 @@ namespace RinsTrap.UI.ViewModels.Settings
             set => App.Settings.Prop.BackgroundUpdatesEnabled = value;
         }
 
+        public bool StreamerMode
+        {
+            get => App.Settings.Prop.StreamerMode;
+            set => App.Settings.Prop.StreamerMode = value;
+        }
+
         public bool IsRobloxInstallationMissing => !App.IsPlayerInstalled && !App.IsStudioInstalled;
 
         public bool ForceRobloxReinstallation

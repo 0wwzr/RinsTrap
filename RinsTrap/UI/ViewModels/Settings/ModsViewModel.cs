@@ -215,6 +215,74 @@ namespace RinsTrap.UI.ViewModels.Settings
 
         public FontModPresetTask TextFontTask { get; } = new();
 
+        public ICommand ChooseCustomCursorCommand => new RelayCommand(ChooseCustomCursor);
+        public ICommand RemoveCustomCursorCommand => new RelayCommand(RemoveCustomCursor);
+
+        public string CustomCursorArrowPath
+        {
+            get => App.Settings.Prop.CustomCursorArrowPath;
+            set
+            {
+                App.Settings.Prop.CustomCursorArrowPath = value;
+                OnPropertyChanged(nameof(CustomCursorArrowPath));
+                OnPropertyChanged(nameof(CustomCursorVisibility));
+                OnPropertyChanged(nameof(ChooseCustomCursorVisibility));
+            }
+        }
+
+        public Visibility CustomCursorVisibility => String.IsNullOrEmpty(App.Settings.Prop.CustomCursorArrowPath) ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility ChooseCustomCursorVisibility => String.IsNullOrEmpty(App.Settings.Prop.CustomCursorArrowPath) ? Visibility.Visible : Visibility.Collapsed;
+
+        private void ChooseCustomCursor()
+        {
+            var dialog = new OpenFileDialog
+            {
+                Filter = "Image files|*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.webp"
+            };
+
+            if (dialog.ShowDialog() != true)
+                return;
+
+            string destDir = Path.Combine(Paths.Base, "CustomCursor");
+            Directory.CreateDirectory(destDir);
+
+            string ext = Path.GetExtension(dialog.FileName);
+            string arrowDest = Path.Combine(destDir, $"ArrowCursor{ext}");
+            string arrowFarDest = Path.Combine(destDir, $"ArrowFarCursor{ext}");
+
+            File.Copy(dialog.FileName, arrowDest, true);
+
+            string? dir = Path.GetDirectoryName(dialog.FileName);
+            if (dir != null)
+            {
+                string farCursor = Path.Combine(dir, "ArrowFarCursor" + ext);
+                if (File.Exists(farCursor))
+                    File.Copy(farCursor, arrowFarDest, true);
+                else
+                    File.Copy(dialog.FileName, arrowFarDest, true);
+            }
+            else
+            {
+                File.Copy(dialog.FileName, arrowFarDest, true);
+            }
+
+            CustomCursorArrowPath = arrowDest;
+            App.Settings.Prop.CustomCursorArrowFarPath = arrowFarDest;
+
+            if (CursorTypeTask.NewState != Enums.CursorType.Custom)
+                CursorTypeTask.NewState = Enums.CursorType.Custom;
+        }
+
+        private void RemoveCustomCursor()
+        {
+            string dir = Path.Combine(Paths.Base, "CustomCursor");
+            if (Directory.Exists(dir))
+                Directory.Delete(dir, true);
+
+            CustomCursorArrowPath = "";
+            App.Settings.Prop.CustomCursorArrowFarPath = "";
+        }
+
         private void OpenCompatSettings()
         {
             string path = new RobloxPlayerData().ExecutablePath;

@@ -46,13 +46,20 @@
         <controls:OptionControl 
             Header="{x:Static resources:Strings.Menu_Mods_Presets_MouseCursor_Title}" 
             Description="{x:Static resources:Strings.Menu_Mods_Presets_MouseCursor_Description}">
-            <ComboBox Margin="5,0,0,0" Padding="10,5,10,5" Width="200" ItemsSource="{Binding CursorTypeTask.Selections, Mode=OneTime}" Text="{Binding CursorTypeTask.NewState, Mode=TwoWay}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Path=., Converter={StaticResource EnumNameConverter}}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+            <StackPanel>
+                <ComboBox Margin="0,0,0,8" Padding="10,5,10,5" Width="200" ItemsSource="{Binding CursorTypeTask.Selections, Mode=OneTime}" Text="{Binding CursorTypeTask.NewState, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource EnumNameConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <StackPanel Visibility="{Binding CustomCursorVisibility, Mode=OneWay}">
+                    <TextBlock Text="{Binding CustomCursorArrowPath}" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" Margin="0,0,0,4" />
+                    <ui:Button Icon="Delete24" Content="Remove Custom Cursor" Appearance="Danger" Command="{Binding RemoveCustomCursorCommand}" />
+                </StackPanel>
+                <ui:Button Visibility="{Binding ChooseCustomCursorVisibility, Mode=OneWay}" Icon="Image24" Content="Upload Custom Cursor" Command="{Binding ChooseCustomCursorCommand}" />
+            </StackPanel>
         </controls:OptionControl>
 
         <controls:OptionControl 
