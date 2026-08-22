@@ -23,6 +23,83 @@ namespace RinsTrap.UI.ViewModels.Settings
         }
 
         public ICommand ViewChangelogCommand => new RelayCommand(ViewChangelog);
+        public ICommand CheckForUpdatesCommand => new AsyncRelayCommand(CheckForUpdatesAsync);
+
+        private string _updateStatus = "";
+        public string UpdateStatus
+        {
+            get => _updateStatus;
+            set
+            {
+                _updateStatus = value;
+                OnPropertyChanged(nameof(UpdateStatus));
+                OnPropertyChanged(nameof(UpdateStatusVisibility));
+            }
+        }
+
+        public Visibility UpdateStatusVisibility => String.IsNullOrEmpty(UpdateStatus) ? Visibility.Collapsed : Visibility.Visible;
+
+        private bool _isCheckingForUpdates;
+        public bool IsCheckingForUpdates
+        {
+            get => _isCheckingForUpdates;
+            set
+            {
+                _isCheckingForUpdates = value;
+                OnPropertyChanged(nameof(IsCheckingForUpdates));
+            }
+        }
+
+        private async Task CheckForUpdatesAsync()
+        {
+            if (IsCheckingForUpdates)
+                return;
+
+            IsCheckingForUpdates = true;
+            UpdateStatus = "Checking for updates...";
+
+            try
+            {
+                var release = await UpdateService.CheckForUpdateAsync();
+
+                if (release is null)
+                {
+                    UpdateStatus = "You're up to date!";
+                    return;
+                }
+
+                var result = MessageBox.Show(
+                    $"Update {release.TagName} is available.\n\nDo you want to download and install it now?",
+                    "Update Available",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Information);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    UpdateStatus = "Downloading update...";
+                    bool success = await UpdateService.DownloadAndApplyUpdateAsync(release);
+
+                    if (!success)
+                    {
+                        UpdateStatus = "Update failed. Please try again later.";
+                    }
+                }
+                else
+                {
+                    UpdateStatus = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                UpdateStatus = "Failed to check for updates.";
+                App.Logger.WriteLine("RinsTrapViewModel", "Update check failed");
+                App.Logger.WriteException("RinsTrapViewModel", ex);
+            }
+            finally
+            {
+                IsCheckingForUpdates = false;
+            }
+        }
 
         private void ViewChangelog()
         {
