@@ -30,6 +30,10 @@ namespace RinsTrap.Enums
 
         [EnumSort(Order = 7)]
         [EnumName(StaticName = "Red")]
-        Red = 6
+        Red = 6,
+
+        [EnumSort(Order = 8)]
+        [EnumName(StaticName = "Custom")]
+        Custom = 7
     }
 }

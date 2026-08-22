@@ -16,7 +16,9 @@ namespace RinsTrap.Models.SettingTasks
 
         private string ManifestPath => Path.Combine(Paths.Base, "GuiRecolor.files");
 
-        private string SourceDirectory => Path.Combine(AppContext.BaseDirectory, "Resources", "GuiRecolors", NewState.ToString());
+        private string SourceDirectory => NewState == GuiRecolorType.Custom
+            ? Path.Combine(Paths.Base, "CustomRecolors")
+            : Path.Combine(AppContext.BaseDirectory, "Resources", "GuiRecolors", NewState.ToString());
 
         private List<string> ReadManifest()
         {

@@ -58,13 +58,16 @@
         <controls:OptionControl 
             Header="{x:Static resources:Strings.Menu_Mods_Presets_GuiColor_Title}" 
             Description="{x:Static resources:Strings.Menu_Mods_Presets_GuiColor_Description}">
-            <ComboBox Margin="5,0,0,0" Padding="10,5,10,5" Width="200" ItemsSource="{Binding GuiRecolorTask.Selections, Mode=OneTime}" Text="{Binding GuiRecolorTask.NewState, Mode=TwoWay}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Path=., Converter={StaticResource EnumNameConverter}}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+            <StackPanel Orientation="Horizontal">
+                <ComboBox Margin="5,0,0,0" Padding="10,5,10,5" Width="200" ItemsSource="{Binding GuiRecolorTask.Selections, Mode=OneTime}" Text="{Binding GuiRecolorTask.NewState, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource EnumNameConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <ui:Button Margin="8,0,0,0" Padding="10,5,10,5" Icon="Add24" Content="{x:Static resources:Strings.Menu_Mods_Presets_GuiColor_Import}" Command="{Binding ImportRecolorCommand}" />
+            </StackPanel>
         </controls:OptionControl>
 
         <controls:OptionControl 
@@ -98,6 +101,15 @@
             <StackPanel>
                 <ui:Button Icon="DocumentAdd16" Content="{x:Static resources:Strings.Menu_Mods_Misc_CustomFont_Choose}" Command="{Binding ManageCustomFontCommand}" Visibility="{Binding ChooseCustomFontVisibility, Mode=OneWay}" />
                 <ui:Button Icon="Delete16" Content="{x:Static resources:Strings.Menu_Mods_Misc_CustomFont_Remove}" Appearance="Danger" Command="{Binding ManageCustomFontCommand}" Visibility="{Binding DeleteCustomFontVisibility, Mode=OneWay}" />
+            </StackPanel>
+        </controls:OptionControl>
+
+        <controls:OptionControl 
+            Header="{x:Static resources:Strings.Menu_Mods_Misc_CustomDeathSound_Title}"
+            Description="{x:Static resources:Strings.Menu_Mods_Misc_CustomDeathSound_Description}">
+            <StackPanel>
+                <ui:Button Icon="DocumentAdd16" Content="{x:Static resources:Strings.Menu_Mods_Misc_CustomDeathSound_Choose}" Command="{Binding ManageDeathSoundCommand}" Visibility="{Binding ChooseDeathSoundVisibility, Mode=OneWay}" />
+                <ui:Button Icon="Delete16" Content="{x:Static resources:Strings.Menu_Mods_Misc_CustomDeathSound_Remove}" Appearance="Danger" Command="{Binding ManageDeathSoundCommand}" Visibility="{Binding DeleteDeathSoundVisibility, Mode=OneWay}" />
             </StackPanel>
         </controls:OptionControl>
     </StackPanel>

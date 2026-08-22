@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -547,6 +547,9 @@ Are you sure you want to continue?</value>
   <data name="Menu.FontFiles" xml:space="preserve">
     <value>Font files</value>
   </data>
+  <data name="Menu.AudioFiles" xml:space="preserve">
+    <value>Audio files</value>
+  </data>
   <data name="Menu.IconFiles" xml:space="preserve">
     <value>Icon files</value>
   </data>
@@ -623,6 +626,12 @@ Selecting 'No' will ignore this warning and continue installation.</value>
   <data name="Menu.Integrations.EnableActivityTracking.Title" xml:space="preserve">
     <value>Enable activity tracking</value>
   </data>
+  <data name="Menu.Integrations.KillRobloxBackground.Title" xml:space="preserve">
+    <value>Close Roblox completely when closed</value>
+  </data>
+  <data name="Menu.Integrations.KillRobloxBackground.Description" xml:space="preserve">
+    <value>When you close the Roblox window, any Roblox processes left running in the background will be closed as well.</value>
+  </data>
   <data name="Menu.Integrations.RequiresActivityTracking" xml:space="preserve">
     <value>This feature requires activity tracking to be enabled and the Discord desktop app to be installed and running. [Find out more]({0}).</value>
   </data>
@@ -671,6 +680,21 @@ Selecting 'No' will ignore this warning and continue installation.</value>
   <data name="Menu.Mods.Misc.CustomFont.Remove" xml:space="preserve">
     <value>Remove applied font</value>
   </data>
+  <data name="Menu.Mods.Misc.CustomDeathSound.Title" xml:space="preserve">
+    <value>Custom death sound</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomDeathSound.Description" xml:space="preserve">
+    <value>Pick any audio file from your computer to use as your death sound. Applied on the next launch.</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomDeathSound.Choose" xml:space="preserve">
+    <value>Choose audio...</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomDeathSound.Remove" xml:space="preserve">
+    <value>Remove applied audio</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomDeathSound.Invalid" xml:space="preserve">
+    <value>The file you have chosen is not a supported audio file. Please pick an OGG, MP3 or WAV file.</value>
+  </data>
   <data name="Menu.Mods.Misc.CustomFont.Title" xml:space="preserve">
     <value>Use custom font</value>
   </data>
@@ -691,6 +715,15 @@ Selecting 'No' will ignore this warning and continue installation.</value>
   </data>
   <data name="Menu.Mods.Presets.GuiColor.Title" xml:space="preserve">
     <value>GUI color preset</value>
+  </data>
+  <data name="Menu.Mods.Presets.GuiColor.Import" xml:space="preserve">
+    <value>Add your own</value>
+  </data>
+  <data name="Menu.Mods.Presets.GuiColor.ImportBrowse" xml:space="preserve">
+    <value>Pick the folder that contains your recolor's content and/or ExtraContent folders.</value>
+  </data>
+  <data name="Menu.Mods.Presets.GuiColor.ImportInvalid" xml:space="preserve">
+    <value>The folder you have chosen does not contain a content or ExtraContent folder, so it cannot be used as a recolor.</value>
   </data>
   <data name="Menu.Mods.Presets.MouseCursor.Description" xml:space="preserve">
     <value>Choose between using two classic Roblox cursor styles.</value>
@@ -902,7 +935,7 @@ RinsTrap was installed at "{1}".</value>
   <data name="Dialog.CannotCreateShortcuts" xml:space="preserve">
     <value>RinsTrap was unable to create shortcuts for the Desktop and Start menu. Try creating them later through the settings.</value>
   </data>
-<data name="Dialog.Exception.Info.2.Alt" xml:space="preserve">
+  <data name="Dialog.Exception.Info.2.Alt" xml:space="preserve">
     <value>Check the RinsTrap Wiki first to see if this problem has already been addressed with a fix.
 
 If not, then please report this exception to the maintainers of this fork. Do not report this to RinsTrap's GitHub issues, as this is an unoffical build.</value>
@@ -1441,78 +1474,6 @@ Defaulting to {1}.</value>
   </data>
   <data name="Notifications.Screenshot.Text" xml:space="preserve">
     <value>Your screenshot was saved to {0}</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.Title" xml:space="preserve">
-    <value>FastFlag Library</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.Description" xml:space="preserve">
-    <value>Apply bundles of commonly used FastFlags with one click. Note that Roblox's FastFlag allowlist may block some of these flags from taking effect.</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.Categories.Performance" xml:space="preserve">
-    <value>Performance</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.Categories.Visuals" xml:space="preserve">
-    <value>Visuals</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.Categories.Behaviour" xml:space="preserve">
-    <value>Behaviour</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.Apply" xml:space="preserve">
-    <value>Apply</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.Remove" xml:space="preserve">
-    <value>Remove</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.Applied" xml:space="preserve">
-    <value>Applied</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.FpsBoost.Title" xml:space="preserve">
-    <value>FPS Boost</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.FpsBoost.Description" xml:space="preserve">
-    <value>Maximizes performance by raising the target FPS to 240, preferring the Vulkan renderer, fixing graphics quality, and disabling post-processing, shadows, and LOD fade.</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.UnlockFps.Title" xml:space="preserve">
-    <value>Unlock FPS</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.UnlockFps.Description" xml:space="preserve">
-    <value>Raises the maximum frame rate cap to 240 FPS.</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.UnlimitedFps.Title" xml:space="preserve">
-    <value>Unlimited frame rate</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.UnlimitedFps.Description" xml:space="preserve">
-    <value>Adds the Maximum Frame Rate setting to the in-game menu and removes every frame rate limit.</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.DisableLod.Title" xml:space="preserve">
-    <value>Disable LOD Fade</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.DisableLod.Description" xml:space="preserve">
-    <value>Disables level-of-detail fade-in for snappier rendering.</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.PreferVulkan.Title" xml:space="preserve">
-    <value>Prefer Vulkan Renderer</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.PreferVulkan.Description" xml:space="preserve">
-    <value>Prefer the Vulkan renderer over DirectX on supported GPUs for better performance.</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.DisablePostFx.Title" xml:space="preserve">
-    <value>Disable Post-Processing</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.DisablePostFx.Description" xml:space="preserve">
-    <value>Removes post-processing effects like motion blur for a sharper image.</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.DisableShadows.Title" xml:space="preserve">
-    <value>Disable Shadows</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.DisableShadows.Description" xml:space="preserve">
-    <value>Removes dynamic shadows entirely for a large performance gain.</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.DynamicHeads.Title" xml:space="preserve">
-    <value>Enable Dynamic Heads</value>
-  </data>
-  <data name="Menu.FastFlags.Presets.Library.DynamicHeads.Description" xml:space="preserve">
-    <value>Enables animated 3D heads on avatars that support them.</value>
   </data>
   <data name="Menu.Appearance.Skybox.Toggle" xml:space="preserve">
     <value>Custom Skybox</value>

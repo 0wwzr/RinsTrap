@@ -63,7 +63,95 @@ namespace RinsTrap.UI.ViewModels.Settings
 
         public Visibility DeleteCustomFontVisibility => !String.IsNullOrEmpty(TextFontTask.NewState) ? Visibility.Visible : Visibility.Collapsed;
 
+        public Visibility ChooseDeathSoundVisibility => !String.IsNullOrEmpty(DeathSoundTask.NewState) ? Visibility.Collapsed : Visibility.Visible;
+
+        public Visibility DeleteDeathSoundVisibility => !String.IsNullOrEmpty(DeathSoundTask.NewState) ? Visibility.Visible : Visibility.Collapsed;
+
+        public DeathSoundTask DeathSoundTask { get; } = new();
+
         public ICommand ManageCustomFontCommand => new RelayCommand(ManageCustomFont);
+
+        public ICommand ImportRecolorCommand => new RelayCommand(ImportCustomRecolor);
+
+        public ICommand ManageDeathSoundCommand => new RelayCommand(ManageDeathSound);
+
+        private static readonly string[] AudioExtensions = { ".ogg", ".mp3", ".wav" };
+
+        private static bool HasClientStructure(string path) =>
+            Directory.Exists(Path.Combine(path, "content")) || Directory.Exists(Path.Combine(path, "ExtraContent"));
+
+        private void ImportCustomRecolor()
+        {
+            using var dialog = new System.Windows.Forms.FolderBrowserDialog
+            {
+                Description = Strings.Menu_Mods_Presets_GuiColor_ImportBrowse,
+                ShowNewFolderButton = false
+            };
+
+            if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                return;
+
+            // auto-descend into a wrapper folder (e.g. "my recolor\SomeName\content")
+            string folder = dialog.SelectedPath;
+
+            if (!HasClientStructure(folder))
+            {
+                var candidates = Directory.EnumerateDirectories(folder).Where(HasClientStructure).Take(2).ToList();
+
+                if (candidates.Count == 1)
+                    folder = candidates[0];
+            }
+
+            if (!HasClientStructure(folder))
+            {
+                Frontend.ShowMessageBox(Strings.Menu_Mods_Presets_GuiColor_ImportInvalid, MessageBoxImage.Error);
+                return;
+            }
+
+            string destRoot = Path.Combine(Paths.Base, "CustomRecolors");
+
+            if (Directory.Exists(destRoot))
+                Directory.Delete(destRoot, true);
+
+            Directory.CreateDirectory(destRoot);
+
+            foreach (string dir in Directory.EnumerateDirectories(folder, "*", SearchOption.AllDirectories))
+                Directory.CreateDirectory(Path.Combine(destRoot, Path.GetRelativePath(folder, dir)));
+
+            foreach (string file in Directory.EnumerateFiles(folder, "*", SearchOption.AllDirectories))
+                File.Copy(file, Path.Combine(destRoot, Path.GetRelativePath(folder, file)), true);
+
+            GuiRecolorTask.NewState = Enums.GuiRecolorType.Custom;
+        }
+
+        private void ManageDeathSound()
+        {
+            if (!String.IsNullOrEmpty(DeathSoundTask.NewState))
+            {
+                DeathSoundTask.NewState = "";
+            }
+            else
+            {
+                var dialog = new OpenFileDialog
+                {
+                    Filter = $"{Strings.Menu_AudioFiles}|*.ogg;*.mp3;*.wav"
+                };
+
+                if (dialog.ShowDialog() != true)
+                    return;
+
+                if (!AudioExtensions.Contains(Path.GetExtension(dialog.FileName).ToLowerInvariant()))
+                {
+                    Frontend.ShowMessageBox(Strings.Menu_Mods_Misc_CustomDeathSound_Invalid, MessageBoxImage.Error);
+                    return;
+                }
+
+                DeathSoundTask.NewState = dialog.FileName;
+            }
+
+            OnPropertyChanged(nameof(ChooseDeathSoundVisibility));
+            OnPropertyChanged(nameof(DeleteDeathSoundVisibility));
+        }
 
         public ICommand OpenCompatSettingsCommand => new RelayCommand(OpenCompatSettings);
 

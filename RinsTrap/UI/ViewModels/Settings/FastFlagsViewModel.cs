@@ -17,8 +17,6 @@ namespace RinsTrap.UI.ViewModels.Settings
 
         public FastFlagsViewModel()
         {
-            foreach (var preset in FastFlagPresetLibrary.Presets)
-                preset.Refresh();
         }
 
         private void OpenFastFlagEditor() => OpenFlagEditorEvent?.Invoke(this, EventArgs.Empty);
@@ -32,30 +30,6 @@ namespace RinsTrap.UI.ViewModels.Settings
             get => App.Settings.Prop.UseFastFlagManager;
             set => App.Settings.Prop.UseFastFlagManager = value;
         }
-
-        public IReadOnlyList<FastFlagPresetGroup> PresetGroups { get; } = BuildPresetGroups();
-
-        private static IReadOnlyList<FastFlagPresetGroup> BuildPresetGroups()
-        {
-            return FastFlagPresetLibrary.Presets
-                .GroupBy(x => x.Category)
-                .Select(x => new FastFlagPresetGroup
-                {
-                    Title = x.Key switch
-                    {
-                        FastFlagPresetCategory.Performance => Strings.Menu_FastFlags_Presets_Library_Categories_Performance,
-                        FastFlagPresetCategory.Visuals => Strings.Menu_FastFlags_Presets_Library_Categories_Visuals,
-                        FastFlagPresetCategory.Behaviour => Strings.Menu_FastFlags_Presets_Library_Categories_Behaviour,
-                        _ => x.Key.ToString()
-                    },
-                    Presets = x.ToList()
-                })
-                .ToList();
-        }
-
-        public ICommand ApplyPresetCommand => new RelayCommand<FastFlagPreset>(preset => preset.Apply());
-
-        public ICommand RemovePresetCommand => new RelayCommand<FastFlagPreset>(preset => preset.Remove());
 
         public IReadOnlyDictionary<MSAAMode, string?> MSAALevels => FastFlagManager.MSAAModes;
 

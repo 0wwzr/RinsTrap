@@ -90,6 +90,12 @@ namespace RinsTrap.UI.ViewModels.Settings
             set => App.Settings.Prop.ShowServerDetails = value;
         }
 
+        public bool KillRobloxBackgroundEnabled
+        {
+            get => App.Settings.Prop.KillRobloxBackgroundProcesses;
+            set => App.Settings.Prop.KillRobloxBackgroundProcesses = value;
+        }
+
         public bool DiscordActivityEnabled
         {
             get => App.Settings.Prop.UseDiscordRichPresence;

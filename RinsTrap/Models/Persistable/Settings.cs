@@ -32,6 +32,7 @@ namespace RinsTrap.Models.Persistable
         public bool ShowServerLocationOnRichPresence { get; set; } = false;
         public bool ShowGamePageButton { get; set; } = true;
         public bool ShowPlaytimeOnRichPresence { get; set; } = true;
+        public bool KillRobloxBackgroundProcesses { get; set; } = false;
         public ObservableCollection<CustomIntegration> CustomIntegrations { get; set; } = new();
 
         // mod preset configuration

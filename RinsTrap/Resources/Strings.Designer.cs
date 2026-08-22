@@ -2892,6 +2892,17 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Audio files ähnelt.
+        /// </summary>
+        public static string Menu_AudioFiles
+        {
+            get
+            {
+                return ResourceManager.GetString("Menu.AudioFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die RinsTrap will automatically check and update itself when launching Roblox. ähnelt.
         /// </summary>
         public static string Menu_Behaviour_AutoUpdate_Description
@@ -3329,270 +3340,6 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Applied ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_Applied
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.Applied", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_Apply
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.Apply", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Behaviour ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_Categories_Behaviour
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.Categories.Behaviour", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Performance ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_Categories_Performance
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.Categories.Performance", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Visuals ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_Categories_Visuals
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.Categories.Visuals", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Apply bundles of commonly used FastFlags with one click. Note that Roblox&apos;s FastFlag allowlist may block some of these flags from taking effect. ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_Description
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Disables level-of-detail fade-in for snappier rendering. ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_DisableLod_Description
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.DisableLod.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Disable LOD Fade ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_DisableLod_Title
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.DisableLod.Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Removes post-processing effects like motion blur for a sharper image. ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_DisablePostFx_Description
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.DisablePostFx.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Disable Post-Processing ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_DisablePostFx_Title
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.DisablePostFx.Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Removes dynamic shadows entirely for a large performance gain. ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_DisableShadows_Description
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.DisableShadows.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Disable Shadows ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_DisableShadows_Title
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.DisableShadows.Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Enables animated 3D heads on avatars that support them. ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_DynamicHeads_Description
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.DynamicHeads.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Enable Dynamic Heads ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_DynamicHeads_Title
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.DynamicHeads.Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Maximizes performance by raising the target FPS to 240, preferring the Vulkan renderer, fixing graphics quality, and disabling post-processing, shadows, and LOD fade. ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_FpsBoost_Description
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.FpsBoost.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die FPS Boost ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_FpsBoost_Title
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.FpsBoost.Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Prefer the Vulkan renderer over DirectX on supported GPUs for better performance. ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_PreferVulkan_Description
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.PreferVulkan.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Prefer Vulkan Renderer ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_PreferVulkan_Title
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.PreferVulkan.Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Remove ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_Remove
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.Remove", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die FastFlag Library ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_Title
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Adds the Maximum Frame Rate setting to the in-game menu and removes every frame rate limit. ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_UnlimitedFps_Description
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.UnlimitedFps.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Unlimited frame rate ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_UnlimitedFps_Title
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.UnlimitedFps.Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Raises the maximum frame rate cap to 240 FPS. ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_UnlockFps_Description
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.UnlockFps.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Unlock FPS ähnelt.
-        /// </summary>
-        public static string Menu_FastFlags_Presets_Library_UnlockFps_Title
-        {
-            get
-            {
-                return ResourceManager.GetString("Menu.FastFlags.Presets.Library.UnlockFps.Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Anti-aliasing quality (MSAA) ähnelt.
         /// </summary>
         public static string Menu_FastFlags_Presets_MSAA_Title
@@ -3885,6 +3632,28 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die When you close the Roblox window, any Roblox processes left running in the background will be closed as well. ähnelt.
+        /// </summary>
+        public static string Menu_Integrations_KillRobloxBackground_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("Menu.Integrations.KillRobloxBackground.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Close Roblox completely when closed ähnelt.
+        /// </summary>
+        public static string Menu_Integrations_KillRobloxBackground_Title
+        {
+            get
+            {
+                return ResourceManager.GetString("Menu.Integrations.KillRobloxBackground.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die When in-game, you&apos;ll be able to see where your server is located via [ipinfo.io]({0}). ähnelt.
         /// </summary>
         public static string Menu_Integrations_QueryServerLocation_Description
@@ -4072,6 +3841,61 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Choose audio... ähnelt.
+        /// </summary>
+        public static string Menu_Mods_Misc_CustomDeathSound_Choose
+        {
+            get
+            {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomDeathSound.Choose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Pick any audio file from your computer to use as your death sound. Applied on the next launch. ähnelt.
+        /// </summary>
+        public static string Menu_Mods_Misc_CustomDeathSound_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomDeathSound.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The file you have chosen is not a supported audio file. Please pick an OGG, MP3 or WAV file. ähnelt.
+        /// </summary>
+        public static string Menu_Mods_Misc_CustomDeathSound_Invalid
+        {
+            get
+            {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomDeathSound.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Remove applied audio ähnelt.
+        /// </summary>
+        public static string Menu_Mods_Misc_CustomDeathSound_Remove
+        {
+            get
+            {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomDeathSound.Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Custom death sound ähnelt.
+        /// </summary>
+        public static string Menu_Mods_Misc_CustomDeathSound_Title
+        {
+            get
+            {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomDeathSound.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Choose font... ähnelt.
         /// </summary>
         public static string Menu_Mods_Misc_CustomFont_Choose
@@ -4178,6 +4002,39 @@ namespace RinsTrap.Resources
             get
             {
                 return ResourceManager.GetString("Menu.Mods.Presets.GuiColor.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Add your own ähnelt.
+        /// </summary>
+        public static string Menu_Mods_Presets_GuiColor_Import
+        {
+            get
+            {
+                return ResourceManager.GetString("Menu.Mods.Presets.GuiColor.Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Pick the folder that contains your recolor&apos;s content and/or ExtraContent folders. ähnelt.
+        /// </summary>
+        public static string Menu_Mods_Presets_GuiColor_ImportBrowse
+        {
+            get
+            {
+                return ResourceManager.GetString("Menu.Mods.Presets.GuiColor.ImportBrowse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The folder you have chosen does not contain a content or ExtraContent folder, so it cannot be used as a recolor. ähnelt.
+        /// </summary>
+        public static string Menu_Mods_Presets_GuiColor_ImportInvalid
+        {
+            get
+            {
+                return ResourceManager.GetString("Menu.Mods.Presets.GuiColor.ImportInvalid", resourceCulture);
             }
         }
         
