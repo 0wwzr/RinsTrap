@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using System.Windows;
 using System.Windows.Input;
 
@@ -80,31 +81,13 @@ namespace RinsTrap.UI.ViewModels.Settings
 
         private void ImportCustomRecolor()
         {
-            using var dialog = new System.Windows.Forms.FolderBrowserDialog
+            var dialog = new OpenFileDialog
             {
-                Description = Strings.Menu_Mods_Presets_GuiColor_ImportBrowse,
-                ShowNewFolderButton = false
+                Filter = $"{Strings.FileTypes_ZipArchive}|*.zip"
             };
 
-            if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            if (dialog.ShowDialog() != true)
                 return;
-
-            // auto-descend into a wrapper folder (e.g. "my recolor\SomeName\content")
-            string folder = dialog.SelectedPath;
-
-            if (!HasClientStructure(folder))
-            {
-                var candidates = Directory.EnumerateDirectories(folder).Where(HasClientStructure).Take(2).ToList();
-
-                if (candidates.Count == 1)
-                    folder = candidates[0];
-            }
-
-            if (!HasClientStructure(folder))
-            {
-                Frontend.ShowMessageBox(Strings.Menu_Mods_Presets_GuiColor_ImportInvalid, MessageBoxImage.Error);
-                return;
-            }
 
             string destRoot = Path.Combine(Paths.Base, "CustomRecolors");
 
@@ -113,11 +96,39 @@ namespace RinsTrap.UI.ViewModels.Settings
 
             Directory.CreateDirectory(destRoot);
 
-            foreach (string dir in Directory.EnumerateDirectories(folder, "*", SearchOption.AllDirectories))
-                Directory.CreateDirectory(Path.Combine(destRoot, Path.GetRelativePath(folder, dir)));
+            try
+            {
+                System.IO.Compression.ZipFile.ExtractToDirectory(dialog.FileName, destRoot);
 
-            foreach (string file in Directory.EnumerateFiles(folder, "*", SearchOption.AllDirectories))
-                File.Copy(file, Path.Combine(destRoot, Path.GetRelativePath(folder, file)), true);
+                // auto-descend into a wrapper folder if needed
+                if (!HasClientStructure(destRoot))
+                {
+                    var candidates = Directory.EnumerateDirectories(destRoot).Where(HasClientStructure).Take(2).ToList();
+
+                    if (candidates.Count == 1)
+                    {
+                        string tempDir = destRoot + "_temp";
+                        Directory.Move(candidates[0], tempDir);
+                        Directory.Delete(destRoot, true);
+                        Directory.Move(tempDir, destRoot);
+                    }
+                }
+
+                if (!HasClientStructure(destRoot))
+                {
+                    Directory.Delete(destRoot, true);
+                    Frontend.ShowMessageBox(Strings.Menu_Mods_Presets_GuiColor_ImportInvalid, MessageBoxImage.Error);
+                    return;
+                }
+            }
+            catch (Exception)
+            {
+                if (Directory.Exists(destRoot))
+                    Directory.Delete(destRoot, true);
+
+                Frontend.ShowMessageBox(Strings.Menu_Mods_Presets_GuiColor_ImportInvalid, MessageBoxImage.Error);
+                return;
+            }
 
             GuiRecolorTask.NewState = Enums.GuiRecolorType.Custom;
         }

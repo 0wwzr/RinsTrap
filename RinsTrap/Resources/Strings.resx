@@ -723,10 +723,10 @@ Selecting 'No' will ignore this warning and continue installation.</value>
     <value>Add your own</value>
   </data>
   <data name="Menu.Mods.Presets.GuiColor.ImportBrowse" xml:space="preserve">
-    <value>Pick the folder that contains your recolor's content and/or ExtraContent folders.</value>
+    <value>Pick a .zip file containing your recolor's content and/or ExtraContent folders.</value>
   </data>
   <data name="Menu.Mods.Presets.GuiColor.ImportInvalid" xml:space="preserve">
-    <value>The folder you have chosen does not contain a content or ExtraContent folder, so it cannot be used as a recolor.</value>
+    <value>The zip file does not contain a content or ExtraContent folder, so it cannot be used as a recolor.</value>
   </data>
   <data name="Menu.Mods.Presets.MouseCursor.Description" xml:space="preserve">
     <value>Choose between using two classic Roblox cursor styles.</value>

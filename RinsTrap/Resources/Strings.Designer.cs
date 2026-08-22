@@ -4016,7 +4016,7 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Pick the folder that contains your recolor&apos;s content and/or ExtraContent folders. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Pick a .zip file containing your recolor&apos;s content and/or ExtraContent folders. ähnelt.
         /// </summary>
         public static string Menu_Mods_Presets_GuiColor_ImportBrowse
         {
@@ -4027,7 +4027,7 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The folder you have chosen does not contain a content or ExtraContent folder, so it cannot be used as a recolor. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The zip file does not contain a content or ExtraContent folder, so it cannot be used as a recolor. ähnelt.
         /// </summary>
         public static string Menu_Mods_Presets_GuiColor_ImportInvalid
         {
