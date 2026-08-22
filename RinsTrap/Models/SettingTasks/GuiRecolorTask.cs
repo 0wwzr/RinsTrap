@@ -12,13 +12,22 @@ namespace RinsTrap.Models.SettingTasks
                 OriginalState = color;
         }
 
-        private string MarkerPath => Path.Combine(Paths.Base, "GuiRecolor.preset");
+        private string MarkerPath => Path.Combine(RecolorsRoot, "GuiRecolor.preset");
 
-        private string ManifestPath => Path.Combine(Paths.Base, "GuiRecolor.files");
+        private string ManifestPath => Path.Combine(RecolorsRoot, "GuiRecolor.files");
 
-        private string SourceDirectory => NewState == GuiRecolorType.Custom
-            ? Path.Combine(Paths.Base, "CustomRecolors")
-            : Path.Combine(AppContext.BaseDirectory, "Resources", "GuiRecolors", NewState.ToString());
+        private string RecolorsRoot => Path.Combine(AppContext.BaseDirectory, "Resources", "GuiRecolors");
+
+        private string GetPresetSourceDir(GuiRecolorType preset) => preset switch
+        {
+            GuiRecolorType.Purple => Path.Combine(RecolorsRoot, "purple roblox gui", "Purple"),
+            GuiRecolorType.Rainbow => Path.Combine(RecolorsRoot, "rainbow roblox gui", "rainbow roblox gui"),
+            GuiRecolorType.Synthwave => Path.Combine(RecolorsRoot, "synthwave roblox gui", "synthwave"),
+            GuiRecolorType.Yellow => Path.Combine(RecolorsRoot, "yellow roblox gui"),
+            GuiRecolorType.DeepBlue => Path.Combine(RecolorsRoot, "deep blue roblox gui"),
+            GuiRecolorType.Red => Path.Combine(RecolorsRoot, "red roblox gui"),
+            _ => ""
+        };
 
         private List<string> ReadManifest()
         {
@@ -34,7 +43,7 @@ namespace RinsTrap.Models.SettingTasks
         {
             foreach (string relativePath in ReadManifest())
             {
-                string path = Path.Combine(Paths.Modifications, relativePath);
+                string path = Path.Combine(RecolorsRoot, relativePath);
 
                 try
                 {
@@ -54,6 +63,19 @@ namespace RinsTrap.Models.SettingTasks
                 File.Delete(ManifestPath);
         }
 
+        private void CleanupEmptyDirs()
+        {
+            foreach (string dir in Directory.EnumerateDirectories(RecolorsRoot, "*", SearchOption.AllDirectories))
+            {
+                try
+                {
+                    if (!Directory.EnumerateFileSystemEntries(dir).Any())
+                        Directory.Delete(dir);
+                }
+                catch { }
+            }
+        }
+
         public override void Execute()
         {
             const string LOG_IDENT = "GuiRecolorTask::Execute";
@@ -61,7 +83,6 @@ namespace RinsTrap.Models.SettingTasks
             if (NewState == OriginalState)
                 return;
 
-            // remove the previously applied recolor first so switching presets never leaves stale files behind
             RemoveAppliedFiles();
 
             if (NewState == GuiRecolorType.None)
@@ -70,23 +91,27 @@ namespace RinsTrap.Models.SettingTasks
 
                 if (File.Exists(MarkerPath))
                     File.Delete(MarkerPath);
+
+                CleanupEmptyDirs();
             }
             else
             {
                 App.Logger.WriteLine(LOG_IDENT, $"Applying GUI recolor preset '{NewState}'");
 
-                if (!Directory.Exists(SourceDirectory))
+                string sourceDir = GetPresetSourceDir(NewState);
+
+                if (!Directory.Exists(sourceDir))
                 {
-                    App.Logger.WriteLine(LOG_IDENT, $"Preset folder '{SourceDirectory}' does not exist");
+                    App.Logger.WriteLine(LOG_IDENT, $"Preset folder '{sourceDir}' does not exist");
                     return;
                 }
 
                 var appliedFiles = new List<string>();
 
-                foreach (string sourceFile in Directory.EnumerateFiles(SourceDirectory, "*", SearchOption.AllDirectories))
+                foreach (string sourceFile in Directory.EnumerateFiles(sourceDir, "*", SearchOption.AllDirectories))
                 {
-                    string relativePath = Path.GetRelativePath(SourceDirectory, sourceFile);
-                    string outputPath = Path.Combine(Paths.Modifications, relativePath);
+                    string relativePath = Path.GetRelativePath(sourceDir, sourceFile);
+                    string outputPath = Path.Combine(RecolorsRoot, relativePath);
                     string? outputDirectory = Path.GetDirectoryName(outputPath);
 
                     if (!String.IsNullOrEmpty(outputDirectory))

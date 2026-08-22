@@ -50,7 +50,7 @@
     <EmbeddedResource Include="Resources\Mods\Sounds\OldWalk.mp3" />
     <EmbeddedResource Include="Resources\Mods\Sounds\Empty.mp3" />
     <EmbeddedResource Include="Resources\Mods\OldAvatarBackground.rbxl" />
-    <Content Include="Resources\GuiRecolors\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\roblox gui recolors\**\*" Link="Resources\GuiRecolors\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
