@@ -3851,13 +3851,24 @@ namespace RinsTrap.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The file you have chosen is not a supported audio file. Please pick an OGG, MP3 or WAV file. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The file you have chosen is not a valid OGG audio file. Please pick an OGG file. ähnelt.
         /// </summary>
         public static string Menu_Mods_Misc_CustomDeathSound_Invalid
         {
             get
             {
                 return ResourceManager.GetString("Menu.Mods.Misc.CustomDeathSound.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The audio file is too long. Maximum duration is 30 seconds. ähnelt.
+        /// </summary>
+        public static string Menu_Mods_Misc_CustomDeathSound_TooLong
+        {
+            get
+            {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomDeathSound.TooLong", resourceCulture);
             }
         }
         

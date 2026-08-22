@@ -134,15 +134,31 @@ namespace RinsTrap.UI.ViewModels.Settings
             {
                 var dialog = new OpenFileDialog
                 {
-                    Filter = $"{Strings.Menu_AudioFiles}|*.ogg;*.mp3;*.wav"
+                    Filter = $"{Strings.Menu_AudioFiles}|*.ogg"
                 };
 
                 if (dialog.ShowDialog() != true)
                     return;
 
-                if (!AudioExtensions.Contains(Path.GetExtension(dialog.FileName).ToLowerInvariant()))
+                string ext = Path.GetExtension(dialog.FileName).ToLowerInvariant();
+
+                if (ext != ".ogg")
                 {
                     Frontend.ShowMessageBox(Strings.Menu_Mods_Misc_CustomDeathSound_Invalid, MessageBoxImage.Error);
+                    return;
+                }
+
+                double duration = DeathSoundTask.GetOggDurationSeconds(dialog.FileName);
+
+                if (duration < 0)
+                {
+                    Frontend.ShowMessageBox(Strings.Menu_Mods_Misc_CustomDeathSound_Invalid, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (duration > DeathSoundTask.MaxDurationSeconds)
+                {
+                    Frontend.ShowMessageBox(Strings.Menu_Mods_Misc_CustomDeathSound_TooLong, MessageBoxImage.Error);
                     return;
                 }
 

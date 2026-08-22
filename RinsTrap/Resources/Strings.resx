@@ -693,7 +693,10 @@ Selecting 'No' will ignore this warning and continue installation.</value>
     <value>Remove applied audio</value>
   </data>
   <data name="Menu.Mods.Misc.CustomDeathSound.Invalid" xml:space="preserve">
-    <value>The file you have chosen is not a supported audio file. Please pick an OGG, MP3 or WAV file.</value>
+    <value>The file you have chosen is not a valid OGG audio file. Please pick an OGG file.</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomDeathSound.TooLong" xml:space="preserve">
+    <value>The audio file is too long. Maximum duration is 30 seconds.</value>
   </data>
   <data name="Menu.Mods.Misc.CustomFont.Title" xml:space="preserve">
     <value>Use custom font</value>
