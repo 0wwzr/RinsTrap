@@ -1,0 +1,15 @@
+## build outputs
+bin/
+obj/
+publish/
+
+## visual studio
+.vs/
+*.user
+*.suo
+
+## raw recolor source assets (shipped copies live in RinsTrap/Resources/GuiRecolors)
+roblox gui recolors/
+
+## misc
+*.log
