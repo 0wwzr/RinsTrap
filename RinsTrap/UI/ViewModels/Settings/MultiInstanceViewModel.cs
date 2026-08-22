@@ -17,6 +17,7 @@ namespace RinsTrap.UI.ViewModels.Settings
         public ICommand KillInstanceCommand => new RelayCommand<RunningInstance>(KillInstance);
         public ICommand KillAllInstancesCommand => new RelayCommand(KillAllInstances);
         public ICommand RefreshInstancesCommand => new RelayCommand(RefreshInstances);
+        public ICommand ToggleAntiAfkCommand => new RelayCommand(ToggleAntiAfk);
 
         public ObservableCollection<MultiInstanceAccount> Accounts
         {
@@ -39,6 +40,66 @@ namespace RinsTrap.UI.ViewModels.Settings
                 OnPropertyChanged(nameof(AllowMultipleInstances));
             }
         }
+
+        // Anti-AFK properties
+        public bool AntiAfkEnabled
+        {
+            get => App.Settings.Prop.AntiAfkEnabled;
+            set
+            {
+                App.Settings.Prop.AntiAfkEnabled = value;
+                OnPropertyChanged(nameof(AntiAfkEnabled));
+                OnPropertyChanged(nameof(AntiAfkStatusText));
+            }
+        }
+
+        public int AntiAfkIntervalSeconds
+        {
+            get => App.Settings.Prop.AntiAfkIntervalSeconds;
+            set
+            {
+                App.Settings.Prop.AntiAfkIntervalSeconds = value;
+                AntiAfkService.Instance.UpdateInterval(value);
+                OnPropertyChanged(nameof(AntiAfkIntervalSeconds));
+                OnPropertyChanged(nameof(AntiAfkIntervalText));
+            }
+        }
+
+        public bool AntiAfkSimulateMouse
+        {
+            get => App.Settings.Prop.AntiAfkSimulateMouse;
+            set
+            {
+                App.Settings.Prop.AntiAfkSimulateMouse = value;
+                OnPropertyChanged(nameof(AntiAfkSimulateMouse));
+            }
+        }
+
+        public bool AntiAfkSimulateKey
+        {
+            get => App.Settings.Prop.AntiAfkSimulateKey;
+            set
+            {
+                App.Settings.Prop.AntiAfkSimulateKey = value;
+                OnPropertyChanged(nameof(AntiAfkSimulateKey));
+            }
+        }
+
+        public string AntiAfkKeyToSend
+        {
+            get => App.Settings.Prop.AntiAfkKeyToSend;
+            set
+            {
+                App.Settings.Prop.AntiAfkKeyToSend = value;
+                OnPropertyChanged(nameof(AntiAfkKeyToSend));
+            }
+        }
+
+        public string AntiAfkStatusText => AntiAfkEnabled ? "Active" : "Inactive";
+
+        public string AntiAfkIntervalText => $"Every {AntiAfkIntervalSeconds / 60}m {AntiAfkIntervalSeconds % 60}s";
+
+        public List<string> AntiAfkKeys { get; } = new() { "Space", "W", "A", "S", "D", "E", "Q" };
 
         public MultiInstanceViewModel()
         {
@@ -160,6 +221,19 @@ namespace RinsTrap.UI.ViewModels.Settings
         private void RefreshInstances()
         {
             InstanceManager.Instance.RefreshInstances();
+        }
+
+        private void ToggleAntiAfk()
+        {
+            if (AntiAfkService.Instance.IsRunning)
+            {
+                AntiAfkService.Instance.Stop();
+            }
+            else
+            {
+                AntiAfkService.Instance.Start();
+            }
+            OnPropertyChanged(nameof(AntiAfkStatusText));
         }
     }
 }

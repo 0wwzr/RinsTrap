@@ -140,5 +140,38 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+
+        <!-- Anti-AFK Section -->
+        <StackPanel Grid.Row="4" Margin="0,16,0,0">
+            <TextBlock Text="Anti-AFK" FontSize="16" FontWeight="SemiBold" />
+            <TextBlock Text="Prevents automatic disconnection due to inactivity" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,0" />
+
+            <controls:OptionControl Header="Enable Anti-AFK" Margin="0,12,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <ui:ToggleSwitch IsChecked="{Binding AntiAfkEnabled, Mode=TwoWay}" />
+                    <TextBlock Text="{Binding AntiAfkStatusText}" Margin="8,0,0,0" VerticalAlignment="Center" />
+                </StackPanel>
+            </controls:OptionControl>
+
+            <controls:OptionControl Header="Interval" IsEnabled="{Binding AntiAfkEnabled}">
+                <StackPanel Orientation="Horizontal">
+                    <Slider Width="200" Minimum="30" Maximum="600" Value="{Binding AntiAfkIntervalSeconds}" TickFrequency="30" IsSnapToTickEnabled="True" />
+                    <TextBlock Text="{Binding AntiAfkIntervalText}" Margin="8,0,0,0" VerticalAlignment="Center" />
+                </StackPanel>
+            </controls:OptionControl>
+
+            <controls:OptionControl Header="Simulate Mouse Movement" IsEnabled="{Binding AntiAfkEnabled}">
+                <ui:ToggleSwitch IsChecked="{Binding AntiAfkSimulateMouse, Mode=TwoWay}" />
+            </controls:OptionControl>
+
+            <controls:OptionControl Header="Simulate Key Press" IsEnabled="{Binding AntiAfkEnabled}">
+                <StackPanel Orientation="Horizontal">
+                    <ui:ToggleSwitch IsChecked="{Binding AntiAfkSimulateKey, Mode=TwoWay}" />
+                    <ComboBox ItemsSource="{Binding AntiAfkKeys}" SelectedItem="{Binding AntiAfkKeyToSend}" Margin="8,0,0,0" Width="80" IsEnabled="{Binding AntiAfkSimulateKey}" />
+                </StackPanel>
+            </controls:OptionControl>
+
+            <ui:Button Content="Toggle Anti-AFK" Icon="Clock24" Margin="0,8,0,0" Command="{Binding ToggleAntiAfkCommand}" />
+        </StackPanel>
     </Grid>
 </ui:UiPage>

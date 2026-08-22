@@ -43,6 +43,13 @@ namespace RinsTrap.Models.Persistable
         public ObservableCollection<MultiInstanceAccount> MultiInstanceAccounts { get; set; } = new();
         public bool ShowInstanceMonitor { get; set; } = true;
 
+        // Anti-AFK
+        public bool AntiAfkEnabled { get; set; } = false;
+        public int AntiAfkIntervalSeconds { get; set; } = 300;
+        public bool AntiAfkSimulateMouse { get; set; } = true;
+        public bool AntiAfkSimulateKey { get; set; } = false;
+        public string AntiAfkKeyToSend { get; set; } = "Space";
+
         // OBS integration
         public bool UseObsIntegration { get; set; } = false;
         public string ObsPassword { get; set; } = "";
