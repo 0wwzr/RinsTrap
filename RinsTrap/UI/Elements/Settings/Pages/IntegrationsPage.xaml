@@ -147,5 +147,61 @@
                 </TextBlock.Style>
             </TextBlock>
         </Grid>
+
+        <TextBlock Text="OBS Integration" FontSize="20" FontWeight="Medium" Margin="0,16,0,0" />
+        <TextBlock Text="Automatically switch OBS scenes when joining/leaving games" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+
+        <controls:OptionControl 
+            Header="Enable OBS Integration" 
+            Description="Connect to OBS Studio via WebSocket"
+            IsEnabled="{Binding InnerContent.IsChecked, ElementName=ActivityTrackingOption, Mode=OneWay}"
+            x:Name="ObsIntegrationOption">
+            <ui:ToggleSwitch IsChecked="{Binding ObsIntegrationEnabled, Mode=TwoWay}" />
+        </controls:OptionControl>
+
+        <controls:OptionControl 
+            Header="OBS WebSocket Password" 
+            Description="Password for OBS WebSocket connection"
+            IsEnabled="{Binding InnerContent.IsChecked, ElementName=ObsIntegrationOption, Mode=OneWay}">
+            <ui:TextBox Width="200" Text="{Binding ObsPassword, Mode=TwoWay}" />
+        </controls:OptionControl>
+
+        <controls:OptionControl 
+            Header="Game Scene Name" 
+            Description="OBS scene to switch to when in-game"
+            IsEnabled="{Binding InnerContent.IsChecked, ElementName=ObsIntegrationOption, Mode=OneWay}">
+            <ui:TextBox Width="200" Text="{Binding ObsGameScene, Mode=TwoWay}" />
+        </controls:OptionControl>
+
+        <controls:OptionControl 
+            Header="Lobby Scene Name" 
+            Description="OBS scene to switch to when in lobby"
+            IsEnabled="{Binding InnerContent.IsChecked, ElementName=ObsIntegrationOption, Mode=OneWay}">
+            <ui:TextBox Width="200" Text="{Binding ObsLobbyScene, Mode=TwoWay}" />
+        </controls:OptionControl>
+
+        <TextBlock Text="Status Sync" FontSize="20" FontWeight="Medium" Margin="0,16,0,0" />
+        <TextBlock Text="Sync your game activity between Discord and Twitch" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+
+        <controls:OptionControl 
+            Header="Sync Discord to Twitch" 
+            Description="Update your Twitch stream title with current game"
+            IsEnabled="{Binding InnerContent.IsChecked, ElementName=ActivityTrackingOption, Mode=OneWay}">
+            <ui:ToggleSwitch IsChecked="{Binding SyncDiscordToTwitch, Mode=TwoWay}" />
+        </controls:OptionControl>
+
+        <controls:OptionControl 
+            Header="Twitch Channel ID" 
+            Description="Your Twitch channel ID for status updates"
+            IsEnabled="{Binding SyncDiscordToTwitch, Mode=OneWay}">
+            <ui:TextBox Width="200" Text="{Binding TwitchChannelId, Mode=TwoWay}" />
+        </controls:OptionControl>
+
+        <controls:OptionControl 
+            Header="Sync Twitch to Discord" 
+            Description="Show Twitch stream in Discord activity"
+            IsEnabled="{Binding InnerContent.IsChecked, ElementName=ActivityTrackingOption, Mode=OneWay}">
+            <ui:ToggleSwitch IsChecked="{Binding SyncTwitchToDiscord, Mode=TwoWay}" />
+        </controls:OptionControl>
     </StackPanel>
 </ui:UiPage>

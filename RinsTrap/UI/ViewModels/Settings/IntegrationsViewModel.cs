@@ -152,6 +152,49 @@ namespace RinsTrap.UI.ViewModels.Settings
             get => App.Settings.Prop.UseDisableAppPatch;
             set => App.Settings.Prop.UseDisableAppPatch = value;
         }
+
+        public bool ObsIntegrationEnabled
+        {
+            get => App.Settings.Prop.UseObsIntegration;
+            set => App.Settings.Prop.UseObsIntegration = value;
+        }
+
+        public string ObsPassword
+        {
+            get => App.Settings.Prop.ObsPassword;
+            set => App.Settings.Prop.ObsPassword = value;
+        }
+
+        public string ObsGameScene
+        {
+            get => App.Settings.Prop.ObsGameScene;
+            set => App.Settings.Prop.ObsGameScene = value;
+        }
+
+        public string ObsLobbyScene
+        {
+            get => App.Settings.Prop.ObsLobbyScene;
+            set => App.Settings.Prop.ObsLobbyScene = value;
+        }
+
+        public bool SyncDiscordToTwitch
+        {
+            get => App.Settings.Prop.SyncDiscordToTwitch;
+            set => App.Settings.Prop.SyncDiscordToTwitch = value;
+        }
+
+        public string TwitchChannelId
+        {
+            get => App.Settings.Prop.TwitchChannelId;
+            set => App.Settings.Prop.TwitchChannelId = value;
+        }
+
+        public bool SyncTwitchToDiscord
+        {
+            get => App.Settings.Prop.SyncTwitchToDiscord;
+            set => App.Settings.Prop.SyncTwitchToDiscord = value;
+        }
+
         public ObservableCollection<CustomIntegration> CustomIntegrations
         {
             get => App.Settings.Prop.CustomIntegrations;

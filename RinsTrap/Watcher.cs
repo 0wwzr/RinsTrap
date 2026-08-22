@@ -20,6 +20,8 @@ namespace RinsTrap
 
         public readonly PlaytimeTracker? PlaytimeTracker;
 
+        private readonly ObsIntegration? _obsIntegration;
+
         public int ProcessId => _watcherData?.ProcessId ?? 0;
 
         public Watcher()
@@ -72,6 +74,12 @@ namespace RinsTrap
 
                 if (App.Settings.Prop.UseDiscordRichPresence)
                     RichPresence = new(ActivityWatcher);
+
+                if (App.Settings.Prop.UseObsIntegration)
+                {
+                    _obsIntegration = new ObsIntegration();
+                    _obsIntegration.Connect();
+                }
             }
 
             if (!App.LaunchSettings.TestModeFlag.Active)
@@ -105,9 +113,15 @@ namespace RinsTrap
                             data.PlaceId,
                             data.UniverseDetails?.Data.Name
                         );
+
+                        _obsIntegration?.SwitchToGameScene();
                     };
 
-                    ActivityWatcher.OnGameLeave += (_, _) => PlaytimeTracker.OnGameLeave();
+                    ActivityWatcher.OnGameLeave += (_, _) =>
+                    {
+                        PlaytimeTracker.OnGameLeave();
+                        _obsIntegration?.SwitchToLobbyScene();
+                    };
                 }
             }
 
@@ -178,6 +192,7 @@ namespace RinsTrap
             PlaytimeTracker?.Dispose();
             _notifyIcon?.Dispose();
             RichPresence?.Dispose();
+            _obsIntegration?.Dispose();
 
             GC.SuppressFinalize(this);
         }

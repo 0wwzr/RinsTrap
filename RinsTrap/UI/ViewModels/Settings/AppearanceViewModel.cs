@@ -34,6 +34,8 @@ namespace RinsTrap.UI.ViewModels.Settings
         public ICommand ChooseBootstrapperImageCommand => new RelayCommand(ChooseBootstrapperImage);
         public ICommand RemoveBootstrapperImageCommand => new RelayCommand(RemoveBootstrapperImage);
 
+        public ICommand PreviewThemeCommand => new RelayCommand(PreviewTheme);
+
         public SkyboxTask SkyboxTask { get; } = new();
 
         public string SelectedSkyboxFolder => String.IsNullOrEmpty(SkyboxTask.NewState) ? Strings.Menu_Appearance_Skybox_Empty : SkyboxTask.NewState;
@@ -157,6 +159,16 @@ namespace RinsTrap.UI.ViewModels.Settings
 
             dialog.CancelEnabled = true;
             dialog.ShowBootstrapper();
+        }
+
+        private void PreviewTheme()
+        {
+            var previewDialog = new ThemePreviewDialog(App.Settings.Prop.Theme)
+            {
+                Owner = Window.GetWindow(_page)
+            };
+
+            previewDialog.ShowDialog();
         }
 
         private void BrowseCustomIconLocation()

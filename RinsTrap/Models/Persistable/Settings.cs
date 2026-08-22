@@ -37,6 +37,18 @@ namespace RinsTrap.Models.Persistable
         public bool ShowPlaytimeOnRichPresence { get; set; } = true;
         public bool KillRobloxBackgroundProcesses { get; set; } = false;
         public bool StreamerMode { get; set; } = false;
+
+        // OBS integration
+        public bool UseObsIntegration { get; set; } = false;
+        public string ObsPassword { get; set; } = "";
+        public string ObsGameScene { get; set; } = "Game";
+        public string ObsLobbyScene { get; set; } = "Lobby";
+
+        // Status sync
+        public bool SyncDiscordToTwitch { get; set; } = false;
+        public string TwitchChannelId { get; set; } = "";
+        public bool SyncTwitchToDiscord { get; set; } = false;
+
         public ObservableCollection<CustomIntegration> CustomIntegrations { get; set; } = new();
 
         // mod preset configuration
