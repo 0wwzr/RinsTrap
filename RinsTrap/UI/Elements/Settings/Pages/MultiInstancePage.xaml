@@ -63,7 +63,7 @@
                                Command="{Binding LaunchInstanceCommand}" />
                 </Grid>
 
-                <ui:Button Content="Launch All Auto-Launch Accounts" Icon="PlayAll24" 
+                <ui:Button Content="Launch All Auto-Launch Accounts" Icon="Play24" 
                            HorizontalAlignment="Stretch" Margin="0,8,0,0"
                            Command="{Binding LaunchAllInstancesCommand}" />
             </StackPanel>
