@@ -16,6 +16,13 @@
 
     <StackPanel Margin="0,0,14,14">
         <TextBlock Margin="0,0,0,8" Text="{x:Static resources:Strings.Menu_RinsTrap_Description}" FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+        
+        <ui:CardAction Margin="0,0,0,0" Icon="Info24">
+            <StackPanel>
+                <TextBlock FontSize="14" Text="{Binding AppVersion}" />
+                <TextBlock Margin="0,2,0,0" FontSize="12" Text="Current installed version" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+            </StackPanel>
+        </ui:CardAction>
 
         <controls:OptionControl 
             Header="{x:Static resources:Strings.Menu_Behaviour_AutoUpdate_Title}"

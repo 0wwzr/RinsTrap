@@ -8,6 +8,8 @@ namespace RinsTrap.UI.ViewModels.Settings
 {
     public class RinsTrapViewModel : NotifyPropertyChangedViewModel
     {
+        public string AppVersion => $"RinsTrap v{App.Version}";
+
         public WebEnvironment[] WebEnvironments => Enum.GetValues<WebEnvironment>();
 
         public bool UpdateCheckingEnabled
