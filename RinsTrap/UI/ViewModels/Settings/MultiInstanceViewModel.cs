@@ -12,12 +12,15 @@ namespace RinsTrap.UI.ViewModels.Settings
     {
         public ICommand AddAccountCommand => new RelayCommand(AddAccount);
         public ICommand DeleteAccountCommand => new RelayCommand(DeleteAccount);
-        public ICommand LaunchInstanceCommand => new RelayCommand<object>(LaunchInstance);
+        public ICommand LaunchInstanceCommand => new RelayCommand(LaunchInstance);
         public ICommand LaunchAllInstancesCommand => new RelayCommand(LaunchAllInstances);
+        public ICommand LaunchSelectedAccountsCommand => new RelayCommand(LaunchSelectedAccounts);
         public ICommand KillInstanceCommand => new RelayCommand<RunningInstance>(KillInstance);
         public ICommand KillAllInstancesCommand => new RelayCommand(KillAllInstances);
         public ICommand RefreshInstancesCommand => new RelayCommand(RefreshInstances);
         public ICommand ToggleAntiAfkCommand => new RelayCommand(ToggleAntiAfk);
+        public ICommand SelectAllAccountsCommand => new RelayCommand(SelectAllAccounts);
+        public ICommand DeleteSelectedAccountsCommand => new RelayCommand(DeleteSelectedAccounts);
 
         public ObservableCollection<MultiInstanceAccount> Accounts
         {
@@ -132,32 +135,29 @@ namespace RinsTrap.UI.ViewModels.Settings
             }
         }
 
-        private void LaunchInstance(object? param)
+        private void LaunchInstance()
         {
-            var account = param as MultiInstanceAccount ?? SelectedAccount;
-            if (account is null) return;
+            if (SelectedAccount is null) return;
 
-            // Update account settings
+            // Enable multi-instance mode
             App.Settings.Prop.AllowMultipleInstances = true;
+            AllowMultipleInstances = true;
 
-            // Launch Roblox with multi-instance mode
-            LaunchHandler.LaunchRoblox(Enums.LaunchMode.Player);
-
-            // Track the instance after a short delay
-            Task.Delay(2000).ContinueWith(_ =>
+            // Launch Roblox without closing RinsTrap
+            Task.Run(() =>
             {
-                var robloxProcesses = Utilities.GetProcessesSafe()
-                    .Where(p => p.ProcessName.StartsWith("Roblox", StringComparison.OrdinalIgnoreCase));
-
-                foreach (var process in robloxProcesses)
+                App.Current.Dispatcher.Invoke(() =>
                 {
-                    if (!InstanceManager.Instance.RunningInstances.Any(i => i.ProcessId == process.Id))
+                    try
                     {
-                        InstanceManager.Instance.RegisterInstance(process.Id, account.Name, account.AccountName);
-                        account.ProcessId = process.Id;
-                        break;
+                        // Use the existing launch handler
+                        LaunchHandler.LaunchRoblox(Enums.LaunchMode.Player);
                     }
-                }
+                    catch (Exception ex)
+                    {
+                        App.Logger.WriteLine("MultiInstanceViewModel", $"Failed to launch: {ex.Message}");
+                    }
+                });
             });
         }
 
@@ -171,28 +171,16 @@ namespace RinsTrap.UI.ViewModels.Settings
 
             foreach (var account in accountsToLaunch)
             {
-                Task.Delay(1000 * accountsToLaunch.IndexOf(account)).ContinueWith(_ =>
-                {
-                    App.Settings.Prop.AllowMultipleInstances = true;
-                    App.Current.Dispatcher.Invoke(() => LaunchHandler.LaunchRoblox(Enums.LaunchMode.Player));
-
-                    Task.Delay(2000).ContinueWith(_ =>
-                    {
-                        var robloxProcesses = Utilities.GetProcessesSafe()
-                            .Where(p => p.ProcessName.StartsWith("Roblox", StringComparison.OrdinalIgnoreCase));
-
-                        foreach (var process in robloxProcesses)
-                        {
-                            if (!InstanceManager.Instance.RunningInstances.Any(i => i.ProcessId == process.Id))
-                            {
-                                InstanceManager.Instance.RegisterInstance(process.Id, account.Name, account.AccountName);
-                                account.ProcessId = process.Id;
-                                break;
-                            }
-                        }
-                    });
-                });
+                SelectedAccount = account;
+                LaunchInstance();
+                Task.Delay(2000).Wait(); // Wait between launches
             }
+        }
+
+        private void LaunchSelectedAccounts()
+        {
+            // Launch all accounts that are auto-launch enabled
+            LaunchAllInstances();
         }
 
         private void KillInstance(RunningInstance? instance)
@@ -234,6 +222,30 @@ namespace RinsTrap.UI.ViewModels.Settings
                 AntiAfkService.Instance.Start();
             }
             OnPropertyChanged(nameof(AntiAfkStatusText));
+        }
+
+        private void SelectAllAccounts()
+        {
+            // This would need UI support - for now just select last account
+            if (Accounts.Any())
+                SelectedAccount = Accounts.Last();
+        }
+
+        private void DeleteSelectedAccounts()
+        {
+            // Delete all accounts
+            var accountsToRemove = Accounts.ToList();
+            foreach (var account in accountsToRemove)
+            {
+                if (account.IsRunning)
+                {
+                    InstanceManager.Instance.KillInstance(account.ProcessId);
+                }
+                Accounts.Remove(account);
+            }
+            SelectedAccount = null;
+            OnPropertyChanged(nameof(SelectedAccount));
+            OnPropertyChanged(nameof(IsAccountSelected));
         }
     }
 }

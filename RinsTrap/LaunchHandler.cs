@@ -272,7 +272,11 @@ namespace RinsTrap
                         App.FinalizeExceptionHandling(t.Exception);
                 }
 
-                App.Terminate();
+                // Only terminate if not in multi-instance mode
+                if (!App.Settings.Prop.AllowMultipleInstances)
+                {
+                    App.Terminate();
+                }
             });
 
             dialog?.ShowBootstrapper();

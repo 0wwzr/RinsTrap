@@ -15,6 +15,7 @@
     <Grid Margin="0,0,14,14">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -23,27 +24,30 @@
         <!-- Header -->
         <StackPanel Grid.Row="0">
             <TextBlock Text="Multi-Instance Manager" FontSize="20" FontWeight="Bold" />
-            <TextBlock Text="Launch and manage multiple Roblox instances with different accounts" FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,0" />
+            <TextBlock Text="Launch and manage multiple Roblox instances" FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,0" />
         </StackPanel>
 
         <!-- Accounts Section -->
         <Grid Grid.Row="1" Margin="0,16,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250" />
+                <ColumnDefinition Width="280" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <!-- Account List -->
             <StackPanel Grid.Column="0">
                 <TextBlock Text="Accounts" FontSize="16" FontWeight="SemiBold" />
-                <ListBox ItemsSource="{Binding Accounts}" 
+                <ListBox x:Name="AccountListBox"
+                         ItemsSource="{Binding Accounts}" 
                          SelectedItem="{Binding SelectedAccount}"
                          DisplayMemberPath="Name"
                          Margin="0,8,0,0"
-                         MinHeight="150" />
+                         MinHeight="120"
+                         ContextMenu="{StaticResource AccountContextMenu}" />
 
                 <Grid Margin="0,8,0,0">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
@@ -58,14 +62,13 @@
                                IsEnabled="{Binding IsAccountSelected}"
                                Command="{Binding DeleteAccountCommand}" />
                     <ui:Button Grid.Column="2" Content="Launch" Icon="Play24" 
-                               HorizontalAlignment="Stretch" Margin="4,0,0,0"
+                               HorizontalAlignment="Stretch" Margin="4,0,4,0"
                                IsEnabled="{Binding IsAccountSelected}"
                                Command="{Binding LaunchInstanceCommand}" />
+                    <ui:Button Grid.Column="3" Content="All" Icon="Play24" 
+                               HorizontalAlignment="Stretch" Margin="4,0,0,0"
+                               Command="{Binding LaunchAllInstancesCommand}" />
                 </Grid>
-
-                <ui:Button Content="Launch All Auto-Launch Accounts" Icon="Play24" 
-                           HorizontalAlignment="Stretch" Margin="0,8,0,0"
-                           Command="{Binding LaunchAllInstancesCommand}" />
             </StackPanel>
 
             <!-- Account Details -->
@@ -73,15 +76,11 @@
                         IsEnabled="{Binding IsAccountSelected}">
                 <TextBlock Text="Account Details" FontSize="16" FontWeight="SemiBold" />
 
-                <TextBlock Text="Instance Name" Margin="0,12,0,4" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                <TextBlock Text="Name" Margin="0,12,0,4" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                 <ui:TextBox Text="{Binding SelectedAccount.Name, UpdateSourceTrigger=PropertyChanged}" 
                             PlaceholderText="e.g., Main Account" />
 
-                <TextBlock Text="Account Name (Roblox)" Margin="0,12,0,4" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                <ui:TextBox Text="{Binding SelectedAccount.AccountName, UpdateSourceTrigger=PropertyChanged}" 
-                            PlaceholderText="e.g., CoolGamer123" />
-
-                <TextBlock Text="Description" Margin="0,12,0,4" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                <TextBlock Text="Description (Optional)" Margin="0,12,0,4" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                 <ui:TextBox Text="{Binding SelectedAccount.Description, UpdateSourceTrigger=PropertyChanged}" 
                             PlaceholderText="e.g., My main trading account"
                             AcceptsReturn="True" TextWrapping="Wrap" />
@@ -91,7 +90,7 @@
                             PlaceholderText="e.g., -noconsole" />
 
                 <controls:OptionControl Header="Auto-Launch" Margin="0,12,0,0"
-                                       Description="Include this account when launching all instances">
+                                       Description="Include when launching all">
                     <ui:ToggleSwitch IsChecked="{Binding SelectedAccount.AutoLaunch, Mode=TwoWay}" />
                 </controls:OptionControl>
 
@@ -103,7 +102,7 @@
             </StackPanel>
         </Grid>
 
-        <!-- Running Instances Section -->
+        <!-- Running Instances Header -->
         <StackPanel Grid.Row="2" Margin="0,16,0,0">
             <Grid>
                 <TextBlock Text="Running Instances" FontSize="16" FontWeight="SemiBold" />
@@ -117,18 +116,21 @@
             </Grid>
         </StackPanel>
 
+        <!-- Running Instances List -->
         <DataGrid Grid.Row="3" 
+                  x:Name="InstancesDataGrid"
                   ItemsSource="{Binding RunningInstances}"
                   Margin="0,8,0,0"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
-                  CanUserAddRows="False">
+                  CanUserAddRows="False"
+                  SelectionMode="Extended"
+                  ContextMenu="{StaticResource InstanceContextMenu}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
-                <DataGridTextColumn Header="Account" Binding="{Binding AccountName}" Width="*" />
                 <DataGridTextColumn Header="PID" Binding="{Binding ProcessId}" Width="80" />
                 <DataGridTextColumn Header="Runtime" Binding="{Binding Runtime}" Width="80" />
-                <DataGridTemplateColumn Header="Action" Width="80">
+                <DataGridTemplateColumn Header="Action" Width="60">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ui:Button Content="Kill" Icon="Dismiss16" 
@@ -174,4 +176,21 @@
             <ui:Button Content="Toggle Anti-AFK" Icon="Clock24" Margin="0,8,0,0" Command="{Binding ToggleAntiAfkCommand}" />
         </StackPanel>
     </Grid>
+
+    <!-- Context Menus -->
+    <ui:UiPage.Resources>
+        <ContextMenu x:Key="AccountContextMenu">
+            <MenuItem Header="Select All" Command="{Binding SelectAllAccountsCommand}" />
+            <MenuItem Header="Delete Selected" Command="{Binding DeleteSelectedAccountsCommand}" />
+            <Separator />
+            <MenuItem Header="Launch Selected" Command="{Binding LaunchSelectedAccountsCommand}" />
+        </ContextMenu>
+
+        <ContextMenu x:Key="InstanceContextMenu">
+            <MenuItem Header="Select All" Click="SelectAllInstances_Click" />
+            <MenuItem Header="Kill Selected" Click="KillSelectedInstances_Click" />
+            <Separator />
+            <MenuItem Header="Kill All" Command="{Binding KillAllInstancesCommand}" />
+        </ContextMenu>
+    </ui:UiPage.Resources>
 </ui:UiPage>

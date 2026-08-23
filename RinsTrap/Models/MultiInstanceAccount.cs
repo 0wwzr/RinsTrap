@@ -6,8 +6,6 @@ namespace RinsTrap.Models
     {
         public string Name { get; set; } = "Account";
 
-        public string AccountName { get; set; } = "";
-
         public string Description { get; set; } = "";
 
         public bool AutoLaunch { get; set; } = false;
