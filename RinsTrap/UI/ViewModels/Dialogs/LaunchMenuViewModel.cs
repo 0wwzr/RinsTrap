@@ -6,7 +6,7 @@ namespace RinsTrap.UI.ViewModels.Installer
 {
     public class LaunchMenuViewModel
     {
-        public string Version => string.Format(Strings.Menu_About_Version, App.Version);
+        public string Version => $"v{App.Version}";
 
         public ICommand LaunchSettingsCommand => new RelayCommand(LaunchSettings);
 
