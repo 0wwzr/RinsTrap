@@ -241,6 +241,80 @@
                 </ScrollViewer>
             </Border>
         </StackPanel>
+
+        <!-- Auto-Relaunch Section -->
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Margin="0,16,0,0">
+            <TextBlock Text="Auto-Relaunch" FontSize="16" FontWeight="SemiBold" />
+
+            <controls:OptionControl Header="Enable Auto-Relaunch"
+                                   Description="Automatically restart crashed instances">
+                <ui:ToggleSwitch IsChecked="{Binding AutoRelaunchEnabled, Mode=TwoWay}" />
+            </controls:OptionControl>
+
+            <controls:OptionControl Header="Relaunch Delay" Margin="0,8,0,0"
+                                   Description="{Binding AutoRelaunchDelayText}">
+                <Slider Minimum="1" Maximum="30" Value="{Binding AutoRelaunchDelaySeconds}" Width="150" />
+            </controls:OptionControl>
+
+            <TextBlock Text="{Binding AutoRelaunchStatusText}" Margin="0,8,0,0"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+        </StackPanel>
+
+        <!-- Discord Rich Presence Section -->
+        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Margin="0,16,0,0">
+            <TextBlock Text="Discord Rich Presence" FontSize="16" FontWeight="SemiBold" />
+
+            <controls:OptionControl Header="Enable Discord Rich Presence"
+                                   Description="Show RinsTrap status on your Discord profile">
+                <ui:ToggleSwitch IsChecked="{Binding DiscordRichPresenceEnabled, Mode=TwoWay}" />
+            </controls:OptionControl>
+
+            <TextBlock Text="Discord App ID" Margin="0,12,0,4" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            <ui:TextBox Text="{Binding DiscordAppId}" 
+                        PlaceholderText="Enter your Discord Application ID" />
+
+            <TextBlock Text="{Binding DiscordRichPresenceStatusText}" Margin="0,8,0,0"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+        </StackPanel>
+
+        <!-- Web Dashboard Section -->
+        <StackPanel Grid.Row="7" Grid.ColumnSpan="2" Margin="0,16,0,0">
+            <TextBlock Text="Web Dashboard" FontSize="16" FontWeight="SemiBold" />
+
+            <controls:OptionControl Header="Enable Web Dashboard"
+                                   Description="Monitor instances from your browser (local only)">
+                <ui:ToggleSwitch IsChecked="{Binding WebDashboardEnabled, Mode=TwoWay}" />
+            </controls:OptionControl>
+
+            <controls:OptionControl Header="Port" Margin="0,8,0,0"
+                                   Description="Port number for the dashboard">
+                <ui:TextBox Text="{Binding WebDashboardPort}" Width="100" />
+            </controls:OptionControl>
+
+            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                <TextBlock Text="{Binding WebDashboardStatusText}" VerticalAlignment="Center"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                <TextBlock Text=" | " VerticalAlignment="Center"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                <TextBlock Text="{Binding WebDashboardUrl}" VerticalAlignment="Center"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+
+            <ui:Button Content="Open Dashboard" Icon="Globe24" Margin="0,8,0,0" 
+                       Click="OpenDashboard_Click" />
+        </StackPanel>
+
+        <!-- Batch Actions Section -->
+        <StackPanel Grid.Row="8" Grid.ColumnSpan="2" Margin="0,16,0,0">
+            <TextBlock Text="Batch Actions" FontSize="16" FontWeight="SemiBold" />
+            
+            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                <ui:Button Content="Restart All" Icon="ArrowSync24" Margin="0,0,8,0" 
+                           Command="{Binding RestartAllInstancesCommand}" />
+                <ui:Button Content="Kill Selected" Icon="Dismiss24" Margin="0,0,8,0" 
+                           Click="KillSelectedInstances_Click" />
+            </StackPanel>
+        </StackPanel>
     </Grid>
 
     <!-- Context Menus -->

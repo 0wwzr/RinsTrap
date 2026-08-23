@@ -58,6 +58,18 @@ namespace RinsTrap.Models.Persistable
         // Instance Logging
         public bool InstanceLoggingEnabled { get; set; } = true;
 
+        // Auto-Relaunch
+        public bool AutoRelaunchEnabled { get; set; } = false;
+        public int AutoRelaunchDelaySeconds { get; set; } = 5;
+
+        // Discord Rich Presence
+        public bool DiscordRichPresenceEnabled { get; set; } = false;
+        public string DiscordAppId { get; set; } = "";
+
+        // Web Dashboard
+        public bool WebDashboardEnabled { get; set; } = false;
+        public int WebDashboardPort { get; set; } = 8080;
+
         // OBS integration
         public bool UseObsIntegration { get; set; } = false;
         public string ObsPassword { get; set; } = "";

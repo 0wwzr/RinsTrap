@@ -48,5 +48,17 @@ namespace RinsTrap.UI.Elements.Settings.Pages
                 }
             }
         }
+
+        private void OpenDashboard_Click(object sender, RoutedEventArgs e)
+        {
+            if (WebDashboardService.Instance.IsRunning)
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = WebDashboardService.Instance.Url,
+                    UseShellExecute = true
+                });
+            }
+        }
     }
 }

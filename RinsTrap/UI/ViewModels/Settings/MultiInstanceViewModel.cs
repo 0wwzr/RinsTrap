@@ -26,6 +26,10 @@ namespace RinsTrap.UI.ViewModels.Settings
         public ICommand ClearLogsCommand => new RelayCommand(ClearLogs);
         public ICommand ExportLogsCommand => new RelayCommand(ExportLogs);
         public ICommand BrowseScreenshotPathCommand => new RelayCommand(BrowseScreenshotPath);
+        public ICommand ToggleAutoRelaunchCommand => new RelayCommand(ToggleAutoRelaunch);
+        public ICommand ToggleDiscordRichPresenceCommand => new RelayCommand(ToggleDiscordRichPresence);
+        public ICommand ToggleWebDashboardCommand => new RelayCommand(ToggleWebDashboard);
+        public ICommand RestartAllInstancesCommand => new RelayCommand(RestartAllInstances);
 
         public ObservableCollection<MultiInstanceAccount> Accounts
         {
@@ -164,6 +168,83 @@ namespace RinsTrap.UI.ViewModels.Settings
         }
 
         public ObservableCollection<LogEntry> LogEntries => InstanceLogger.Instance.LogEntries;
+
+        // Auto-Relaunch properties
+        public bool AutoRelaunchEnabled
+        {
+            get => App.Settings.Prop.AutoRelaunchEnabled;
+            set
+            {
+                App.Settings.Prop.AutoRelaunchEnabled = value;
+                OnPropertyChanged(nameof(AutoRelaunchEnabled));
+                OnPropertyChanged(nameof(AutoRelaunchStatusText));
+            }
+        }
+
+        public int AutoRelaunchDelaySeconds
+        {
+            get => App.Settings.Prop.AutoRelaunchDelaySeconds;
+            set
+            {
+                App.Settings.Prop.AutoRelaunchDelaySeconds = value;
+                OnPropertyChanged(nameof(AutoRelaunchDelaySeconds));
+                OnPropertyChanged(nameof(AutoRelaunchDelayText));
+            }
+        }
+
+        public string AutoRelaunchStatusText => AutoRelaunchEnabled ? "Active" : "Inactive";
+        public string AutoRelaunchDelayText => $"Delay: {AutoRelaunchDelaySeconds}s";
+
+        // Discord Rich Presence properties
+        public bool DiscordRichPresenceEnabled
+        {
+            get => App.Settings.Prop.DiscordRichPresenceEnabled;
+            set
+            {
+                App.Settings.Prop.DiscordRichPresenceEnabled = value;
+                OnPropertyChanged(nameof(DiscordRichPresenceEnabled));
+                OnPropertyChanged(nameof(DiscordRichPresenceStatusText));
+            }
+        }
+
+        public string DiscordAppId
+        {
+            get => App.Settings.Prop.DiscordAppId;
+            set
+            {
+                App.Settings.Prop.DiscordAppId = value;
+                OnPropertyChanged(nameof(DiscordAppId));
+            }
+        }
+
+        public string DiscordRichPresenceStatusText => DiscordRichPresenceEnabled ? "Connected" : "Disconnected";
+
+        // Web Dashboard properties
+        public bool WebDashboardEnabled
+        {
+            get => App.Settings.Prop.WebDashboardEnabled;
+            set
+            {
+                App.Settings.Prop.WebDashboardEnabled = value;
+                OnPropertyChanged(nameof(WebDashboardEnabled));
+                OnPropertyChanged(nameof(WebDashboardStatusText));
+                OnPropertyChanged(nameof(WebDashboardUrl));
+            }
+        }
+
+        public int WebDashboardPort
+        {
+            get => App.Settings.Prop.WebDashboardPort;
+            set
+            {
+                App.Settings.Prop.WebDashboardPort = value;
+                OnPropertyChanged(nameof(WebDashboardPort));
+                OnPropertyChanged(nameof(WebDashboardUrl));
+            }
+        }
+
+        public string WebDashboardStatusText => WebDashboardEnabled ? "Running" : "Stopped";
+        public string WebDashboardUrl => $"http://localhost:{WebDashboardPort}";
 
         public MultiInstanceViewModel()
         {
@@ -367,6 +448,68 @@ namespace RinsTrap.UI.ViewModels.Settings
             {
                 InstanceLogger.Instance.ExportLogs(dialog.FileName);
             }
+        }
+
+        private void ToggleAutoRelaunch()
+        {
+            if (AutoRelaunchService.Instance.IsRunning)
+            {
+                AutoRelaunchService.Instance.Stop();
+                AutoRelaunchEnabled = false;
+            }
+            else
+            {
+                AutoRelaunchEnabled = true;
+                AutoRelaunchService.Instance.Start();
+            }
+            OnPropertyChanged(nameof(AutoRelaunchStatusText));
+        }
+
+        private async void ToggleDiscordRichPresence()
+        {
+            if (DiscordRichPresenceService.Instance.IsInitialized)
+            {
+                DiscordRichPresenceService.Instance.ClearPresence();
+                DiscordRichPresenceService.Instance.Dispose();
+                DiscordRichPresenceEnabled = false;
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(DiscordAppId))
+                {
+                    // Use default app ID or prompt user
+                    DiscordAppId = "1234567890"; // Replace with actual app ID
+                }
+
+                bool success = DiscordRichPresenceService.Instance.Initialize(DiscordAppId);
+                if (success)
+                {
+                    DiscordRichPresenceEnabled = true;
+                    DiscordRichPresenceService.Instance.UpdateInstanceCount(InstanceManager.Instance.RunningInstances.Count);
+                }
+            }
+            OnPropertyChanged(nameof(DiscordRichPresenceStatusText));
+        }
+
+        private async void ToggleWebDashboard()
+        {
+            if (WebDashboardService.Instance.IsRunning)
+            {
+                WebDashboardService.Instance.Stop();
+                WebDashboardEnabled = false;
+            }
+            else
+            {
+                WebDashboardEnabled = true;
+                await WebDashboardService.Instance.StartAsync();
+            }
+            OnPropertyChanged(nameof(WebDashboardStatusText));
+            OnPropertyChanged(nameof(WebDashboardUrl));
+        }
+
+        private void RestartAllInstances()
+        {
+            BatchActionService.Instance.RestartAllInstances();
         }
     }
 }
