@@ -175,6 +175,72 @@
 
             <ui:Button Content="Toggle Anti-AFK" Icon="Clock24" Margin="0,8,0,0" Command="{Binding ToggleAntiAfkCommand}" />
         </StackPanel>
+
+        <!-- Screenshots Section -->
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Margin="0,16,0,0">
+            <TextBlock Text="Instance Screenshots" FontSize="16" FontWeight="SemiBold" />
+
+            <controls:OptionControl Header="Enable Screenshots"
+                                   Description="Automatically capture screenshots of running instances">
+                <ui:ToggleSwitch IsChecked="{Binding ScreenshotsEnabled, Mode=TwoWay}" />
+            </controls:OptionControl>
+
+            <TextBlock Text="Interval" Margin="0,12,0,4" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            <ComboBox ItemsSource="{Binding ScreenshotIntervals}" SelectedItem="{Binding ScreenshotIntervalSeconds}" Width="120" HorizontalAlignment="Left" />
+
+            <TextBlock Text="Save Location" Margin="0,12,0,4" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ui:TextBox Grid.Column="0" Text="{Binding ScreenshotSavePath}" 
+                            PlaceholderText="Default: AppData/Local/RinsTrap/Screenshots" IsReadOnly="True" />
+                <ui:Button Grid.Column="1" Content="Browse" Icon="FolderOpen24" Margin="8,0,0,0" Command="{Binding BrowseScreenshotPathCommand}" />
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                <ui:Button Content="Capture Now" Icon="Camera24" Margin="0,0,8,0" Command="{Binding CaptureNowCommand}" />
+                <TextBlock Text="{Binding ScreenshotStatusText}" VerticalAlignment="Center" 
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Logging Section -->
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Margin="0,16,0,0">
+            <Grid>
+                <TextBlock Text="Instance Logging" FontSize="16" FontWeight="SemiBold" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <ui:Button Content="Clear" Icon="Delete24" Margin="0,0,8,0" Command="{Binding ClearLogsCommand}" />
+                    <ui:Button Content="Export" Icon="ArrowDownload24" Margin="0,0,8,0" Command="{Binding ExportLogsCommand}" />
+                    <ui:ToggleSwitch IsChecked="{Binding LoggingEnabled, Mode=TwoWay}" />
+                </StackPanel>
+            </Grid>
+
+            <Border Background="{DynamicResource ControlFillColorDefaultBrush}" 
+                    CornerRadius="4" Padding="8" Margin="0,8,0,0" MaxHeight="150">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding LogEntries}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80" />
+                                        <ColumnDefinition Width="80" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{Binding Timestamp, StringFormat='{}{0:HH:mm:ss}'}" 
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="10" />
+                                    <TextBlock Grid.Column="1" Text="{Binding InstanceName}" 
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="10" />
+                                    <TextBlock Grid.Column="2" Text="{Binding Message}" FontSize="10" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+        </StackPanel>
     </Grid>
 
     <!-- Context Menus -->

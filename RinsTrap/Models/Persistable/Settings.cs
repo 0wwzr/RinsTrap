@@ -50,6 +50,14 @@ namespace RinsTrap.Models.Persistable
         public bool AntiAfkSimulateKey { get; set; } = false;
         public string AntiAfkKeyToSend { get; set; } = "Space";
 
+        // Instance Screenshots
+        public bool InstanceScreenshotsEnabled { get; set; } = false;
+        public int ScreenshotIntervalSeconds { get; set; } = 60;
+        public string ScreenshotSavePath { get; set; } = "";
+
+        // Instance Logging
+        public bool InstanceLoggingEnabled { get; set; } = true;
+
         // OBS integration
         public bool UseObsIntegration { get; set; } = false;
         public string ObsPassword { get; set; } = "";

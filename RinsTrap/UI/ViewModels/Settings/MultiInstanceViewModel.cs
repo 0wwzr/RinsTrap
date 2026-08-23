@@ -21,6 +21,11 @@ namespace RinsTrap.UI.ViewModels.Settings
         public ICommand ToggleAntiAfkCommand => new RelayCommand(ToggleAntiAfk);
         public ICommand SelectAllAccountsCommand => new RelayCommand(SelectAllAccounts);
         public ICommand DeleteSelectedAccountsCommand => new RelayCommand(DeleteSelectedAccounts);
+        public ICommand ToggleScreenshotsCommand => new RelayCommand(ToggleScreenshots);
+        public ICommand CaptureNowCommand => new RelayCommand(CaptureNow);
+        public ICommand ClearLogsCommand => new RelayCommand(ClearLogs);
+        public ICommand ExportLogsCommand => new RelayCommand(ExportLogs);
+        public ICommand BrowseScreenshotPathCommand => new RelayCommand(BrowseScreenshotPath);
 
         public ObservableCollection<MultiInstanceAccount> Accounts
         {
@@ -103,6 +108,62 @@ namespace RinsTrap.UI.ViewModels.Settings
         public string AntiAfkIntervalText => $"Every {AntiAfkIntervalSeconds / 60}m {AntiAfkIntervalSeconds % 60}s";
 
         public List<string> AntiAfkKeys { get; } = new() { "Space", "W", "A", "S", "D", "E", "Q" };
+
+        // Screenshot properties
+        public bool ScreenshotsEnabled
+        {
+            get => App.Settings.Prop.InstanceScreenshotsEnabled;
+            set
+            {
+                App.Settings.Prop.InstanceScreenshotsEnabled = value;
+                OnPropertyChanged(nameof(ScreenshotsEnabled));
+                OnPropertyChanged(nameof(ScreenshotStatusText));
+            }
+        }
+
+        public int ScreenshotIntervalSeconds
+        {
+            get => App.Settings.Prop.ScreenshotIntervalSeconds;
+            set
+            {
+                App.Settings.Prop.ScreenshotIntervalSeconds = value;
+                ScreenshotService.Instance.UpdateInterval(value);
+                OnPropertyChanged(nameof(ScreenshotIntervalSeconds));
+                OnPropertyChanged(nameof(ScreenshotIntervalText));
+            }
+        }
+
+        public string ScreenshotSavePath
+        {
+            get => App.Settings.Prop.ScreenshotSavePath;
+            set
+            {
+                App.Settings.Prop.ScreenshotSavePath = value;
+                OnPropertyChanged(nameof(ScreenshotSavePath));
+            }
+        }
+
+        public string ScreenshotStatusText => ScreenshotsEnabled ? "Active" : "Inactive";
+
+        public string ScreenshotIntervalText => $"Every {ScreenshotIntervalSeconds / 60}m {ScreenshotIntervalSeconds % 60}s";
+
+        public List<string> ScreenshotIntervals { get; } = new() 
+        { 
+            "10s", "30s", "1m", "5m", "10m", "30m", "1h" 
+        };
+
+        // Logging properties
+        public bool LoggingEnabled
+        {
+            get => App.Settings.Prop.InstanceLoggingEnabled;
+            set
+            {
+                App.Settings.Prop.InstanceLoggingEnabled = value;
+                OnPropertyChanged(nameof(LoggingEnabled));
+            }
+        }
+
+        public ObservableCollection<LogEntry> LogEntries => InstanceLogger.Instance.LogEntries;
 
         public MultiInstanceViewModel()
         {
@@ -246,6 +307,66 @@ namespace RinsTrap.UI.ViewModels.Settings
             SelectedAccount = null;
             OnPropertyChanged(nameof(SelectedAccount));
             OnPropertyChanged(nameof(IsAccountSelected));
+        }
+
+        private void ToggleScreenshots()
+        {
+            if (ScreenshotService.Instance.IsRunning)
+            {
+                ScreenshotService.Instance.Stop();
+                ScreenshotsEnabled = false;
+            }
+            else
+            {
+                ScreenshotsEnabled = true;
+                ScreenshotService.Instance.Start();
+            }
+            OnPropertyChanged(nameof(ScreenshotStatusText));
+        }
+
+        private void CaptureNow()
+        {
+            ScreenshotService.Instance.CaptureAllInstances();
+        }
+
+        private void BrowseScreenshotPath()
+        {
+            var dialog = new System.Windows.Forms.FolderBrowserDialog
+            {
+                Description = "Select Screenshot Save Location",
+                ShowNewFolderButton = true
+            };
+
+            if (!string.IsNullOrEmpty(ScreenshotSavePath) && Directory.Exists(ScreenshotSavePath))
+            {
+                dialog.SelectedPath = ScreenshotSavePath;
+            }
+
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                ScreenshotSavePath = dialog.SelectedPath;
+            }
+        }
+
+        private void ClearLogs()
+        {
+            InstanceLogger.Instance.Clear();
+        }
+
+        private void ExportLogs()
+        {
+            var dialog = new Microsoft.Win32.SaveFileDialog
+            {
+                Title = "Export Logs",
+                Filter = "Text files (*.txt)|*.txt|CSV files (*.csv)|*.csv|All files (*.*)|*.*",
+                DefaultExt = ".txt",
+                FileName = $"RinsTrap_InstanceLogs_{DateTime.Now:yyyyMMdd_HHmmss}.txt"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                InstanceLogger.Instance.ExportLogs(dialog.FileName);
+            }
         }
     }
 }
