@@ -5,10 +5,9 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       xmlns:controls="clr-namespace:RinsTrap.UI.Elements.Controls"
-      xmlns:models="clr-namespace:RinsTrap.UI.ViewModels.Settings"
       d:DataContext="{d:DesignInstance Type=MultiInstanceViewModel}"
       mc:Ignorable="d" 
-      d:DesignHeight="600" d:DesignWidth="800"
+      d:DesignHeight="800" d:DesignWidth="800"
       Title="MultiInstancePage"
       Scrollable="True">
 
@@ -28,23 +27,13 @@
         </ContextMenu>
     </ui:UiPage.Resources>
 
-    <Grid Margin="0,0,14,14">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
+    <StackPanel Margin="0,0,14,14">
         <!-- Header -->
-        <StackPanel Grid.Row="0">
-            <TextBlock Text="Multi-Instance Manager" FontSize="20" FontWeight="Bold" />
-            <TextBlock Text="Launch and manage multiple Roblox instances" FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,0" />
-        </StackPanel>
+        <TextBlock Text="Multi-Instance Manager" FontSize="20" FontWeight="Bold" />
+        <TextBlock Text="Launch and manage multiple Roblox instances" FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,0" />
 
         <!-- Accounts Section -->
-        <Grid Grid.Row="1" Margin="0,16,0,0">
+        <Grid Margin="0,16,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="280" />
                 <ColumnDefinition Width="*" />
@@ -118,29 +107,29 @@
             </StackPanel>
         </Grid>
 
-        <!-- Running Instances Header -->
-        <StackPanel Grid.Row="2" Margin="0,16,0,0">
-            <Grid>
-                <TextBlock Text="Running Instances" FontSize="16" FontWeight="SemiBold" />
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <ui:Button Content="Refresh" Icon="ArrowSync24" Margin="0,0,8,0"
-                               Command="{Binding RefreshInstancesCommand}" />
-                    <ui:Button Content="Kill All" Icon="Dismiss24" 
-                               Appearance="Danger"
-                               Command="{Binding KillAllInstancesCommand}" />
-                </StackPanel>
-            </Grid>
-        </StackPanel>
+        <!-- Running Instances -->
+        <Grid Margin="0,16,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Running Instances" FontSize="16" FontWeight="SemiBold" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <ui:Button Content="Refresh" Icon="ArrowSync24" Margin="0,0,8,0"
+                           Command="{Binding RefreshInstancesCommand}" />
+                <ui:Button Content="Kill All" Icon="Dismiss24" 
+                           Appearance="Danger"
+                           Command="{Binding KillAllInstancesCommand}" />
+            </StackPanel>
+        </Grid>
 
-        <!-- Running Instances List -->
-        <DataGrid Grid.Row="3" 
-                  x:Name="InstancesDataGrid"
+        <DataGrid x:Name="InstancesDataGrid"
                   ItemsSource="{Binding RunningInstances}"
                   Margin="0,8,0,0"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   CanUserAddRows="False"
                   SelectionMode="Extended"
+                  MinHeight="80"
                   ContextMenu="{StaticResource InstanceContextMenu}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
@@ -160,209 +149,225 @@
         </DataGrid>
 
         <!-- Anti-AFK Section -->
-        <StackPanel Grid.Row="4" Margin="0,16,0,0">
-            <TextBlock Text="Anti-AFK" FontSize="16" FontWeight="SemiBold" />
-            <TextBlock Text="Prevents automatic disconnection due to inactivity" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,0" />
+        <Border Margin="0,16,0,0" Padding="12" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8">
+            <StackPanel>
+                <TextBlock Text="Anti-AFK" FontSize="16" FontWeight="SemiBold" />
+                <TextBlock Text="Prevents automatic disconnection due to inactivity" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,0" />
 
-            <controls:OptionControl Header="Enable Anti-AFK" Margin="0,12,0,0">
-                <StackPanel Orientation="Horizontal">
-                    <ui:ToggleSwitch IsChecked="{Binding AntiAfkEnabled, Mode=TwoWay}" />
-                    <TextBlock Text="{Binding AntiAfkStatusText}" Margin="8,0,0,0" VerticalAlignment="Center" />
-                </StackPanel>
-            </controls:OptionControl>
+                <controls:OptionControl Header="Enable Anti-AFK" Margin="0,12,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:ToggleSwitch IsChecked="{Binding AntiAfkEnabled, Mode=TwoWay}" />
+                        <TextBlock Text="{Binding AntiAfkStatusText}" Margin="8,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </controls:OptionControl>
 
-            <controls:OptionControl Header="Interval" IsEnabled="{Binding AntiAfkEnabled}">
-                <StackPanel Orientation="Horizontal">
-                    <Slider Width="200" Minimum="30" Maximum="600" Value="{Binding AntiAfkIntervalSeconds}" TickFrequency="30" IsSnapToTickEnabled="True" />
-                    <TextBlock Text="{Binding AntiAfkIntervalText}" Margin="8,0,0,0" VerticalAlignment="Center" />
-                </StackPanel>
-            </controls:OptionControl>
+                <controls:OptionControl Header="Interval" IsEnabled="{Binding AntiAfkEnabled}">
+                    <StackPanel Orientation="Horizontal">
+                        <Slider Width="200" Minimum="30" Maximum="600" Value="{Binding AntiAfkIntervalSeconds}" TickFrequency="30" IsSnapToTickEnabled="True" />
+                        <TextBlock Text="{Binding AntiAfkIntervalText}" Margin="8,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </controls:OptionControl>
 
-            <controls:OptionControl Header="Simulate Mouse Movement" IsEnabled="{Binding AntiAfkEnabled}">
-                <ui:ToggleSwitch IsChecked="{Binding AntiAfkSimulateMouse, Mode=TwoWay}" />
-            </controls:OptionControl>
+                <controls:OptionControl Header="Simulate Mouse Movement" IsEnabled="{Binding AntiAfkEnabled}">
+                    <ui:ToggleSwitch IsChecked="{Binding AntiAfkSimulateMouse, Mode=TwoWay}" />
+                </controls:OptionControl>
 
-            <controls:OptionControl Header="Simulate Key Press" IsEnabled="{Binding AntiAfkEnabled}">
-                <StackPanel Orientation="Horizontal">
-                    <ui:ToggleSwitch IsChecked="{Binding AntiAfkSimulateKey, Mode=TwoWay}" />
-                    <ComboBox ItemsSource="{Binding AntiAfkKeys}" SelectedItem="{Binding AntiAfkKeyToSend}" Margin="8,0,0,0" Width="80" IsEnabled="{Binding AntiAfkSimulateKey}" />
-                </StackPanel>
-            </controls:OptionControl>
+                <controls:OptionControl Header="Simulate Key Press" IsEnabled="{Binding AntiAfkEnabled}">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:ToggleSwitch IsChecked="{Binding AntiAfkSimulateKey, Mode=TwoWay}" />
+                        <ComboBox ItemsSource="{Binding AntiAfkKeys}" SelectedItem="{Binding AntiAfkKeyToSend}" Margin="8,0,0,0" Width="80" IsEnabled="{Binding AntiAfkSimulateKey}" />
+                    </StackPanel>
+                </controls:OptionControl>
 
-            <ui:Button Content="Toggle Anti-AFK" Icon="Clock24" Margin="0,8,0,0" Command="{Binding ToggleAntiAfkCommand}" />
-        </StackPanel>
+                <ui:Button Content="Toggle Anti-AFK" Icon="Clock24" Margin="0,8,0,0" Command="{Binding ToggleAntiAfkCommand}" />
+            </StackPanel>
+        </Border>
 
         <!-- Screenshots Section -->
-        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Margin="0,16,0,0">
-            <TextBlock Text="Instance Screenshots" FontSize="16" FontWeight="SemiBold" />
+        <Border Margin="0,16,0,0" Padding="12" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8">
+            <StackPanel>
+                <TextBlock Text="Instance Screenshots" FontSize="16" FontWeight="SemiBold" />
 
-            <controls:OptionControl Header="Enable Screenshots"
-                                   Description="Automatically capture screenshots of running instances">
-                <ui:ToggleSwitch IsChecked="{Binding ScreenshotsEnabled, Mode=TwoWay}" />
-            </controls:OptionControl>
+                <controls:OptionControl Header="Enable Screenshots"
+                                       Description="Automatically capture screenshots of running instances">
+                    <ui:ToggleSwitch IsChecked="{Binding ScreenshotsEnabled, Mode=TwoWay}" />
+                </controls:OptionControl>
 
-            <TextBlock Text="Interval" Margin="0,12,0,4" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-            <ComboBox ItemsSource="{Binding ScreenshotIntervals}" SelectedItem="{Binding ScreenshotIntervalSeconds}" Width="120" HorizontalAlignment="Left" />
+                <TextBlock Text="Interval" Margin="0,12,0,4" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                <ComboBox ItemsSource="{Binding ScreenshotIntervals}" SelectedItem="{Binding ScreenshotIntervalSeconds}" Width="120" HorizontalAlignment="Left" />
 
-            <TextBlock Text="Save Location" Margin="0,12,0,4" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <ui:TextBox Grid.Column="0" Text="{Binding ScreenshotSavePath}" 
-                            PlaceholderText="Default: AppData/Local/RinsTrap/Screenshots" IsReadOnly="True" />
-                <ui:Button Grid.Column="1" Content="Browse" Icon="FolderOpen24" Margin="8,0,0,0" Command="{Binding BrowseScreenshotPathCommand}" />
-            </Grid>
+                <TextBlock Text="Save Location" Margin="0,12,0,4" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ui:TextBox Grid.Column="0" Text="{Binding ScreenshotSavePath}" 
+                                PlaceholderText="Default: AppData/Local/RinsTrap/Screenshots" IsReadOnly="True" />
+                    <ui:Button Grid.Column="1" Content="Browse" Icon="FolderOpen24" Margin="8,0,0,0" Command="{Binding BrowseScreenshotPathCommand}" />
+                </Grid>
 
-            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                <ui:Button Content="Capture Now" Icon="Camera24" Margin="0,0,8,0" Command="{Binding CaptureNowCommand}" />
-                <TextBlock Text="{Binding ScreenshotStatusText}" VerticalAlignment="Center" 
-                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <ui:Button Content="Capture Now" Icon="Camera24" Margin="0,0,8,0" Command="{Binding CaptureNowCommand}" />
+                    <TextBlock Text="{Binding ScreenshotStatusText}" VerticalAlignment="Center" 
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
+        </Border>
 
         <!-- Logging Section -->
-        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Margin="0,16,0,0">
-            <Grid>
-                <TextBlock Text="Instance Logging" FontSize="16" FontWeight="SemiBold" />
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <ui:Button Content="Clear" Icon="Delete24" Margin="0,0,8,0" Command="{Binding ClearLogsCommand}" />
-                    <ui:Button Content="Export" Icon="ArrowDownload24" Margin="0,0,8,0" Command="{Binding ExportLogsCommand}" />
-                    <ui:ToggleSwitch IsChecked="{Binding LoggingEnabled, Mode=TwoWay}" />
-                </StackPanel>
-            </Grid>
+        <Border Margin="0,16,0,0" Padding="12" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8">
+            <StackPanel>
+                <Grid>
+                    <TextBlock Text="Instance Logging" FontSize="16" FontWeight="SemiBold" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <ui:Button Content="Clear" Icon="Delete24" Margin="0,0,8,0" Command="{Binding ClearLogsCommand}" />
+                        <ui:Button Content="Export" Icon="ArrowDownload24" Margin="0,0,8,0" Command="{Binding ExportLogsCommand}" />
+                        <ui:ToggleSwitch IsChecked="{Binding LoggingEnabled, Mode=TwoWay}" />
+                    </StackPanel>
+                </Grid>
 
-            <Border Background="{DynamicResource ControlFillColorDefaultBrush}" 
-                    CornerRadius="4" Padding="8" Margin="0,8,0,0" MaxHeight="150">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding LogEntries}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="0,2">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="80" />
-                                        <ColumnDefinition Width="80" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="{Binding Timestamp, StringFormat='{}{0:HH:mm:ss}'}" 
-                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="10" />
-                                    <TextBlock Grid.Column="1" Text="{Binding InstanceName}" 
-                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="10" />
-                                    <TextBlock Grid.Column="2" Text="{Binding Message}" FontSize="10" />
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </Border>
-        </StackPanel>
+                <Border Background="{DynamicResource ControlFillColorDefaultBrush}" 
+                        CornerRadius="4" Padding="8" Margin="0,8,0,0" MaxHeight="150">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding LogEntries}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Timestamp, StringFormat='{}{0:HH:mm:ss}'}" 
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="10" />
+                                        <TextBlock Grid.Column="1" Text="{Binding InstanceName}" 
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="10" />
+                                        <TextBlock Grid.Column="2" Text="{Binding Message}" FontSize="10" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+            </StackPanel>
+        </Border>
 
         <!-- Auto-Relaunch Section -->
-        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Margin="0,16,0,0">
-            <TextBlock Text="Auto-Relaunch" FontSize="16" FontWeight="SemiBold" />
+        <Border Margin="0,16,0,0" Padding="12" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8">
+            <StackPanel>
+                <TextBlock Text="Auto-Relaunch" FontSize="16" FontWeight="SemiBold" />
 
-            <controls:OptionControl Header="Enable Auto-Relaunch"
-                                   Description="Automatically restart crashed instances">
-                <ui:ToggleSwitch IsChecked="{Binding AutoRelaunchEnabled, Mode=TwoWay}" />
-            </controls:OptionControl>
+                <controls:OptionControl Header="Enable Auto-Relaunch"
+                                       Description="Automatically restart crashed instances">
+                    <ui:ToggleSwitch IsChecked="{Binding AutoRelaunchEnabled, Mode=TwoWay}" />
+                </controls:OptionControl>
 
-            <controls:OptionControl Header="Relaunch Delay" Margin="0,8,0,0"
-                                   Description="{Binding AutoRelaunchDelayText}">
-                <Slider Minimum="1" Maximum="30" Value="{Binding AutoRelaunchDelaySeconds}" Width="150" />
-            </controls:OptionControl>
+                <controls:OptionControl Header="Relaunch Delay" Margin="0,8,0,0"
+                                       Description="{Binding AutoRelaunchDelayText}">
+                    <Slider Minimum="1" Maximum="30" Value="{Binding AutoRelaunchDelaySeconds}" Width="150" />
+                </controls:OptionControl>
 
-            <TextBlock Text="{Binding AutoRelaunchStatusText}" Margin="0,8,0,0"
-                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-        </StackPanel>
+                <TextBlock Text="{Binding AutoRelaunchStatusText}" Margin="0,8,0,0"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+        </Border>
 
         <!-- Discord Rich Presence Section -->
-        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Margin="0,16,0,0">
-            <TextBlock Text="Discord Rich Presence" FontSize="16" FontWeight="SemiBold" />
+        <Border Margin="0,16,0,0" Padding="12" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8">
+            <StackPanel>
+                <TextBlock Text="Discord Rich Presence" FontSize="16" FontWeight="SemiBold" />
 
-            <controls:OptionControl Header="Enable Discord Rich Presence"
-                                   Description="Show RinsTrap status on your Discord profile">
-                <ui:ToggleSwitch IsChecked="{Binding DiscordRichPresenceEnabled, Mode=TwoWay}" />
-            </controls:OptionControl>
+                <controls:OptionControl Header="Enable Discord Rich Presence"
+                                       Description="Show RinsTrap status on your Discord profile">
+                    <ui:ToggleSwitch IsChecked="{Binding DiscordRichPresenceEnabled, Mode=TwoWay}" />
+                </controls:OptionControl>
 
-            <TextBlock Text="Discord App ID" Margin="0,12,0,4" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-            <ui:TextBox Text="{Binding DiscordAppId}" 
-                        PlaceholderText="Enter your Discord Application ID" />
+                <TextBlock Text="Discord App ID" Margin="0,12,0,4" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                <ui:TextBox Text="{Binding DiscordAppId}" 
+                            PlaceholderText="Enter your Discord Application ID" />
 
-            <TextBlock Text="{Binding DiscordRichPresenceStatusText}" Margin="0,8,0,0"
-                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-        </StackPanel>
+                <TextBlock Text="{Binding DiscordRichPresenceStatusText}" Margin="0,8,0,0"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+        </Border>
 
         <!-- Web Dashboard Section -->
-        <StackPanel Grid.Row="7" Grid.ColumnSpan="2" Margin="0,16,0,0">
-            <TextBlock Text="Web Dashboard" FontSize="16" FontWeight="SemiBold" />
+        <Border Margin="0,16,0,0" Padding="12" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8">
+            <StackPanel>
+                <TextBlock Text="Web Dashboard" FontSize="16" FontWeight="SemiBold" />
 
-            <controls:OptionControl Header="Enable Web Dashboard"
-                                   Description="Monitor instances from your browser (local only)">
-                <ui:ToggleSwitch IsChecked="{Binding WebDashboardEnabled, Mode=TwoWay}" />
-            </controls:OptionControl>
+                <controls:OptionControl Header="Enable Web Dashboard"
+                                       Description="Monitor instances from your browser (local only)">
+                    <ui:ToggleSwitch IsChecked="{Binding WebDashboardEnabled, Mode=TwoWay}" />
+                </controls:OptionControl>
 
-            <controls:OptionControl Header="Port" Margin="0,8,0,0"
-                                   Description="Port number for the dashboard">
-                <ui:TextBox Text="{Binding WebDashboardPort}" Width="100" />
-            </controls:OptionControl>
+                <controls:OptionControl Header="Port" Margin="0,8,0,0"
+                                       Description="Port number for the dashboard">
+                    <ui:TextBox Text="{Binding WebDashboardPort}" Width="100" />
+                </controls:OptionControl>
 
-            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                <TextBlock Text="{Binding WebDashboardStatusText}" VerticalAlignment="Center"
-                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                <TextBlock Text=" | " VerticalAlignment="Center"
-                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                <TextBlock Text="{Binding WebDashboardUrl}" VerticalAlignment="Center"
-                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <TextBlock Text="{Binding WebDashboardStatusText}" VerticalAlignment="Center"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <TextBlock Text=" | " VerticalAlignment="Center"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <TextBlock Text="{Binding WebDashboardUrl}" VerticalAlignment="Center"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+
+                <ui:Button Content="Open Dashboard" Icon="Globe24" Margin="0,8,0,0" 
+                           Click="OpenDashboard_Click" />
             </StackPanel>
-
-            <ui:Button Content="Open Dashboard" Icon="Globe24" Margin="0,8,0,0" 
-                       Click="OpenDashboard_Click" />
-        </StackPanel>
+        </Border>
 
         <!-- Batch Actions Section -->
-        <StackPanel Grid.Row="8" Grid.ColumnSpan="2" Margin="0,16,0,0">
-            <TextBlock Text="Batch Actions" FontSize="16" FontWeight="SemiBold" />
-            
-            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                <ui:Button Content="Restart All" Icon="ArrowSync24" Margin="0,0,8,0" 
-                           Command="{Binding RestartAllInstancesCommand}" />
-                <ui:Button Content="Kill Selected" Icon="Dismiss24" Margin="0,0,8,0" 
-                           Click="KillSelectedInstances_Click" />
+        <Border Margin="0,16,0,0" Padding="12" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8">
+            <StackPanel>
+                <TextBlock Text="Batch Actions" FontSize="16" FontWeight="SemiBold" />
+                
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <ui:Button Content="Restart All" Icon="ArrowSync24" Margin="0,0,8,0" 
+                               Command="{Binding RestartAllInstancesCommand}" />
+                    <ui:Button Content="Kill Selected" Icon="Dismiss24" Margin="0,0,8,0" 
+                               Click="KillSelectedInstances_Click" />
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
+        </Border>
 
         <!-- Anti-Detection Section -->
-        <StackPanel Grid.Row="9" Grid.ColumnSpan="2" Margin="0,16,0,0">
-            <TextBlock Text="Anti-Detection" FontSize="16" FontWeight="SemiBold" />
+        <Border Margin="0,16,0,0" Padding="12" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8">
+            <StackPanel>
+                <TextBlock Text="Anti-Detection" FontSize="16" FontWeight="SemiBold" />
 
-            <controls:OptionControl Header="Enable Anti-Detection"
-                                   Description="Randomize launch parameters to appear as different instances">
-                <ui:ToggleSwitch IsChecked="{Binding AntiDetectionEnabled, Mode=TwoWay}" />
-            </controls:OptionControl>
+                <controls:OptionControl Header="Enable Anti-Detection"
+                                       Description="Randomize launch parameters to appear as different instances">
+                    <ui:ToggleSwitch IsChecked="{Binding AntiDetectionEnabled, Mode=TwoWay}" />
+                </controls:OptionControl>
 
-            <controls:OptionControl Header="Randomize User ID" Margin="0,8,0,0"
-                                   Description="Generate unique user IDs per instance">
-                <ui:ToggleSwitch IsChecked="{Binding RandomizeUserId, Mode=TwoWay}" />
-            </controls:OptionControl>
+                <controls:OptionControl Header="Randomize User ID" Margin="0,8,0,0"
+                                       Description="Generate unique user IDs per instance">
+                    <ui:ToggleSwitch IsChecked="{Binding RandomizeUserId, Mode=TwoWay}" />
+                </controls:OptionControl>
 
-            <controls:OptionControl Header="Randomize Session ID" Margin="0,8,0,0"
-                                   Description="Generate unique session IDs per instance">
-                <ui:ToggleSwitch IsChecked="{Binding RandomizeSessionId, Mode=TwoWay}" />
-            </controls:OptionControl>
+                <controls:OptionControl Header="Randomize Session ID" Margin="0,8,0,0"
+                                       Description="Generate unique session IDs per instance">
+                    <ui:ToggleSwitch IsChecked="{Binding RandomizeSessionId, Mode=TwoWay}" />
+                </controls:OptionControl>
 
-            <controls:OptionControl Header="Randomize Client Version" Margin="0,8,0,0"
-                                   Description="Spoof client version numbers">
-                <ui:ToggleSwitch IsChecked="{Binding RandomizeClientVersion, Mode=TwoWay}" />
-            </controls:OptionControl>
+                <controls:OptionControl Header="Randomize Client Version" Margin="0,8,0,0"
+                                       Description="Spoof client version numbers">
+                    <ui:ToggleSwitch IsChecked="{Binding RandomizeClientVersion, Mode=TwoWay}" />
+                </controls:OptionControl>
 
-            <controls:OptionControl Header="Spoof Hardware ID" Margin="0,8,0,0"
-                                   Description="Use separate data folders per instance">
-                <ui:ToggleSwitch IsChecked="{Binding SpoofHardwareId, Mode=TwoWay}" />
-            </controls:OptionControl>
+                <controls:OptionControl Header="Spoof Hardware ID" Margin="0,8,0,0"
+                                       Description="Use separate data folders per instance">
+                    <ui:ToggleSwitch IsChecked="{Binding SpoofHardwareId, Mode=TwoWay}" />
+                </controls:OptionControl>
 
-            <TextBlock Text="{Binding AntiDetectionStatusText}" Margin="0,8,0,0"
-                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-        </StackPanel>
-    </Grid>
+                <TextBlock Text="{Binding AntiDetectionStatusText}" Margin="0,8,0,0"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+        </Border>
+    </StackPanel>
 </ui:UiPage>
