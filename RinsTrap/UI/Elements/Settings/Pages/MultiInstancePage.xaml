@@ -315,6 +315,39 @@
                            Click="KillSelectedInstances_Click" />
             </StackPanel>
         </StackPanel>
+
+        <!-- Anti-Detection Section -->
+        <StackPanel Grid.Row="9" Grid.ColumnSpan="2" Margin="0,16,0,0">
+            <TextBlock Text="Anti-Detection" FontSize="16" FontWeight="SemiBold" />
+
+            <controls:OptionControl Header="Enable Anti-Detection"
+                                   Description="Randomize launch parameters to appear as different instances">
+                <ui:ToggleSwitch IsChecked="{Binding AntiDetectionEnabled, Mode=TwoWay}" />
+            </controls:OptionControl>
+
+            <controls:OptionControl Header="Randomize User ID" Margin="0,8,0,0"
+                                   Description="Generate unique user IDs per instance">
+                <ui:ToggleSwitch IsChecked="{Binding RandomizeUserId, Mode=TwoWay}" />
+            </controls:OptionControl>
+
+            <controls:OptionControl Header="Randomize Session ID" Margin="0,8,0,0"
+                                   Description="Generate unique session IDs per instance">
+                <ui:ToggleSwitch IsChecked="{Binding RandomizeSessionId, Mode=TwoWay}" />
+            </controls:OptionControl>
+
+            <controls:OptionControl Header="Randomize Client Version" Margin="0,8,0,0"
+                                   Description="Spoof client version numbers">
+                <ui:ToggleSwitch IsChecked="{Binding RandomizeClientVersion, Mode=TwoWay}" />
+            </controls:OptionControl>
+
+            <controls:OptionControl Header="Spoof Hardware ID" Margin="0,8,0,0"
+                                   Description="Use separate data folders per instance">
+                <ui:ToggleSwitch IsChecked="{Binding SpoofHardwareId, Mode=TwoWay}" />
+            </controls:OptionControl>
+
+            <TextBlock Text="{Binding AntiDetectionStatusText}" Margin="0,8,0,0"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+        </StackPanel>
     </Grid>
 
     <!-- Context Menus -->

@@ -30,6 +30,7 @@ namespace RinsTrap.UI.ViewModels.Settings
         public ICommand ToggleDiscordRichPresenceCommand => new RelayCommand(ToggleDiscordRichPresence);
         public ICommand ToggleWebDashboardCommand => new RelayCommand(ToggleWebDashboard);
         public ICommand RestartAllInstancesCommand => new RelayCommand(RestartAllInstances);
+        public ICommand ToggleAntiDetectionCommand => new RelayCommand(ToggleAntiDetection);
 
         public ObservableCollection<MultiInstanceAccount> Accounts
         {
@@ -245,6 +246,60 @@ namespace RinsTrap.UI.ViewModels.Settings
 
         public string WebDashboardStatusText => WebDashboardEnabled ? "Running" : "Stopped";
         public string WebDashboardUrl => $"http://localhost:{WebDashboardPort}";
+
+        // Anti-Detection properties
+        public bool AntiDetectionEnabled
+        {
+            get => App.Settings.Prop.AntiDetectionEnabled;
+            set
+            {
+                App.Settings.Prop.AntiDetectionEnabled = value;
+                OnPropertyChanged(nameof(AntiDetectionEnabled));
+                OnPropertyChanged(nameof(AntiDetectionStatusText));
+            }
+        }
+
+        public bool RandomizeUserId
+        {
+            get => App.Settings.Prop.RandomizeUserId;
+            set
+            {
+                App.Settings.Prop.RandomizeUserId = value;
+                OnPropertyChanged(nameof(RandomizeUserId));
+            }
+        }
+
+        public bool RandomizeSessionId
+        {
+            get => App.Settings.Prop.RandomizeSessionId;
+            set
+            {
+                App.Settings.Prop.RandomizeSessionId = value;
+                OnPropertyChanged(nameof(RandomizeSessionId));
+            }
+        }
+
+        public bool RandomizeClientVersion
+        {
+            get => App.Settings.Prop.RandomizeClientVersion;
+            set
+            {
+                App.Settings.Prop.RandomizeClientVersion = value;
+                OnPropertyChanged(nameof(RandomizeClientVersion));
+            }
+        }
+
+        public bool SpoofHardwareId
+        {
+            get => App.Settings.Prop.SpoofHardwareId;
+            set
+            {
+                App.Settings.Prop.SpoofHardwareId = value;
+                OnPropertyChanged(nameof(SpoofHardwareId));
+            }
+        }
+
+        public string AntiDetectionStatusText => AntiDetectionEnabled ? "Active" : "Inactive";
 
         public MultiInstanceViewModel()
         {
@@ -510,6 +565,17 @@ namespace RinsTrap.UI.ViewModels.Settings
         private void RestartAllInstances()
         {
             BatchActionService.Instance.RestartAllInstances();
+        }
+
+        private void ToggleAntiDetection()
+        {
+            AntiDetectionEnabled = !AntiDetectionEnabled;
+            OnPropertyChanged(nameof(AntiDetectionStatusText));
+
+            if (AntiDetectionEnabled)
+            {
+                AntiDetectionService.Instance.ClearCache();
+            }
         }
     }
 }

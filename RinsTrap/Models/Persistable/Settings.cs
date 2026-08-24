@@ -70,6 +70,13 @@ namespace RinsTrap.Models.Persistable
         public bool WebDashboardEnabled { get; set; } = false;
         public int WebDashboardPort { get; set; } = 8080;
 
+        // Anti-Detection
+        public bool AntiDetectionEnabled { get; set; } = false;
+        public bool RandomizeUserId { get; set; } = true;
+        public bool RandomizeSessionId { get; set; } = true;
+        public bool RandomizeClientVersion { get; set; } = false;
+        public bool SpoofHardwareId { get; set; } = false;
+
         // OBS integration
         public bool UseObsIntegration { get; set; } = false;
         public string ObsPassword { get; set; } = "";
