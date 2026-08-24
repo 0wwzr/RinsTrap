@@ -27,7 +27,6 @@ namespace RinsTrap.UI.ViewModels.Settings
         public ICommand ExportLogsCommand => new RelayCommand(ExportLogs);
         public ICommand BrowseScreenshotPathCommand => new RelayCommand(BrowseScreenshotPath);
         public ICommand ToggleAutoRelaunchCommand => new RelayCommand(ToggleAutoRelaunch);
-        public ICommand ToggleDiscordRichPresenceCommand => new RelayCommand(ToggleDiscordRichPresence);
         public ICommand ToggleWebDashboardCommand => new RelayCommand(ToggleWebDashboard);
         public ICommand RestartAllInstancesCommand => new RelayCommand(RestartAllInstances);
         public ICommand ToggleAntiDetectionCommand => new RelayCommand(ToggleAntiDetection);
@@ -195,30 +194,6 @@ namespace RinsTrap.UI.ViewModels.Settings
 
         public string AutoRelaunchStatusText => AutoRelaunchEnabled ? "Active" : "Inactive";
         public string AutoRelaunchDelayText => $"Delay: {AutoRelaunchDelaySeconds}s";
-
-        // Discord Rich Presence properties
-        public bool DiscordRichPresenceEnabled
-        {
-            get => App.Settings.Prop.DiscordRichPresenceEnabled;
-            set
-            {
-                App.Settings.Prop.DiscordRichPresenceEnabled = value;
-                OnPropertyChanged(nameof(DiscordRichPresenceEnabled));
-                OnPropertyChanged(nameof(DiscordRichPresenceStatusText));
-            }
-        }
-
-        public string DiscordAppId
-        {
-            get => App.Settings.Prop.DiscordAppId;
-            set
-            {
-                App.Settings.Prop.DiscordAppId = value;
-                OnPropertyChanged(nameof(DiscordAppId));
-            }
-        }
-
-        public string DiscordRichPresenceStatusText => DiscordRichPresenceEnabled ? "Connected" : "Disconnected";
 
         // Web Dashboard properties
         public bool WebDashboardEnabled
@@ -518,32 +493,6 @@ namespace RinsTrap.UI.ViewModels.Settings
                 AutoRelaunchService.Instance.Start();
             }
             OnPropertyChanged(nameof(AutoRelaunchStatusText));
-        }
-
-        private async void ToggleDiscordRichPresence()
-        {
-            if (DiscordRichPresenceService.Instance.IsInitialized)
-            {
-                DiscordRichPresenceService.Instance.ClearPresence();
-                DiscordRichPresenceService.Instance.Dispose();
-                DiscordRichPresenceEnabled = false;
-            }
-            else
-            {
-                if (string.IsNullOrEmpty(DiscordAppId))
-                {
-                    // Use default app ID or prompt user
-                    DiscordAppId = "1234567890"; // Replace with actual app ID
-                }
-
-                bool success = DiscordRichPresenceService.Instance.Initialize(DiscordAppId);
-                if (success)
-                {
-                    DiscordRichPresenceEnabled = true;
-                    DiscordRichPresenceService.Instance.UpdateInstanceCount(InstanceManager.Instance.RunningInstances.Count);
-                }
-            }
-            OnPropertyChanged(nameof(DiscordRichPresenceStatusText));
         }
 
         private async void ToggleWebDashboard()

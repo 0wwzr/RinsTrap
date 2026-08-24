@@ -178,7 +178,8 @@
                 </Border>
 
                 <!-- Screenshots -->
-                <Border Grid.Row="0" Grid.Column="1" Padding="12" Margin="8,0,0,8" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8">
+                <Border Grid.Row="0" Grid.Column="1" Padding="12" Margin="8,0,0,8" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8"
+                        IsEnabled="{Binding ScreenshotsEnabled}">
                     <StackPanel>
                         <Grid>
                             <TextBlock Text="Screenshots" FontSize="14" FontWeight="SemiBold" />
@@ -242,34 +243,28 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Discord + Dashboard + Logging -->
+                <!-- Dashboard + Logging -->
                 <Border Grid.Row="1" Grid.Column="1" Padding="12" Margin="8,0,0,0" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8">
                     <StackPanel>
-                        <Grid>
-                            <TextBlock Text="Discord Rich Presence" FontSize="14" FontWeight="SemiBold" />
-                            <ui:ToggleSwitch IsChecked="{Binding DiscordRichPresenceEnabled, Mode=TwoWay}" HorizontalAlignment="Right" />
-                        </Grid>
-                        <TextBlock Text="Show status on Discord" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,0" />
-                        <ui:TextBox Text="{Binding DiscordAppId}" PlaceholderText="Discord Application ID" Margin="0,6,0,0" />
-
-                        <Separator Margin="0,12,0,12" />
-
                         <Grid>
                             <TextBlock Text="Web Dashboard" FontSize="14" FontWeight="SemiBold" />
                             <ui:ToggleSwitch IsChecked="{Binding WebDashboardEnabled, Mode=TwoWay}" HorizontalAlignment="Right" />
                         </Grid>
-                        <TextBlock Text="Monitor from browser (localhost)" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,0" />
-                        <Grid Margin="0,6,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="Port:" VerticalAlignment="Center" FontSize="12" Margin="0,0,6,0" />
-                            <ui:TextBox Grid.Column="1" Text="{Binding WebDashboardPort}" Width="60" />
-                            <ui:Button Grid.Column="2" Content="Open" Icon="Globe16" Margin="8,0,0,0" Padding="8,4"
-                                       Click="OpenDashboard_Click" />
-                        </Grid>
+                        <TextBlock Text="Monitor instances from browser (localhost)" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,0" />
+                        <StackPanel Margin="0,8,0,0" IsEnabled="{Binding WebDashboardEnabled}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Port:" VerticalAlignment="Center" FontSize="12" Margin="0,0,6,0" />
+                                <ui:TextBox Grid.Column="1" Text="{Binding WebDashboardPort}" Width="60" />
+                                <ui:Button Grid.Column="2" Content="Open Dashboard" Icon="Globe16" Margin="8,0,0,0" Padding="10,5"
+                                           Click="OpenDashboard_Click" />
+                            </Grid>
+                            <TextBlock Text="{Binding WebDashboardStatusText}" Margin="0,6,0,0" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        </StackPanel>
 
                         <Separator Margin="0,12,0,12" />
 
@@ -277,7 +272,8 @@
                             <TextBlock Text="Instance Logging" FontSize="14" FontWeight="SemiBold" />
                             <ui:ToggleSwitch IsChecked="{Binding LoggingEnabled, Mode=TwoWay}" HorizontalAlignment="Right" />
                         </Grid>
-                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <TextBlock Text="Track joins, leaves, errors per instance" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,0" />
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0" IsEnabled="{Binding LoggingEnabled}">
                             <ui:Button Content="Clear Logs" Icon="Delete16" Margin="0,0,6,0" Padding="8,4"
                                        Command="{Binding ClearLogsCommand}" />
                             <ui:Button Content="Export" Icon="ArrowDownload16" Padding="8,4"
