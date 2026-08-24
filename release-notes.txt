@@ -1,0 +1,6 @@
+﻿## Bug Fix
+
+### Fixed Empty Description Crash
+- Removed empty Description attributes from OptionControl
+- Prevents MarkdownTextBlock crash on empty strings
+- Multi-Instance page now loads correctly
