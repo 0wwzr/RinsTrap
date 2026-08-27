@@ -1,23 +1,7 @@
-﻿## Improved Multi-Instance UI
+﻿## v2.26.1
 
-### Better Sizing
-- Wider left column (300px)
-- Larger font sizes (18px headers, 14px section titles)
-- More padding and margins throughout
-- Taller account list and instance grid
-
-### Better Layout
-- Two-column layout with proper spacing
-- Feature cards in 2x2 grid with separators
-- Account details panel with all fields
-- Quick actions with Launch/Launch All/Restart/Kill All
-
-### All Features Included
-- Anti-AFK with mouse/key options
-- Screenshots with interval and location
-- Auto-Relaunch with delay slider
-- Anti-Detection with 3 toggles
-- Discord Rich Presence
-- Web Dashboard
-- Instance Logging with Clear/Export
-- Mini activity log at bottom
+### Changes
+- Removed Discord Rich Presence feature from Multi-Instance page
+- All feature cards now require toggle ON before controls are usable
+- Anti-AFK, Screenshots, Auto-Relaunch, Anti-Detection, Dashboard, Logging sections all disable when toggled off
+- Cleaner feature cards layout

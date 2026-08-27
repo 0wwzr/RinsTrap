@@ -30,18 +30,7 @@
             <ui:ToggleSwitch IsChecked="{Binding UpdateCheckingEnabled, Mode=TwoWay}" />
         </controls:OptionControl>
 
-        <controls:OptionControl
-            Header="{x:Static resources:Strings.Menu_RinsTrap_WhatsNewToggle_Title}"
-            Description="{x:Static resources:Strings.Menu_RinsTrap_WhatsNewToggle_Description}">
-            <ui:ToggleSwitch IsChecked="{Binding ShowWhatsNew, Mode=TwoWay}" />
-        </controls:OptionControl>
-
-        <ui:CardAction Margin="0,8,0,0" Icon="News24" Command="{Binding ViewChangelogCommand}">
-            <StackPanel>
-                <TextBlock FontSize="14" Text="{x:Static resources:Strings.Menu_RinsTrap_WhatsNew_Title}" />
-                <TextBlock Margin="0,2,0,0" FontSize="12" Text="{x:Static resources:Strings.Menu_RinsTrap_WhatsNew_Description}" Padding="0,0,16,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
-            </StackPanel>
-        </ui:CardAction>
+        
 
         <ui:CardAction Margin="0,8,0,0" Icon="ArrowSync24" Command="{Binding CheckForUpdatesCommand}" IsEnabled="{Binding IsCheckingForUpdates, Converter={StaticResource InvertBoolConverter}, Mode=OneWay}">
             <StackPanel>

@@ -16,16 +16,13 @@
 
         <controls:OptionControl
             Header="{x:Static resources:Strings.Menu_Appearance_Global_Theme_Title}">
-            <StackPanel Orientation="Horizontal">
-                <ComboBox Width="200" Padding="10,5,10,5" ItemsSource="{Binding Themes, Mode=OneTime}" Text="{Binding Theme, Mode=TwoWay}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Path=., Converter={StaticResource EnumNameConverter}}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-                <ui:Button Margin="8,0,0,0" Icon="Eye24" Content="Preview" Command="{Binding PreviewThemeCommand}" />
-            </StackPanel>
+            <ComboBox Width="200" Padding="10,5,10,5" ItemsSource="{Binding Themes, Mode=OneTime}" Text="{Binding Theme, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Path=., Converter={StaticResource EnumNameConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </controls:OptionControl>
 
         <controls:OptionControl
@@ -43,7 +40,6 @@
                 <TextBlock Text="{x:Static resources:Strings.Menu_Appearance_Bootstrapper_Title}" FontSize="20" FontWeight="Medium" VerticalAlignment="Bottom" />
                 <TextBlock Text="{x:Static resources:Strings.Menu_Appearance_Bootstrapper_Description}" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
             </StackPanel>
-            <ui:Button Grid.Column="1" Content="{x:Static resources:Strings.Menu_Appearance_Preview}" HorizontalAlignment="Stretch" Margin="0,16,0,0" Command="{Binding PreviewBootstrapperCommand}" />
         </Grid>
         
         <ui:CardExpander Margin="0,8,0,0" IsExpanded="{Binding Path=CustomThemesExpanded, Mode=OneWay}" Style="{StaticResource NoUserExpansionCardExpanderStyle}">

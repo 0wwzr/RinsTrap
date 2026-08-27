@@ -21,6 +21,11 @@ namespace RinsTrap.Models.SettingTasks
         private string GetPresetSourceDir(GuiRecolorType preset) => preset switch
         {
             GuiRecolorType.Purple => Path.Combine(RecolorsRoot, "purple roblox gui", "Purple"),
+            GuiRecolorType.OceanBlue => Path.Combine(RecolorsRoot, "ocean blue roblox gui"),
+            GuiRecolorType.EmeraldGreen => Path.Combine(RecolorsRoot, "emerald green roblox gui"),
+            GuiRecolorType.SunsetOrange => Path.Combine(RecolorsRoot, "sunset orange roblox gui"),
+            GuiRecolorType.RosePink => Path.Combine(RecolorsRoot, "rose pink roblox gui"),
+            GuiRecolorType.Midnight => Path.Combine(RecolorsRoot, "midnight roblox gui"),
             GuiRecolorType.Rainbow => Path.Combine(RecolorsRoot, "rainbow roblox gui", "rainbow roblox gui"),
             GuiRecolorType.Synthwave => Path.Combine(RecolorsRoot, "synthwave roblox gui", "synthwave"),
             GuiRecolorType.Yellow => Path.Combine(RecolorsRoot, "yellow roblox gui"),

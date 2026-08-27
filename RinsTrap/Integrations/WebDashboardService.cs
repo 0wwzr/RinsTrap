@@ -145,7 +145,6 @@ namespace RinsTrap.Integrations
             var accounts = App.Settings.Prop.MultiInstanceAccounts.Select(a => new
             {
                 a.Name,
-                a.Description,
                 a.AutoLaunch,
                 a.ProcessId,
                 IsRunning = a.ProcessId > 0

@@ -24,6 +24,7 @@ using RinsTrap.RobloxInterfaces;
 using RinsTrap.UI.Elements.Bootstrapper.Base;
 
 using ICSharpCode.SharpZipLib.Zip;
+using RinsTrap.Integrations;
 
 namespace RinsTrap
 {
@@ -68,6 +69,11 @@ namespace RinsTrap
         private AsyncMutex? _mutex;
 
         private int _appPid = 0;
+
+        // Multi-instance cookie support
+        public static string? CurrentAccountCookie { get; set; }
+        public static string? CurrentAccountName { get; set; }
+        public static string? CurrentAuthTicket { get; set; }
 
         public IBootstrapperDialog? Dialog = null;
 
@@ -562,10 +568,34 @@ namespace RinsTrap
 
             SetStatus(Strings.Bootstrapper_Status_Starting);
 
+            // Set cookie for current account if available
+            if (!string.IsNullOrEmpty(CurrentAccountCookie))
+            {
+                RobloxCookieManager.SetWinInetCookie(CurrentAccountCookie);
+                App.Logger.WriteLine(LOG_IDENT, $"Set cookie for account: {CurrentAccountName}");
+            }
+
+            // Build launch arguments with auth ticket if available
+            string launchArgs = _launchCommandLine;
+            if (!string.IsNullOrEmpty(CurrentAuthTicket))
+            {
+                // Add authentication ticket as launch argument
+                if (!launchArgs.Contains("-ticket"))
+                {
+                    launchArgs = $"{launchArgs} -ticket \"{CurrentAuthTicket}\"".Trim();
+                    App.Logger.WriteLine(LOG_IDENT, $"Added auth ticket to launch arguments (length: {CurrentAuthTicket.Length})");
+                    App.Logger.WriteLine(LOG_IDENT, $"Full launch args: {launchArgs}");
+                }
+            }
+            else
+            {
+                App.Logger.WriteLine(LOG_IDENT, "No auth ticket available for this launch");
+            }
+
             var startInfo = new ProcessStartInfo()
             {
                 FileName = AppData.ExecutablePath,
-                Arguments = _launchCommandLine,
+                Arguments = launchArgs,
                 WorkingDirectory = AppData.Directory
             };
 

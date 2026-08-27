@@ -49,11 +49,23 @@ namespace RinsTrap.Models.Persistable
         public bool AntiAfkSimulateMouse { get; set; } = true;
         public bool AntiAfkSimulateKey { get; set; } = false;
         public string AntiAfkKeyToSend { get; set; } = "Space";
+        public string AntiAfkMode { get; set; } = "Normal";
+        public bool AntiAfkRandomizeInterval { get; set; } = true;
+        public string AntiAfkMousePattern { get; set; } = "Jitter";
+        public int AntiAfkMouseDistance { get; set; } = 50;
+        public bool AntiAfkRandomKey { get; set; } = false;
+        public bool AntiAfkSimulateClick { get; set; } = false;
+        public bool AntiAfkOnlyWhenFocused { get; set; } = true;
+        public bool AntiAfkPauseDuringChat { get; set; } = true;
 
         // Instance Screenshots
         public bool InstanceScreenshotsEnabled { get; set; } = false;
         public int ScreenshotIntervalSeconds { get; set; } = 60;
         public string ScreenshotSavePath { get; set; } = "";
+        public string ScreenshotFormat { get; set; } = "PNG";
+        public int ScreenshotQuality { get; set; } = 90;
+        public bool ScreenshotOnlyActive { get; set; } = true;
+        public bool ScreenshotTimestampFilename { get; set; } = true;
 
         // Instance Logging
         public bool InstanceLoggingEnabled { get; set; } = true;
@@ -61,6 +73,9 @@ namespace RinsTrap.Models.Persistable
         // Auto-Relaunch
         public bool AutoRelaunchEnabled { get; set; } = false;
         public int AutoRelaunchDelaySeconds { get; set; } = 5;
+        public int AutoRelaunchMaxRetries { get; set; } = 3;
+        public bool AutoRelaunchOnCrashOnly { get; set; } = true;
+        public bool AutoRelaunchNotify { get; set; } = true;
 
         // Discord Rich Presence
         public bool DiscordRichPresenceEnabled { get; set; } = false;
@@ -76,6 +91,42 @@ namespace RinsTrap.Models.Persistable
         public bool RandomizeSessionId { get; set; } = true;
         public bool RandomizeClientVersion { get; set; } = false;
         public bool SpoofHardwareId { get; set; } = false;
+
+        // Window Management
+        public bool AutoArrangeWindows { get; set; } = false;
+        public string ArrangeLayout { get; set; } = "Grid";
+        public int WindowGap { get; set; } = 10;
+        public bool RememberWindowPositions { get; set; } = true;
+
+        // Instance Groups
+        public bool InstanceGroupsEnabled { get; set; } = false;
+
+        // Resource Limits
+        public bool ResourceLimitsEnabled { get; set; } = false;
+        public int CpuLimitPercent { get; set; } = 0;
+        public int MemoryLimitMB { get; set; } = 0;
+        public string ProcessPriority { get; set; } = "Normal";
+        public bool CpuAffinityEnabled { get; set; } = false;
+
+        // Instance Templates
+        public bool TemplatesEnabled { get; set; } = false;
+
+        // Scheduler
+        public bool SchedulerEnabled { get; set; } = false;
+
+        // Hotkeys
+        public bool HotkeysEnabled { get; set; } = false;
+
+        // Advanced
+        public bool FpsLimiterEnabled { get; set; } = false;
+        public int FpsLimit { get; set; } = 60;
+        public bool NetworkThrottleEnabled { get; set; } = false;
+        public int NetworkThrottleKBps { get; set; } = 0;
+        public int AutoLaunchStaggerSeconds { get; set; } = 2;
+        public bool MinimizeToTrayOnLaunch { get; set; } = false;
+        public bool HealthMonitoringEnabled { get; set; } = false;
+        public bool AutoKillHungInstances { get; set; } = false;
+        public int HungTimeoutSeconds { get; set; } = 30;
 
         // OBS integration
         public bool UseObsIntegration { get; set; } = false;

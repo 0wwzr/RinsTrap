@@ -1,10 +1,14 @@
+using System.Windows;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Diagnostics;
 
 using CommunityToolkit.Mvvm.Input;
 
 using RinsTrap.Integrations;
 using RinsTrap.Models;
+using RinsTrap.Models.Persistable;
+using RinsTrap;
 
 namespace RinsTrap.UI.ViewModels.Settings
 {
@@ -30,6 +34,18 @@ namespace RinsTrap.UI.ViewModels.Settings
         public ICommand ToggleWebDashboardCommand => new RelayCommand(ToggleWebDashboard);
         public ICommand RestartAllInstancesCommand => new RelayCommand(RestartAllInstances);
         public ICommand ToggleAntiDetectionCommand => new RelayCommand(ToggleAntiDetection);
+
+        // New commands
+        public ICommand TileWindowsCommand => new RelayCommand(TileWindows);
+        public ICommand CascadeWindowsCommand => new RelayCommand(CascadeWindows);
+        public ICommand MinimizeAllWindowsCommand => new RelayCommand(MinimizeAllWindows);
+        public ICommand CreateInstanceGroupCommand => new RelayCommand(CreateInstanceGroup);
+        public ICommand ManageInstanceGroupsCommand => new RelayCommand(ManageInstanceGroups);
+        public ICommand SaveAsTemplateCommand => new RelayCommand(SaveAsTemplate);
+        public ICommand ManageTemplatesCommand => new RelayCommand(ManageTemplates);
+        public ICommand AddScheduleCommand => new RelayCommand(AddSchedule);
+        public ICommand ViewSchedulesCommand => new RelayCommand(ViewSchedules);
+        public ICommand ConfigureHotkeysCommand => new RelayCommand(ConfigureHotkeys);
 
         public ObservableCollection<MultiInstanceAccount> Accounts
         {
@@ -276,6 +292,396 @@ namespace RinsTrap.UI.ViewModels.Settings
 
         public string AntiDetectionStatusText => AntiDetectionEnabled ? "Active" : "Inactive";
 
+        // Anti-AFK Extended properties
+        public string AntiAfkMode
+        {
+            get => App.Settings.Prop.AntiAfkMode;
+            set
+            {
+                App.Settings.Prop.AntiAfkMode = value;
+                OnPropertyChanged(nameof(AntiAfkMode));
+            }
+        }
+
+        public List<string> AntiAfkModes { get; } = new() { "Conservative", "Normal", "Aggressive" };
+
+        public bool AntiAfkRandomizeInterval
+        {
+            get => App.Settings.Prop.AntiAfkRandomizeInterval;
+            set
+            {
+                App.Settings.Prop.AntiAfkRandomizeInterval = value;
+                OnPropertyChanged(nameof(AntiAfkRandomizeInterval));
+            }
+        }
+
+        public string AntiAfkMousePattern
+        {
+            get => App.Settings.Prop.AntiAfkMousePattern;
+            set
+            {
+                App.Settings.Prop.AntiAfkMousePattern = value;
+                OnPropertyChanged(nameof(AntiAfkMousePattern));
+            }
+        }
+
+        public List<string> AntiAfkMousePatterns { get; } = new() { "Jitter", "Circle", "Random", "Linear" };
+
+        public int AntiAfkMouseDistance
+        {
+            get => App.Settings.Prop.AntiAfkMouseDistance;
+            set
+            {
+                App.Settings.Prop.AntiAfkMouseDistance = value;
+                OnPropertyChanged(nameof(AntiAfkMouseDistance));
+            }
+        }
+
+        public bool AntiAfkRandomKey
+        {
+            get => App.Settings.Prop.AntiAfkRandomKey;
+            set
+            {
+                App.Settings.Prop.AntiAfkRandomKey = value;
+                OnPropertyChanged(nameof(AntiAfkRandomKey));
+            }
+        }
+
+        public bool AntiAfkSimulateClick
+        {
+            get => App.Settings.Prop.AntiAfkSimulateClick;
+            set
+            {
+                App.Settings.Prop.AntiAfkSimulateClick = value;
+                OnPropertyChanged(nameof(AntiAfkSimulateClick));
+            }
+        }
+
+        public bool AntiAfkOnlyWhenFocused
+        {
+            get => App.Settings.Prop.AntiAfkOnlyWhenFocused;
+            set
+            {
+                App.Settings.Prop.AntiAfkOnlyWhenFocused = value;
+                OnPropertyChanged(nameof(AntiAfkOnlyWhenFocused));
+            }
+        }
+
+        public bool AntiAfkPauseDuringChat
+        {
+            get => App.Settings.Prop.AntiAfkPauseDuringChat;
+            set
+            {
+                App.Settings.Prop.AntiAfkPauseDuringChat = value;
+                OnPropertyChanged(nameof(AntiAfkPauseDuringChat));
+            }
+        }
+
+        // Screenshot Extended properties
+        public string ScreenshotFormat
+        {
+            get => App.Settings.Prop.ScreenshotFormat;
+            set
+            {
+                App.Settings.Prop.ScreenshotFormat = value;
+                OnPropertyChanged(nameof(ScreenshotFormat));
+            }
+        }
+
+        public List<string> ScreenshotFormats { get; } = new() { "PNG", "JPG", "BMP" };
+
+        public int ScreenshotQuality
+        {
+            get => App.Settings.Prop.ScreenshotQuality;
+            set
+            {
+                App.Settings.Prop.ScreenshotQuality = value;
+                OnPropertyChanged(nameof(ScreenshotQuality));
+            }
+        }
+
+        public bool ScreenshotOnlyActive
+        {
+            get => App.Settings.Prop.ScreenshotOnlyActive;
+            set
+            {
+                App.Settings.Prop.ScreenshotOnlyActive = value;
+                OnPropertyChanged(nameof(ScreenshotOnlyActive));
+            }
+        }
+
+        public bool ScreenshotTimestampFilename
+        {
+            get => App.Settings.Prop.ScreenshotTimestampFilename;
+            set
+            {
+                App.Settings.Prop.ScreenshotTimestampFilename = value;
+                OnPropertyChanged(nameof(ScreenshotTimestampFilename));
+            }
+        }
+
+        // Window Management properties
+        public bool AutoArrangeWindows
+        {
+            get => App.Settings.Prop.AutoArrangeWindows;
+            set
+            {
+                App.Settings.Prop.AutoArrangeWindows = value;
+                OnPropertyChanged(nameof(AutoArrangeWindows));
+            }
+        }
+
+        public string ArrangeLayout
+        {
+            get => App.Settings.Prop.ArrangeLayout;
+            set
+            {
+                App.Settings.Prop.ArrangeLayout = value;
+                OnPropertyChanged(nameof(ArrangeLayout));
+            }
+        }
+
+        public List<string> ArrangeLayouts { get; } = new() { "Grid", "Horizontal", "Vertical", "Cascade" };
+
+        public int WindowGap
+        {
+            get => App.Settings.Prop.WindowGap;
+            set
+            {
+                App.Settings.Prop.WindowGap = value;
+                OnPropertyChanged(nameof(WindowGap));
+            }
+        }
+
+        public bool RememberWindowPositions
+        {
+            get => App.Settings.Prop.RememberWindowPositions;
+            set
+            {
+                App.Settings.Prop.RememberWindowPositions = value;
+                OnPropertyChanged(nameof(RememberWindowPositions));
+            }
+        }
+
+        // Auto-Relaunch Extended properties
+        public int AutoRelaunchMaxRetries
+        {
+            get => App.Settings.Prop.AutoRelaunchMaxRetries;
+            set
+            {
+                App.Settings.Prop.AutoRelaunchMaxRetries = value;
+                OnPropertyChanged(nameof(AutoRelaunchMaxRetries));
+            }
+        }
+
+        public bool AutoRelaunchOnCrashOnly
+        {
+            get => App.Settings.Prop.AutoRelaunchOnCrashOnly;
+            set
+            {
+                App.Settings.Prop.AutoRelaunchOnCrashOnly = value;
+                OnPropertyChanged(nameof(AutoRelaunchOnCrashOnly));
+            }
+        }
+
+        public bool AutoRelaunchNotify
+        {
+            get => App.Settings.Prop.AutoRelaunchNotify;
+            set
+            {
+                App.Settings.Prop.AutoRelaunchNotify = value;
+                OnPropertyChanged(nameof(AutoRelaunchNotify));
+            }
+        }
+
+        // Instance Groups
+        public bool InstanceGroupsEnabled
+        {
+            get => App.Settings.Prop.InstanceGroupsEnabled;
+            set
+            {
+                App.Settings.Prop.InstanceGroupsEnabled = value;
+                OnPropertyChanged(nameof(InstanceGroupsEnabled));
+            }
+        }
+
+        // Resource Limits
+        public bool ResourceLimitsEnabled
+        {
+            get => App.Settings.Prop.ResourceLimitsEnabled;
+            set
+            {
+                App.Settings.Prop.ResourceLimitsEnabled = value;
+                OnPropertyChanged(nameof(ResourceLimitsEnabled));
+            }
+        }
+
+        public int CpuLimitPercent
+        {
+            get => App.Settings.Prop.CpuLimitPercent;
+            set
+            {
+                App.Settings.Prop.CpuLimitPercent = value;
+                OnPropertyChanged(nameof(CpuLimitPercent));
+            }
+        }
+
+        public int MemoryLimitMB
+        {
+            get => App.Settings.Prop.MemoryLimitMB;
+            set
+            {
+                App.Settings.Prop.MemoryLimitMB = value;
+                OnPropertyChanged(nameof(MemoryLimitMB));
+            }
+        }
+
+        public string ProcessPriority
+        {
+            get => App.Settings.Prop.ProcessPriority;
+            set
+            {
+                App.Settings.Prop.ProcessPriority = value;
+                OnPropertyChanged(nameof(ProcessPriority));
+            }
+        }
+
+        public List<string> ProcessPriorities { get; } = new() { "Idle", "Below Normal", "Normal", "Above Normal", "High", "Realtime" };
+
+        public bool CpuAffinityEnabled
+        {
+            get => App.Settings.Prop.CpuAffinityEnabled;
+            set
+            {
+                App.Settings.Prop.CpuAffinityEnabled = value;
+                OnPropertyChanged(nameof(CpuAffinityEnabled));
+            }
+        }
+
+        // Instance Templates
+        public bool TemplatesEnabled
+        {
+            get => App.Settings.Prop.TemplatesEnabled;
+            set
+            {
+                App.Settings.Prop.TemplatesEnabled = value;
+                OnPropertyChanged(nameof(TemplatesEnabled));
+            }
+        }
+
+        // Scheduler
+        public bool SchedulerEnabled
+        {
+            get => App.Settings.Prop.SchedulerEnabled;
+            set
+            {
+                App.Settings.Prop.SchedulerEnabled = value;
+                OnPropertyChanged(nameof(SchedulerEnabled));
+            }
+        }
+
+        // Hotkeys
+        public bool HotkeysEnabled
+        {
+            get => App.Settings.Prop.HotkeysEnabled;
+            set
+            {
+                App.Settings.Prop.HotkeysEnabled = value;
+                OnPropertyChanged(nameof(HotkeysEnabled));
+            }
+        }
+
+        // Advanced
+        public bool FpsLimiterEnabled
+        {
+            get => App.Settings.Prop.FpsLimiterEnabled;
+            set
+            {
+                App.Settings.Prop.FpsLimiterEnabled = value;
+                OnPropertyChanged(nameof(FpsLimiterEnabled));
+            }
+        }
+
+        public int FpsLimit
+        {
+            get => App.Settings.Prop.FpsLimit;
+            set
+            {
+                App.Settings.Prop.FpsLimit = value;
+                OnPropertyChanged(nameof(FpsLimit));
+            }
+        }
+
+        public bool NetworkThrottleEnabled
+        {
+            get => App.Settings.Prop.NetworkThrottleEnabled;
+            set
+            {
+                App.Settings.Prop.NetworkThrottleEnabled = value;
+                OnPropertyChanged(nameof(NetworkThrottleEnabled));
+            }
+        }
+
+        public int NetworkThrottleKBps
+        {
+            get => App.Settings.Prop.NetworkThrottleKBps;
+            set
+            {
+                App.Settings.Prop.NetworkThrottleKBps = value;
+                OnPropertyChanged(nameof(NetworkThrottleKBps));
+            }
+        }
+
+        public int AutoLaunchStaggerSeconds
+        {
+            get => App.Settings.Prop.AutoLaunchStaggerSeconds;
+            set
+            {
+                App.Settings.Prop.AutoLaunchStaggerSeconds = value;
+                OnPropertyChanged(nameof(AutoLaunchStaggerSeconds));
+            }
+        }
+
+        public bool MinimizeToTrayOnLaunch
+        {
+            get => App.Settings.Prop.MinimizeToTrayOnLaunch;
+            set
+            {
+                App.Settings.Prop.MinimizeToTrayOnLaunch = value;
+                OnPropertyChanged(nameof(MinimizeToTrayOnLaunch));
+            }
+        }
+
+        public bool HealthMonitoringEnabled
+        {
+            get => App.Settings.Prop.HealthMonitoringEnabled;
+            set
+            {
+                App.Settings.Prop.HealthMonitoringEnabled = value;
+                OnPropertyChanged(nameof(HealthMonitoringEnabled));
+            }
+        }
+
+        public bool AutoKillHungInstances
+        {
+            get => App.Settings.Prop.AutoKillHungInstances;
+            set
+            {
+                App.Settings.Prop.AutoKillHungInstances = value;
+                OnPropertyChanged(nameof(AutoKillHungInstances));
+            }
+        }
+
+        public int HungTimeoutSeconds
+        {
+            get => App.Settings.Prop.HungTimeoutSeconds;
+            set
+            {
+                App.Settings.Prop.HungTimeoutSeconds = value;
+                OnPropertyChanged(nameof(HungTimeoutSeconds));
+            }
+        }
+
         public MultiInstanceViewModel()
         {
             InstanceManager.Instance.InstancesChanged += (_, _) =>
@@ -314,6 +720,8 @@ namespace RinsTrap.UI.ViewModels.Settings
             // Enable multi-instance mode
             App.Settings.Prop.AllowMultipleInstances = true;
             AllowMultipleInstances = true;
+
+            App.Logger.WriteLine("MultiInstanceViewModel", $"Launching account: {SelectedAccount.Name}");
 
             // Launch Roblox without closing RinsTrap
             Task.Run(() =>
@@ -525,6 +933,64 @@ namespace RinsTrap.UI.ViewModels.Settings
             {
                 AntiDetectionService.Instance.ClearCache();
             }
+        }
+
+        // New command implementations
+        private void TileWindows()
+        {
+            InstanceManager.Instance.TileWindows();
+        }
+
+        private void CascadeWindows()
+        {
+            InstanceManager.Instance.CascadeWindows();
+        }
+
+        private void MinimizeAllWindows()
+        {
+            InstanceManager.Instance.MinimizeAllWindows();
+        }
+
+        private void CreateInstanceGroup()
+        {
+            // TODO: Show dialog to create instance group
+            App.Logger.WriteLine("MultiInstanceViewModel", "Create Instance Group requested");
+        }
+
+        private void ManageInstanceGroups()
+        {
+            // TODO: Show instance groups management dialog
+            App.Logger.WriteLine("MultiInstanceViewModel", "Manage Instance Groups requested");
+        }
+
+        private void SaveAsTemplate()
+        {
+            // TODO: Show dialog to save current configuration as template
+            App.Logger.WriteLine("MultiInstanceViewModel", "Save as Template requested");
+        }
+
+        private void ManageTemplates()
+        {
+            // TODO: Show templates management dialog
+            App.Logger.WriteLine("MultiInstanceViewModel", "Manage Templates requested");
+        }
+
+        private void AddSchedule()
+        {
+            // TODO: Show dialog to add scheduled launch
+            App.Logger.WriteLine("MultiInstanceViewModel", "Add Schedule requested");
+        }
+
+        private void ViewSchedules()
+        {
+            // TODO: Show schedules management dialog
+            App.Logger.WriteLine("MultiInstanceViewModel", "View Schedules requested");
+        }
+
+        private void ConfigureHotkeys()
+        {
+            // TODO: Show hotkeys configuration dialog
+            App.Logger.WriteLine("MultiInstanceViewModel", "Configure Hotkeys requested");
         }
     }
 }
