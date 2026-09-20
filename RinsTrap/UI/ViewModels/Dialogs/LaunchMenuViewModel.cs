@@ -107,7 +107,7 @@ namespace RinsTrap.UI.ViewModels.Installer
 
             App.Logger.WriteLine(LOG_IDENT, $"Applied troll skybox from '{trollFolder}'");
             LaunchRobloxLabel = "Launch Totally Normal Roblox";
-            LaunchRobloxIconPath = Path.Combine(AppContext.BaseDirectory, "troll", "lol!.png");
+            LaunchRobloxIconPath = "pack://application:,,,/RinsTrap.ico";
             OnPropertyChanged(nameof(LaunchRobloxLabel));
             OnPropertyChanged(nameof(LaunchRobloxIconPath));
             OnPropertyChanged(nameof(HasLaunchRobloxIcon));
