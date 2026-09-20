@@ -1,7 +1,8 @@
 ﻿## v2.29.3
 
-### Secret launch-menu feature
-- Removed the activation popup so the renamed launch action is the only reveal
+### Secret...
+- A small surprise has been added...
+- You may notice something different...
 
 ---
 
