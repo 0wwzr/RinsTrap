@@ -26,7 +26,19 @@ namespace RinsTrap.UI.ViewModels.Installer
             "Launch Regular Roblox",
             "Launch The Normal One",
             "Launch Roblox, Trust Me",
-            "Launch An Ordinary Experience"
+            "Launch An Ordinary Experience",
+            "Launch Roblox Without Questions",
+            "Launch The Very Standard Game",
+            "Launch Roblox, Nothing To See",
+            "Launch A Completely Typical Session",
+            "Launch Roblox, As Expected",
+            "Launch The Safest Button Here",
+            "Launch Roblox, Definitely",
+            "Launch A Normal Game Experience",
+            "Launch Roblox, Please Remain Calm",
+            "Launch The Officially Ordinary Option",
+            "Launch Roblox, Everything Is Fine",
+            "Launch The Last Normal Sentence"
         };
 
         public string Version => $"v{App.Version}";
@@ -52,7 +64,7 @@ namespace RinsTrap.UI.ViewModels.Installer
 
             if (_trollLogoClicks < TrollActivationClicks)
             {
-                LaunchRobloxLabel = PreActivationLabels[Random.Shared.Next(PreActivationLabels.Length)];
+                LaunchRobloxLabel = PreActivationLabels[_trollLogoClicks - 1];
                 OnPropertyChanged(nameof(LaunchRobloxLabel));
                 return;
             }
