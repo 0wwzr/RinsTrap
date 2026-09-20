@@ -11,6 +11,8 @@ namespace RinsTrap.UI.ViewModels.Settings
     {
         private DateTime? _fromDate = DateTime.Today.AddDays(-6);
         private DateTime? _toDate = DateTime.Today;
+        private string _selectedPreset = "7D";
+        private string _selectedGameSort = "Playtime";
 
         public StatisticsViewModel()
         {
@@ -21,7 +23,53 @@ namespace RinsTrap.UI.ViewModels.Settings
 
         public ICommand ApplyDateRangeCommand => new RelayCommand(LoadData);
 
+        public ICommand SelectPresetCommand => new RelayCommand<string>(SelectPreset);
+
         public ICommand OpenScreenshotsFolderCommand => new RelayCommand(OpenScreenshotsFolder);
+
+        public ObservableCollection<RangeOption> RangeOptions { get; } = new()
+        {
+            new("7D", "Last 7 days"),
+            new("30D", "Last 30 days"),
+            new("90D", "Last 90 days"),
+            new("YTD", "Year to date"),
+            new("ALL", "All time")
+        };
+
+        public ObservableCollection<string> GameSortOptions { get; } = new()
+        {
+            "Playtime",
+            "Sessions",
+            "Last played",
+            "Name"
+        };
+
+        public string SelectedPreset
+        {
+            get => _selectedPreset;
+            private set
+            {
+                if (_selectedPreset == value)
+                    return;
+
+                _selectedPreset = value;
+                OnPropertyChanged(nameof(SelectedPreset));
+            }
+        }
+
+        public string SelectedGameSort
+        {
+            get => _selectedGameSort;
+            set
+            {
+                if (_selectedGameSort == value)
+                    return;
+
+                _selectedGameSort = value;
+                OnPropertyChanged(nameof(SelectedGameSort));
+                SortGames();
+            }
+        }
 
         public DateTime? FromDate
         {
@@ -64,6 +112,14 @@ namespace RinsTrap.UI.ViewModels.Settings
         public string AverageSession { get; private set; } = "0m";
 
         public string RangeSummary { get; private set; } = "";
+
+        public string PeakDay { get; private set; } = "No activity";
+
+        public string PeakDayDuration { get; private set; } = "0m";
+
+        public string TopGame { get; private set; } = "No recorded games";
+
+        public string SelectedRangeSessions { get; private set; } = "0";
 
         public ObservableCollection<PlaytimeDayEntry> Days { get; } = new();
 
@@ -127,7 +183,9 @@ namespace RinsTrap.UI.ViewModels.Settings
 
             long todaySeconds = GetSeconds(stats, today);
             long totalSeconds = stats.SecondsByDay.Values.Sum();
-            int sessions = stats.SessionCount;
+            int sessions = stats.Games.Values
+                .Where(game => IsGameInRange(game, from, to))
+                .Sum(game => game.SessionCount);
             if (sessions == 0 && totalSeconds > 0)
                 sessions = 1;
 
@@ -147,29 +205,44 @@ namespace RinsTrap.UI.ViewModels.Settings
                 });
             }
 
-            Games.Clear();
-            foreach (var game in stats.Games.Values
+            var rangeGames = stats.Games.Values
                 .Where(game => IsGameInRange(game, from, to))
-                .OrderByDescending(game => game.SecondsPlayed))
-            {
-                Games.Add(new GameStatisticsEntry
+                .Select(game => new GameStatisticsEntry
                 {
                     Name = String.IsNullOrWhiteSpace(game.Name) ? $"Game {game.UniverseId}" : game.Name,
                     Duration = PlaytimeTracker.FormatDuration(game.SecondsPlayed),
+                    SecondsPlayed = game.SecondsPlayed,
+                    SessionTotal = game.SessionCount,
                     Sessions = game.SessionCount.ToString(CultureInfo.InvariantCulture),
+                    LastPlayedDate = game.LastPlayed,
                     LastPlayed = game.LastPlayed == default ? "Unknown" : game.LastPlayed.ToString("MMM d, yyyy", CultureInfo.InvariantCulture)
-                });
+                })
+                .ToList();
+
+            Games.Clear();
+            foreach (var game in rangeGames)
+            {
+                Games.Add(game);
             }
+
+            SortGames();
+
+            var peakDay = dailySeconds.OrderByDescending(pair => pair.Value).FirstOrDefault();
+            var topGame = rangeGames.OrderByDescending(game => game.SecondsPlayed).FirstOrDefault();
 
             TodayPlaytime = PlaytimeTracker.FormatDuration(todaySeconds);
             SelectedRangePlaytime = PlaytimeTracker.FormatDuration(selectedSeconds);
             TotalPlaytime = PlaytimeTracker.FormatDuration(totalSeconds);
             SessionCount = sessions.ToString(CultureInfo.InvariantCulture);
-            GamesPlayed = Games.Count.ToString(CultureInfo.InvariantCulture);
+            GamesPlayed = rangeGames.Count.ToString(CultureInfo.InvariantCulture);
             ActiveDays = activeDays.ToString(CultureInfo.InvariantCulture);
             AverageSession = sessions > 0 ? PlaytimeTracker.FormatDuration(selectedSeconds / sessions) : "0m";
             RangeSummary = $"Showing {from:MMM d, yyyy} - {to:MMM d, yyyy}";
-            HasData = selectedSeconds > 0 || sessions > 0 || Games.Count > 0;
+            PeakDay = peakDay.Value > 0 ? peakDay.Key.ToString("ddd, MMM d", CultureInfo.InvariantCulture) : "No activity";
+            PeakDayDuration = PlaytimeTracker.FormatDuration(peakDay.Value);
+            TopGame = topGame?.Name ?? "No recorded games";
+            SelectedRangeSessions = sessions.ToString(CultureInfo.InvariantCulture);
+            HasData = selectedSeconds > 0 || sessions > 0 || rangeGames.Count > 0;
 
             OnPropertyChanged(nameof(TodayPlaytime));
             OnPropertyChanged(nameof(SelectedRangePlaytime));
@@ -179,10 +252,65 @@ namespace RinsTrap.UI.ViewModels.Settings
             OnPropertyChanged(nameof(ActiveDays));
             OnPropertyChanged(nameof(AverageSession));
             OnPropertyChanged(nameof(RangeSummary));
+            OnPropertyChanged(nameof(PeakDay));
+            OnPropertyChanged(nameof(PeakDayDuration));
+            OnPropertyChanged(nameof(TopGame));
+            OnPropertyChanged(nameof(SelectedRangeSessions));
             OnPropertyChanged(nameof(Days));
             OnPropertyChanged(nameof(Games));
             OnPropertyChanged(nameof(HasGames));
             OnPropertyChanged(nameof(HasData));
+        }
+
+        private void SelectPreset(string? preset)
+        {
+            if (String.IsNullOrEmpty(preset))
+                return;
+
+            DateTime today = DateTime.Today;
+            DateTime from = preset switch
+            {
+                "30D" => today.AddDays(-29),
+                "90D" => today.AddDays(-89),
+                "YTD" => new DateTime(today.Year, 1, 1),
+                "ALL" => EarliestRecordedDate() ?? today.AddDays(-6),
+                _ => today.AddDays(-6)
+            };
+
+            SelectedPreset = preset;
+            FromDate = from;
+            ToDate = today;
+            LoadData();
+        }
+
+        private DateTime? EarliestRecordedDate()
+        {
+            return App.PlaytimeStats.Prop.SecondsByDay.Keys
+                .Select(key => DateTime.TryParseExact(key, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date) ? date : (DateTime?)null)
+                .Where(date => date.HasValue)
+                .Min();
+        }
+
+        private void SortGames()
+        {
+            if (Games.Count == 0)
+                return;
+
+            IEnumerable<GameStatisticsEntry> sorted = SelectedGameSort switch
+            {
+                "Sessions" => Games.OrderByDescending(game => game.SessionTotal),
+                "Last played" => Games.OrderByDescending(game => game.LastPlayedDate),
+                "Name" => Games.OrderBy(game => game.Name, StringComparer.OrdinalIgnoreCase),
+                _ => Games.OrderByDescending(game => game.SecondsPlayed)
+            };
+
+            var entries = sorted.ToList();
+            Games.Clear();
+            foreach (var entry in entries)
+                Games.Add(entry);
+
+            OnPropertyChanged(nameof(Games));
+            OnPropertyChanged(nameof(HasGames));
         }
 
         private static bool IsGameInRange(Models.Persistable.GamePlaytimeEntry game, DateTime from, DateTime to)
@@ -214,6 +342,8 @@ namespace RinsTrap.UI.ViewModels.Settings
         public string Duration { get; set; } = "";
 
         public long Seconds { get; set; }
+
+        public double BarWidth => Math.Min(100, Seconds / 86400d * 100);
     }
 
     public class GameStatisticsEntry
@@ -225,5 +355,24 @@ namespace RinsTrap.UI.ViewModels.Settings
         public string Sessions { get; set; } = "";
 
         public string LastPlayed { get; set; } = "";
+
+        public long SecondsPlayed { get; set; }
+
+        public int SessionTotal { get; set; }
+
+        public DateTime LastPlayedDate { get; set; }
+    }
+
+    public class RangeOption
+    {
+        public RangeOption(string value, string label)
+        {
+            Value = value;
+            Label = label;
+        }
+
+        public string Value { get; }
+
+        public string Label { get; }
     }
 }

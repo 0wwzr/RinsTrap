@@ -1,4 +1,11 @@
-﻿## v2.29.9
+﻿## v2.30.0
+
+### Statistics dashboard
+- ...
+
+---
+
+## v2.29.9
 
 ### Skybox quality
 - Improved skybox image fitting with high-quality bicubic scaling
