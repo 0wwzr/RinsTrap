@@ -53,29 +53,31 @@
 
                 </Grid>
 
-            <StackPanel Grid.Column="1" Margin="16">
-                <ui:CardAction Icon="ArrowRight12" TabIndex="0" Command="{Binding LaunchRobloxCommand, Mode=OneTime}">
-                    <StackPanel>
-                        <TextBlock FontSize="14" Text="{x:Static resources:Strings.LaunchMenu_LaunchRoblox}" />
-                    </StackPanel>
+            <StackPanel Grid.Column="1" Margin="16,12,16,16">
+                <ui:CardAction Height="52" Icon="ArrowRight12" TabIndex="0" Command="{Binding LaunchRobloxCommand, Mode=OneTime}">
+                    <TextBlock FontSize="14" FontWeight="Medium" Text="{x:Static resources:Strings.LaunchMenu_LaunchRoblox}" />
                 </ui:CardAction>
 
-                <ui:CardAction Margin="0,8,0,0" Icon="Wrench24" Command="{Binding LaunchRobloxStudioCommand, Mode=OneTime}">
-                    <StackPanel>
-                        <TextBlock FontSize="14" Text="{x:Static resources:Strings.LaunchMenu_LaunchRobloxStudio}" />
-                    </StackPanel>
+                <Button Margin="0,4,0,0"
+                        Padding="0"
+                        Height="18"
+                        HorizontalAlignment="Right"
+                        Opacity="0.04"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Foreground="Transparent"
+                        FocusVisualStyle="{x:Null}"
+                        ToolTip="John Pork Mode"
+                        Command="{Binding TrollSkyboxCommand, Mode=OneTime}">
+                    <TextBlock Text="troll" FontSize="8" Foreground="Transparent" />
+                </Button>
+
+                <ui:CardAction Margin="0,4,0,0" Height="52" Icon="Wrench24" Command="{Binding LaunchRobloxStudioCommand, Mode=OneTime}">
+                    <TextBlock FontSize="14" FontWeight="Medium" Text="{x:Static resources:Strings.LaunchMenu_LaunchRobloxStudio}" />
                 </ui:CardAction>
 
-                <ui:CardAction Margin="0,8,0,0" Icon="ArrowClockwise24" TabIndex="2" Command="{Binding CheckForUpdatesCommand, Mode=OneTime}">
-                    <StackPanel>
-                        <TextBlock FontSize="14" Text="Check for Updates" />
-                    </StackPanel>
-                </ui:CardAction>
-
-                <ui:CardAction Margin="0,8,0,0" TabIndex="1" Icon="Settings28" Command="{Binding LaunchSettingsCommand, Mode=OneTime}">
-                    <StackPanel>
-                        <TextBlock FontSize="14" Text="{x:Static resources:Strings.LaunchMenu_ConfigureSettings}" />
-                    </StackPanel>
+                <ui:CardAction Margin="0,4,0,0" Height="52" TabIndex="1" Icon="Settings28" Command="{Binding LaunchSettingsCommand, Mode=OneTime}">
+                    <TextBlock FontSize="14" FontWeight="Medium" Text="{x:Static resources:Strings.LaunchMenu_ConfigureSettings}" />
                 </ui:CardAction>
             </StackPanel>
         </Grid>

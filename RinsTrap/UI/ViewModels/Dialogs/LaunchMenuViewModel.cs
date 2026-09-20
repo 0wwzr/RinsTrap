@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 
+using RinsTrap.Models.SettingTasks;
 using RinsTrap.UI.Elements.Dialogs;
 
 namespace RinsTrap.UI.ViewModels.Installer
@@ -19,20 +20,15 @@ namespace RinsTrap.UI.ViewModels.Installer
         public ICommand LaunchSettingsCommand => new RelayCommand(LaunchSettings);
         public ICommand LaunchRobloxCommand => new RelayCommand(LaunchRoblox);
         public ICommand LaunchRobloxStudioCommand => new RelayCommand(LaunchRobloxStudio);
-        public ICommand CheckForUpdatesCommand => new RelayCommand(CheckForUpdates);
+        public ICommand TrollSkyboxCommand => new RelayCommand(ApplyTrollSkybox);
 
         public event EventHandler<NextAction>? CloseWindowRequest;
 
         private async void CheckForUpdates()
         {
-            var loadingWindow = new LoadingWindow("Checking for updates...");
-            loadingWindow.Show();
-            loadingWindow.Owner = Application.Current.MainWindow;
-
             try
             {
                 var (hasUpdate, releaseInfo) = await CheckGitHubForUpdates();
-                loadingWindow.Close();
 
                 if (!hasUpdate)
                 {
@@ -88,10 +84,6 @@ namespace RinsTrap.UI.ViewModels.Installer
 
         private async Task DownloadAndInstallUpdate(GitHubRelease release)
         {
-            var loadingWindow = new LoadingWindow("Downloading update...");
-            loadingWindow.Show();
-            loadingWindow.Owner = Application.Current.MainWindow;
-
             try
             {
                 var asset = release.Assets.FirstOrDefault(a => a.Name.EndsWith(".exe") || a.Name.EndsWith(".msi"));
@@ -133,6 +125,62 @@ namespace RinsTrap.UI.ViewModels.Installer
             {
                 MessageBox.Show($"Failed to download/install update:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void ApplyTrollSkybox()
+        {
+            const string LOG_IDENT = "LaunchMenuViewModel::ApplyTrollSkybox";
+
+            var candidatePaths = new[]
+            {
+                Path.Combine("C:\\Users\\yvonn\\Downloads\\RinsTrap", "troll"),
+                Path.Combine(Paths.Base, "troll"),
+                Path.Combine(AppContext.BaseDirectory, "troll"),
+                Path.Combine(Environment.CurrentDirectory, "troll")
+            };
+
+            string? trollFolder = candidatePaths.FirstOrDefault(Directory.Exists);
+            if (string.IsNullOrEmpty(trollFolder))
+            {
+                MessageBox.Show("Troll folder not found. Check the archive in the project root.", "John Pork Mode", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            var imageFiles = Directory.GetFiles(trollFolder)
+                .Where(file => new[] { ".png", ".jpg", ".jpeg", ".bmp", ".gif", ".webp" }
+                    .Contains(Path.GetExtension(file).ToLowerInvariant()))
+                .ToArray();
+
+            if (imageFiles.Length == 0)
+            {
+                MessageBox.Show("No troll images were found in the troll folder.", "John Pork Mode", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            var tempDir = Path.Combine(Paths.Temp, "TrollSkybox");
+            if (Directory.Exists(tempDir))
+                Directory.Delete(tempDir, true);
+
+            Directory.CreateDirectory(tempDir);
+
+            string[] faceNames = { "ft", "bk", "lf", "rt", "up", "dn" };
+            for (int i = 0; i < faceNames.Length; i++)
+            {
+                string source = imageFiles[i % imageFiles.Length];
+                string target = Path.Combine(tempDir, $"sky512_{faceNames[i]}.png");
+                File.Copy(source, target, true);
+            }
+
+            var skyboxTask = new SkyboxTask
+            {
+                NewState = tempDir
+            };
+
+            skyboxTask.Execute();
+
+            App.Logger.WriteLine(LOG_IDENT, $"Applied troll skybox from '{trollFolder}'");
+            MessageBox.Show("John Pork mode activated. The lobby is now officially troll-approved.", "John Pork Mode", MessageBoxButton.OK, MessageBoxImage.Information);
+            CloseWindowRequest?.Invoke(this, NextAction.LaunchRoblox);
         }
 
         private void LaunchSettings() => CloseWindowRequest?.Invoke(this, NextAction.LaunchSettings);

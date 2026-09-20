@@ -32,14 +32,6 @@
 
         
 
-        <ui:CardAction Margin="0,8,0,0" Icon="ArrowSync24" Command="{Binding CheckForUpdatesCommand}" IsEnabled="{Binding IsCheckingForUpdates, Converter={StaticResource InvertBoolConverter}, Mode=OneWay}">
-            <StackPanel>
-                <TextBlock FontSize="14" Text="Check for Updates" />
-                <TextBlock Margin="0,2,0,0" FontSize="12" Text="Check if a new version of RinsTrap is available" Padding="0,0,16,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
-                <TextBlock Margin="0,4,0,0" FontSize="12" Text="{Binding UpdateStatus}" Padding="0,0,16,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Visibility="{Binding UpdateStatusVisibility}" />
-            </StackPanel>
-        </ui:CardAction>
-
         <controls:OptionControl 
             Header="{x:Static resources:Strings.Menu_RinsTrap_Analytics_Title}"
             Description="{x:Static resources:Strings.Menu_RinsTrap_Analytics_Description}">

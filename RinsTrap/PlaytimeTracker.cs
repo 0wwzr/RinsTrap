@@ -24,6 +24,8 @@ namespace RinsTrap
 
         private DateTime _gameStart;
 
+        private DateTime _lastGameUpdate = DateTime.MinValue;
+
         /// <summary>
         /// Invoked when a notification should be shown to the user
         /// </summary>
@@ -33,10 +35,16 @@ namespace RinsTrap
 
         public void OnGameJoin(long universeId, long placeId, string? name)
         {
+            if (_gameUniverseId != 0 && _gameStart != default)
+                OnGameLeave();
+
             _gameUniverseId = universeId;
             _gamePlaceId = placeId;
             _gameName = name ?? "";
             _gameStart = DateTime.Now;
+            _lastGameUpdate = _gameStart;
+
+            App.PlaytimeStats.Prop.SessionSeconds = 0;
         }
 
         public void OnGameLeave()
@@ -44,17 +52,22 @@ namespace RinsTrap
             if (_gameUniverseId == 0)
                 return;
 
-            long seconds = (long)(DateTime.Now - _gameStart).TotalSeconds;
+            DateTime now = DateTime.Now;
+            long seconds = (long)(now - _gameStart).TotalSeconds;
 
             if (seconds > 0)
             {
                 var stats = App.PlaytimeStats.Prop;
+                string dayKey = now.ToString("yyyy-MM-dd");
 
                 if (stats.Games.TryGetValue(_gameUniverseId, out var entry))
                 {
                     entry.SecondsPlayed += seconds;
                     entry.SessionCount++;
-                    entry.LastPlayed = DateTime.Now;
+                    entry.LastPlayed = now;
+
+                    if (entry.FirstPlayed == default)
+                        entry.FirstPlayed = now;
 
                     if (!String.IsNullOrEmpty(_gameName))
                         entry.Name = _gameName;
@@ -68,14 +81,22 @@ namespace RinsTrap
                         Name = _gameName,
                         SecondsPlayed = seconds,
                         SessionCount = 1,
-                        LastPlayed = DateTime.Now
+                        FirstPlayed = now,
+                        LastPlayed = now
                     };
                 }
 
+                stats.SessionCount++;
+                stats.SecondsByDay[dayKey] = stats.SecondsByDay.GetValueOrDefault(dayKey) + seconds;
+                stats.SessionSeconds = 0;
                 App.PlaytimeStats.Save();
             }
 
             _gameUniverseId = 0;
+            _gamePlaceId = 0;
+            _gameName = "";
+            _gameStart = default;
+            _lastGameUpdate = DateTime.MinValue;
         }
 
         public void Start()
@@ -97,22 +118,24 @@ namespace RinsTrap
                         break;
                     }
 
-                    _tickSeconds += 60;
-
-                    App.PlaytimeStats.Prop.SessionSeconds = _tickSeconds;
-                    App.PlaytimeStats.Save();
-
-                    if (App.Settings.Prop.EnablePlaytimeReminder)
+                    if (_gameUniverseId != 0 && _gameStart != default)
                     {
-                        int interval = Math.Max(15, App.Settings.Prop.PlaytimeReminderMinutes);
-                        long intervalSeconds = interval * 60L;
+                        _tickSeconds = Math.Max(_tickSeconds, (long)(DateTime.Now - _gameStart).TotalSeconds);
+                        App.PlaytimeStats.Prop.SessionSeconds = _tickSeconds;
+                        App.PlaytimeStats.Save();
 
-                        if (_tickSeconds % intervalSeconds == 0)
+                        if (App.Settings.Prop.EnablePlaytimeReminder)
                         {
-                            Notify?.Invoke(
-                                Strings.Notifications_PlaytimeReminder_Title,
-                                String.Format(Strings.Notifications_PlaytimeReminder_Text, FormatDuration(_tickSeconds))
-                            );
+                            int interval = Math.Max(15, App.Settings.Prop.PlaytimeReminderMinutes);
+                            long intervalSeconds = interval * 60L;
+
+                            if (_tickSeconds % intervalSeconds == 0)
+                            {
+                                Notify?.Invoke(
+                                    Strings.Notifications_PlaytimeReminder_Title,
+                                    String.Format(Strings.Notifications_PlaytimeReminder_Text, FormatDuration(_tickSeconds))
+                                );
+                            }
                         }
                     }
                 }
@@ -139,27 +162,28 @@ namespace RinsTrap
                 App.Logger.WriteException(LOG_IDENT, ex);
             }
 
-            long seconds = (long)SessionDuration.TotalSeconds;
-
-            App.PlaytimeStats.Prop.SessionSeconds = 0;
-
-            if (seconds <= 0)
-                return;
+            long seconds = 0;
 
             if (_gameUniverseId != 0)
             {
                 long gameSeconds = (long)(DateTime.Now - _gameStart).TotalSeconds;
 
                 if (gameSeconds > 0)
+                {
+                    seconds = gameSeconds;
                     OnGameLeave();
+                }
                 else
+                {
                     _gameUniverseId = 0;
+                }
             }
 
-            App.PlaytimeStats.Prop.SessionCount++;
-            App.PlaytimeStats.Prop.SecondsByDay[DateTime.Now.ToString("yyyy-MM-dd")] =
-                App.PlaytimeStats.Prop.SecondsByDay.GetValueOrDefault(DateTime.Now.ToString("yyyy-MM-dd")) + seconds;
+            App.PlaytimeStats.Prop.SessionSeconds = 0;
             App.PlaytimeStats.Save();
+
+            if (seconds <= 0)
+                return;
 
             App.Logger.WriteLine(LOG_IDENT, $"Session ended, recorded {seconds} seconds");
 
@@ -178,6 +202,9 @@ namespace RinsTrap
                 return $"{seconds}s";
 
             TimeSpan timeSpan = TimeSpan.FromSeconds(seconds);
+
+            if (timeSpan.TotalDays >= 1)
+                return $"{(int)timeSpan.TotalDays}d {timeSpan.Hours}h {timeSpan.Minutes}m";
 
             if (timeSpan.TotalHours >= 1)
                 return $"{(int)timeSpan.TotalHours}h {timeSpan.Minutes}m";

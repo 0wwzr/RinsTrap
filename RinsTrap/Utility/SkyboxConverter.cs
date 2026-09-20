@@ -1,5 +1,6 @@
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Numerics;
 
 namespace RinsTrap.Utility
 {
@@ -25,6 +26,41 @@ namespace RinsTrap.Utility
 
         public static int GetMipCount() => 1 + (int)Math.Log2(FaceSize); // 11 for 1024
 
+        public static void CreateCubemapFromImage(string sourcePath, string outputDirectory)
+        {
+            const string LOG_IDENT = "SkyboxConverter::CreateCubemapFromImage";
+
+            App.Logger.WriteLine(LOG_IDENT, $"Generating cubemap from '{sourcePath}' into '{outputDirectory}'");
+
+            if (Directory.Exists(outputDirectory))
+                Directory.Delete(outputDirectory, true);
+
+            Directory.CreateDirectory(outputDirectory);
+
+            using var source = new Bitmap(sourcePath);
+
+            foreach (var face in FaceFiles.Keys)
+            {
+                using var faceBitmap = new Bitmap(FaceSize, FaceSize, PixelFormat.Format32bppArgb);
+
+                for (int y = 0; y < FaceSize; y++)
+                {
+                    for (int x = 0; x < FaceSize; x++)
+                    {
+                        double nx = ((2.0 * x) / (FaceSize - 1)) - 1.0;
+                        double ny = ((2.0 * y) / (FaceSize - 1)) - 1.0;
+
+                        var direction = GetFaceDirection(face, nx, ny);
+                        var color = SampleEquirectangular(source, direction);
+                        faceBitmap.SetPixel(x, y, color);
+                    }
+                }
+
+                string faceFile = Path.Combine(outputDirectory, $"sky512_{face}.png");
+                faceBitmap.Save(faceFile, ImageFormat.Png);
+            }
+        }
+
         public static void Convert(string sourcePath, string outputPath)
         {
             const string LOG_IDENT = "SkyboxConverter::Convert";
@@ -35,6 +71,50 @@ namespace RinsTrap.Utility
             using var resized = new Bitmap(bitmap, new Size(FaceSize, FaceSize));
 
             ConvertBitmap(resized, outputPath);
+        }
+
+        private static Color SampleEquirectangular(Bitmap source, Vector3 direction)
+        {
+            double yaw = Math.Atan2(direction.Z, direction.X);
+            double pitch = Math.Asin(direction.Y);
+
+            double u = (yaw + Math.PI) / (Math.PI * 2.0);
+            double v = (pitch + Math.PI / 2.0) / Math.PI;
+
+            int x = (int)Math.Clamp(u * (source.Width - 1), 0, source.Width - 1);
+            int y = (int)Math.Clamp((1.0 - v) * (source.Height - 1), 0, source.Height - 1);
+
+            return source.GetPixel(x, y);
+        }
+
+        private static Vector3 GetFaceDirection(string face, double nx, double ny)
+        {
+            switch (face)
+            {
+                case "ft":
+                    return Normalize(new Vector3((float)nx, (float)-ny, -1.0f));
+                case "bk":
+                    return Normalize(new Vector3((float)-nx, (float)-ny, 1.0f));
+                case "lf":
+                    return Normalize(new Vector3(-1.0f, (float)-ny, (float)nx));
+                case "rt":
+                    return Normalize(new Vector3(1.0f, (float)-ny, (float)-nx));
+                case "up":
+                    return Normalize(new Vector3((float)nx, 1.0f, (float)-ny));
+                case "dn":
+                    return Normalize(new Vector3((float)nx, -1.0f, (float)ny));
+                default:
+                    return new Vector3(0f, 0f, 1f);
+            }
+        }
+
+        private static Vector3 Normalize(Vector3 vector)
+        {
+            double length = Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y + vector.Z * vector.Z);
+            if (length < 1e-8)
+                return new Vector3(0f, 0f, 1f);
+
+            return new Vector3((float)(vector.X / length), (float)(vector.Y / length), (float)(vector.Z / length));
         }
 
         private static void ConvertBitmap(Bitmap bitmap, string outputPath)

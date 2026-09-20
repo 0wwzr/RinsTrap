@@ -1,0 +1,183 @@
+# Statistics Tab - Feature Requests & Improvements
+
+## Core Tracking Improvements
+
+### 1. Accurate Game-Only Playtime Tracking
+- **Track ONLY when in actual Roblox games** (not in menus, home screen, avatar editor, etc.)
+- Detect game join/leave events via Roblox process monitoring
+- Track per-game playtime with place ID and universe ID
+- Ignore time spent in Roblox Studio, home page, avatar shop, settings, etc.
+- Use Roblox process command line args or memory scanning to detect game state
+
+### 2. Roblox App Process Tracking
+- Track `RobloxPlayerBeta.exe` process lifecycle
+- Monitor CPU/memory usage per session
+- Detect crashes vs clean exits
+- Track multiple concurrent Roblox instances separately
+
+### 3. Granular Time Tracking
+- **Per-second resolution** for active gameplay
+- **Pause tracking** when: minimized, alt-tabbed, game paused, AFK > 30s
+- **Resume tracking** on focus restore
+- **Idle detection** (no input > 60s = pause)
+
+## Time Range & Viewing Options
+
+### 1. Predefined Time Ranges
+- Today / Yesterday / This Week / Last Week / This Month / Last Month / This Year / Last Year / All Time
+- **Custom date range picker** (From/To with calendar)
+- **Relative ranges**: "Last 7 days", "Last 30 days", "Last 90 days", "Last 365 days"
+
+### 2. Time Granularity Views
+- **Hourly breakdown** (24h chart) - peak hours
+- **Daily breakdown** (weekly/monthly charts)
+- **Weekly breakdown** (monthly/yearly)
+- **Monthly breakdown** (yearly+)
+
+### 3. Specific Time Filters
+- **Day of week** comparison (Mon vs Sun)
+- **Hour of day** heatmap (when do they play most?)
+- **Weekend vs Weekday** comparison
+- **Custom time windows** (e.g., "4pm-10pm on weekdays")
+
+## Visualization & Charts
+
+### 1. Interactive Charts
+- **Area chart** for cumulative playtime
+- **Bar chart** for daily/weekly/monthly totals
+- **Line chart** for trend over time
+- **Heatmap calendar** (GitHub-style) - each day colored by playtime
+- **Hourly heatmap** (24h x 7 days grid)
+- **Pie chart** for game distribution
+- **Stacked area** for multi-game comparison
+
+### 2. Real-time Updates
+- Live updating during active session
+- Auto-refresh every 30s during gameplay
+- Session timer in title bar
+
+### 3. Export & Sharing
+- **Export to CSV/JSON** (filtered by date range)
+- **Generate report** (PDF with charts)
+- **Copy to clipboard** (formatted summary)
+- **Share link** (generate temporary public stats page)
+
+## Game-Specific Analytics
+
+### 1. Per-Game Statistics
+- Total hours per game (place/universe ID)
+- First played / Last played dates
+- **Session count** per game
+- **Average session length** per game
+- **Longest single session** per game
+- **Game icon + name** display (fetch from Roblox API)
+
+### 2. Game Comparison
+- **Top 10 games** by playtime
+- **New games this week/month**
+- **Games not played in 30+ days**
+- **Completion estimates** (if achievement data available)
+
+### 3. Game Session Details
+- **Session timeline** (timeline view of all sessions)
+- **Join/Leave timestamps** per session
+- **Server info** (if available: server ID, player count, region)
+- **Crash/Disconnect tracking** per game
+
+## Advanced Analytics
+
+### 1. Trends & Predictions
+- **Playtime trend** (increasing/decreasing)
+- **Projected monthly/yearly totals**
+- **Seasonal patterns** (more play in summer/holidays)
+- **Burnout detection** (sudden drop after high activity)
+
+### 2. Comparative Analytics
+- **Compare two time ranges** side-by-side
+- **Year-over-year** comparison
+- **Month-over-month** growth rate
+- **Percentile ranking** (vs other RinsTrap users - opt-in)
+
+### 3. Efficiency Metrics
+- **Active playtime ratio** (gameplay vs total Roblox time)
+- **AFK percentage** per session
+- **Session efficiency** (gameplay time / session duration)
+
+## UI/UX Improvements
+
+### 1. Dashboard Layout
+- **Customizable dashboard** (drag-drop widgets)
+- **Compact mode** for small windows
+- **Full-screen mode** for detailed analysis
+- **Dark/Light theme** sync with app theme
+
+### 2. Navigation
+- **Tabbed interface**: Overview | Games | Timeline | Analytics | Export
+- **Breadcrumb navigation** for deep views
+- **Quick filters** (last 7d, 30d, 90d, custom) always visible
+- **Search/filter** games by name
+
+### 3. Data Presentation
+- **Human-readable durations** (1h 23m, not 4980s)
+- **Relative timestamps** ("2 hours ago", "Last Tuesday")
+- **Number formatting** (1,234.5h)
+- **Tooltips** with exact values on hover
+- **Copy values** on click
+
+## Technical Implementation
+
+### 1. Data Storage
+- **SQLite database** for local stats (better than JSON for queries)
+- **Partitioned by month** for performance
+- **Indexed by** date, game ID, session ID
+- **Auto-cleanup** option (keep last N years)
+
+### 2. Performance
+- **Lazy loading** for charts (virtual scrolling)
+- **Background aggregation** (don't block UI)
+- **Cached aggregations** (refresh on new data only)
+- **Pagination** for large datasets (sessions list)
+
+### 3. Privacy & Sync
+- **Local-only** by default (no cloud)
+- **Optional encrypted backup** to user's cloud
+- **Export/Import** for migration
+- **GDPR-compliant** delete all data option
+
+## New UI Components Needed
+
+1. **DateRangePicker** - custom dual-calendar with presets
+2. **ChartControl** - wrapper for LiveCharts2/ScottPlot with zoom/pan
+3. **GameCard** - reusable game display (icon, name, hours, trend)
+4. **SessionRow** - timeline row with expandable details
+5. **HeatmapCalendar** - GitHub-style contribution calendar
+10. **TimeRangeSelector** - preset + custom picker in toolbar
+11. **ExportDialog** - format, range, fields selection
+12. **StatsCard** - KPI display (total hours, games played, avg session, etc.)
+
+## Priority Order
+
+**Phase 1 (Core):** Game-only tracking, accurate session detection, basic charts, date ranges
+**Phase 2 (Analytics):** Game-specific stats, heatmaps, trends, export
+**Phase 3 (Advanced):** Predictions, comparisons, custom dashboards, export formats
+**Phase 3 (Polish):** Animations, tooltips, keyboard shortcuts, accessibility
+
+## Integration Points
+
+- **LaunchMenuViewModel** - show today's playtime in menu
+- **ActivityWatcher** - hook for real-time session detection
+- **Bootstrapper** - pass launch args for game detection
+- **Settings** - privacy controls, data retention, auto-export
+- **Tray icon** - show current session time in tooltip
+
+## Testing Scenarios
+
+1. Launch game → play 30min → leave → verify 30m recorded
+2. Alt-tab during game → verify pause/resume
+3. Minimize Roblox → verify pause
+4. Crash during game → verify session saved on restart
+5. Multiple games in one session → separate tracking
+6. Date range changes → charts update instantly
+5. Export CSV → verify data integrity
+6. Year view → performance with 365 data points
+6. Heatmap → click day → show sessions

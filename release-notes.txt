@@ -1,7 +1,60 @@
-﻿## v2.26.1
+﻿## v2.28.1
 
-### Changes
-- Removed Discord Rich Presence feature from Multi-Instance page
-- All feature cards now require toggle ON before controls are usable
-- Anti-AFK, Screenshots, Auto-Relaunch, Anti-Detection, Dashboard, Logging sections all disable when toggled off
-- Cleaner feature cards layout
+### Highlights
+- Polished updater/loading window to match the smoother startup-style Roblox flow
+- Improved launch menu spacing and consistency for all main action buttons
+- Fixed the statistics range buttons so they properly change the selected data period
+- Fixed the top-game display to prefer the actual game name instead of showing raw universe IDs
+- Expanded server information panel with better uptime and current play-time details
+- Added a quick copy invite link action in the server info popup
+
+### UI Improvements
+- Updated the update-check loading screen to a cleaner centered startup card
+- Tightened the spacing between launch actions to better match the rest of the app UI
+- Standardized the check-for-updates button sizing and styling with the other launch options
+- Reduced visual clutter in the server info panel while keeping key stats readable
+
+### Statistics Fixes
+- 7D / 30D / 90D / YTD / All buttons now correctly map to the intended ranges
+- Top game labels now use the real Roblox game title when available
+- Better fallback handling when a name is missing from recorded play data
+
+### Release workflow
+- This release is intended to be published as a GitHub release with notes so all users can see the latest changes and auto-update from the app updater.
+- Every future app change or quality-of-life improvement should follow the same pattern: bump the version, update this release-notes file, and publish the release notes on GitHub.
+
+---
+
+## v2.28.0
+
+### New Features
+- **Check for Updates button** in Launch Menu with full auto-update flow:
+  - Loading window with progress ring
+  - Checks GitHub API for latest release
+  - Version comparison (semver)
+  - Warning dialog with changelog preview
+  - Downloads installer to temp
+  - Shows "Ready to Install" confirmation
+  - Launches installer, shuts down RinsTrap
+
+### New GUI Presets (6 new)
+- Ocean Blue
+- Emerald Green
+- Sunset Orange
+- Rose Pink
+- Midnight
+- Rainbow (moved down)
+- Synthwave, Yellow, Deep Blue, Red (reordered)
+
+### UI Cleanup
+- Removed Multi-Instance tab
+- Removed "What's New" buttons from Appearance & RinsTrap pages
+- Removed Preview buttons from Global Theme & Bootstrapper
+- Update button moved to Launch Menu (between Launch Studio & Settings)
+- Matches other CardAction buttons (no colors, single icon)
+
+### Improvements
+- CleanSlider style for all sliders (matches WPF UI theme)
+- Simplified Multi-Instance page (removed Description, Cookie, Auth Ticket)
+- Streamlined Appearance page
+- Cleaned up RinsTrap page (removed WhatsNew toggles)

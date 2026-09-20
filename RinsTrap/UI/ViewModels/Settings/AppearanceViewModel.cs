@@ -76,22 +76,21 @@ namespace RinsTrap.UI.ViewModels.Settings
             if (dialog.ShowDialog() != true)
                 return;
 
-            string tempDir = Path.Combine(Paths.Temp, "SkyboxImage");
-            Directory.CreateDirectory(tempDir);
-
-            string[] faceNames = { "ft", "bk", "lf", "rt", "up", "dn" };
-
-            foreach (string face in faceNames)
+            try
             {
-                string dest = Path.Combine(tempDir, $"sky512_{face}{Path.GetExtension(dialog.FileName)}");
-                File.Copy(dialog.FileName, dest, true);
+                string tempDir = Path.Combine(Paths.Temp, "SkyboxImage");
+                SkyboxConverter.CreateCubemapFromImage(dialog.FileName, tempDir);
+
+                SkyboxTask.NewState = tempDir;
+
+                OnPropertyChanged(nameof(SelectedSkyboxFolder));
+                OnPropertyChanged(nameof(ChooseSkyboxVisibility));
+                OnPropertyChanged(nameof(RemoveSkyboxVisibility));
             }
-
-            SkyboxTask.NewState = tempDir;
-
-            OnPropertyChanged(nameof(SelectedSkyboxFolder));
-            OnPropertyChanged(nameof(ChooseSkyboxVisibility));
-            OnPropertyChanged(nameof(RemoveSkyboxVisibility));
+            catch (Exception ex)
+            {
+                Frontend.ShowMessageBox($"Failed to generate skybox from the selected image:\n{ex.Message}", MessageBoxImage.Error);
+            }
         }
 
         private void RemoveSkybox()
@@ -123,7 +122,7 @@ namespace RinsTrap.UI.ViewModels.Settings
         {
             var dialog = new OpenFileDialog
             {
-                Filter = "Image files|*.png;*.jpg;*.jpeg|All files|*.*"
+                Filter = "Image files|*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.webp|All files|*.*"
             };
 
             if (dialog.ShowDialog() != true)

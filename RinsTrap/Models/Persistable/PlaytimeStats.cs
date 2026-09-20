@@ -35,6 +35,8 @@ namespace RinsTrap.Models.Persistable
 
         public int SessionCount { get; set; } = 0;
 
+        public DateTime FirstPlayed { get; set; }
+
         public DateTime LastPlayed { get; set; }
     }
 }

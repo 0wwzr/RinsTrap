@@ -15,9 +15,15 @@ namespace RinsTrap.UI.ViewModels.ContextMenu
 
         public string ServerLocation { get; private set; } = Strings.Common_Loading;
 
+        public string ServerUptime => FormatElapsed(_activityWatcher.Data.TimeJoined);
+
+        public string CurrentPlayerPlaytime => FormatElapsed(_activityWatcher.Data.TimeJoined);
+
         public Visibility ServerLocationVisibility => App.Settings.Prop.ShowServerDetails ? Visibility.Visible : Visibility.Collapsed;
 
         public ICommand CopyInstanceIdCommand => new RelayCommand(CopyInstanceId);
+
+        public ICommand CopyInviteLinkCommand => new RelayCommand(CopyInviteLink);
 
         public ServerInformationViewModel(Watcher watcher)
         {
@@ -40,5 +46,22 @@ namespace RinsTrap.UI.ViewModels.ContextMenu
         }
 
         private void CopyInstanceId() => Clipboard.SetDataObject(InstanceId);
+
+        private void CopyInviteLink() => Clipboard.SetDataObject(_activityWatcher.Data.GetInviteDeeplink());
+
+        private static string FormatElapsed(DateTime start)
+        {
+            TimeSpan elapsed = DateTime.Now - start;
+            if (elapsed.TotalSeconds < 0)
+                return "0m";
+
+            if (elapsed.TotalDays >= 1)
+                return $"{(int)elapsed.TotalDays}d {elapsed.Hours}h {elapsed.Minutes}m";
+
+            if (elapsed.TotalHours >= 1)
+                return $"{(int)elapsed.TotalHours}h {elapsed.Minutes}m";
+
+            return $"{Math.Max(0, elapsed.Minutes)}m";
+        }
     }
 }
