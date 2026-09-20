@@ -8,17 +8,17 @@
 
 ## v2.29.2
 
-### Secret launch-menu feature
-- The launch action changes to "Launch Totally Normal Roblox" after activation
-- The launch menu stays open so the surprise label can be seen before continuing
+### Launch menu polish
+- Updated the launch action presentation
+- Refined the launch menu interaction flow
 
 ---
 
 ## v2.29.1
 
-### Secret launch-menu feature
-- Added a secret interaction to the launch menu
-- Includes a hidden activation message after repeated presses
+### Launch menu polish
+- Added a small launch menu interaction improvement
+- Refined the launch menu feedback behavior
 
 ---
 
@@ -33,9 +33,9 @@
 
 ## v2.28.8
 
-### Secret launch-menu interaction
-- Moved the hidden interaction onto the RinsTrap logo in the launch menu
-- Removed the tiny hidden button below the launch actions
+### Launch menu polish
+- Moved the launch menu interaction onto the RinsTrap logo
+- Removed the tiny button below the launch actions
 
 ---
 
@@ -49,9 +49,9 @@
 
 ## v2.28.6
 
-### Secret launch-menu interaction
-- Kept the hidden button in the launch menu alongside the regular launch actions
-- Packaged the secret feature assets with the app so the hidden action works from built and installed copies
+### Launch menu polish
+- Kept the logo interaction alongside the regular launch actions
+- Packaged the related assets with the app for built and installed copies
 - Removed the developer-machine-specific asset path
 
 ---
