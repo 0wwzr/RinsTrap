@@ -1,8 +1,8 @@
-﻿## v2.29.0
+﻿## v2.29.1
 
-### Troll logo activation
-- The hidden troll action now activates after 20 logo presses
-- Shows a "Troll mode activated." message window when the threshold is reached
+### Secret launch-menu feature
+- Added a secret interaction to the launch menu
+- Includes a hidden activation message after repeated presses
 
 ---
 
