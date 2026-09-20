@@ -1,4 +1,18 @@
-﻿## v2.29.3
+﻿## v2.29.5
+
+### Launch menu polish
+- Added rotating launch labels while interacting with the launch menu
+
+---
+
+## v2.29.4
+
+### Launch menu polish
+- Added an image to the renamed launch action after the hidden interaction is activated
+
+---
+
+## v2.29.3
 
 ### Secret...
 - A small surprise has been added...

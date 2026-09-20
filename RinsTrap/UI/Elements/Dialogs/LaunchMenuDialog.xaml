@@ -64,7 +64,21 @@
 
             <StackPanel Grid.Column="1" Margin="16,12,16,16">
                 <ui:CardAction Height="58" Width="Auto" Icon="ArrowRight12" TabIndex="0" Command="{Binding LaunchRobloxCommand, Mode=OneTime}">
-                    <TextBlock FontSize="14" FontWeight="Medium" Text="{x:Static resources:Strings.LaunchMenu_LaunchRoblox}" />
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="24" Height="24" Margin="0,0,8,0" Source="{Binding LaunchRobloxIconPath}" Stretch="Uniform">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding HasLaunchRobloxIcon}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                        <TextBlock FontSize="14" FontWeight="Medium" Text="{Binding LaunchRobloxLabel}" VerticalAlignment="Center" />
+                    </StackPanel>
                 </ui:CardAction>
 
                 <ui:CardAction Margin="0,6,0,0" Height="58" Width="Auto" Icon="Wrench24" Command="{Binding LaunchRobloxStudioCommand, Mode=OneTime}">

@@ -11,13 +11,31 @@ using RinsTrap.UI.Elements.Dialogs;
 
 namespace RinsTrap.UI.ViewModels.Installer
 {
-    public class LaunchMenuViewModel
+    public class LaunchMenuViewModel : NotifyPropertyChangedViewModel
     {
         private int _trollLogoClicks;
 
         private const int TrollActivationClicks = 20;
 
+        private static readonly string[] PreActivationLabels =
+        {
+            "Launch Totally Normal Roblox",
+            "Launch Roblox, Probably",
+            "Launch Completely Safe Experience",
+            "Launch Roblox (Nothing Strange)",
+            "Launch Regular Roblox",
+            "Launch The Normal One",
+            "Launch Roblox, Trust Me",
+            "Launch An Ordinary Experience"
+        };
+
         public string Version => $"v{App.Version}";
+
+        public string LaunchRobloxLabel { get; private set; } = Strings.LaunchMenu_LaunchRoblox;
+
+        public string? LaunchRobloxIconPath { get; private set; }
+
+        public bool HasLaunchRobloxIcon => !String.IsNullOrEmpty(LaunchRobloxIconPath);
 
         public ICommand LaunchSettingsCommand => new RelayCommand(LaunchSettings);
         public ICommand LaunchRobloxCommand => new RelayCommand(LaunchRoblox);
@@ -33,7 +51,11 @@ namespace RinsTrap.UI.ViewModels.Installer
             _trollLogoClicks++;
 
             if (_trollLogoClicks < TrollActivationClicks)
+            {
+                LaunchRobloxLabel = PreActivationLabels[Random.Shared.Next(PreActivationLabels.Length)];
+                OnPropertyChanged(nameof(LaunchRobloxLabel));
                 return;
+            }
 
             _trollLogoClicks = 0;
 
@@ -84,8 +106,11 @@ namespace RinsTrap.UI.ViewModels.Installer
             skyboxTask.Execute();
 
             App.Logger.WriteLine(LOG_IDENT, $"Applied troll skybox from '{trollFolder}'");
-            MessageBox.Show("Troll mode activated.", "Troll Mode", MessageBoxButton.OK, MessageBoxImage.Information);
-            CloseWindowRequest?.Invoke(this, NextAction.LaunchRoblox);
+            LaunchRobloxLabel = "Launch Totally Normal Roblox";
+            LaunchRobloxIconPath = Path.Combine(AppContext.BaseDirectory, "troll", "lol!.png");
+            OnPropertyChanged(nameof(LaunchRobloxLabel));
+            OnPropertyChanged(nameof(LaunchRobloxIconPath));
+            OnPropertyChanged(nameof(HasLaunchRobloxIcon));
         }
 
         private void LaunchSettings() => CloseWindowRequest?.Invoke(this, NextAction.LaunchSettings);
