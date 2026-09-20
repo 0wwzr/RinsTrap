@@ -1,4 +1,19 @@
-﻿## v2.29.1
+﻿## v2.29.3
+
+### Secret launch-menu feature
+- Removed the activation popup so the renamed launch action is the only reveal
+
+---
+
+## v2.29.2
+
+### Secret launch-menu feature
+- The launch action changes to "Launch Totally Normal Roblox" after activation
+- The launch menu stays open so the surprise label can be seen before continuing
+
+---
+
+## v2.29.1
 
 ### Secret launch-menu feature
 - Added a secret interaction to the launch menu
@@ -17,8 +32,8 @@
 
 ## v2.28.8
 
-### Hidden troll button
-- Moved the hidden troll action onto the RinsTrap logo in the launch menu
+### Secret launch-menu interaction
+- Moved the hidden interaction onto the RinsTrap logo in the launch menu
 - Removed the tiny hidden button below the launch actions
 
 ---
@@ -33,9 +48,9 @@
 
 ## v2.28.6
 
-### Hidden troll launch action
-- Kept the hidden button in the launch menu alongside Launch Roblox, Launch Roblox Studio, and Configure settings
-- Packaged the troll images with the app so the hidden action works from built and installed copies, not only from the source workspace
+### Secret launch-menu interaction
+- Kept the hidden button in the launch menu alongside the regular launch actions
+- Packaged the secret feature assets with the app so the hidden action works from built and installed copies
 - Removed the developer-machine-specific asset path
 
 ---
