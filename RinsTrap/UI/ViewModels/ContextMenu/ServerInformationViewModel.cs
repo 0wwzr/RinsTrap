@@ -13,6 +13,14 @@ namespace RinsTrap.UI.ViewModels.ContextMenu
 
         public string ServerType => _activityWatcher.Data.ServerType.ToTranslatedString();
 
+        public string AccountName { get; private set; } = Strings.Common_Loading;
+
+        public string AccountAvatarUrl { get; private set; } = "";
+
+        public string GameName { get; private set; } = Strings.Common_Loading;
+
+        public string PlayerCount { get; private set; } = Strings.Common_Loading;
+
         public string ServerLocation { get; private set; } = Strings.Common_Loading;
 
         public string ServerUptime => FormatElapsed(_activityWatcher.Data.TimeJoined);
@@ -31,6 +39,44 @@ namespace RinsTrap.UI.ViewModels.ContextMenu
 
             if (ServerLocationVisibility == Visibility.Visible)
                 QueryServerLocation();
+
+            _ = LoadRobloxDetails();
+        }
+
+        private async Task LoadRobloxDetails()
+        {
+            try
+            {
+                var activity = _activityWatcher.Data;
+
+                if (activity.UserId != 0)
+                {
+                    var userDetails = await UserDetails.Fetch(activity.UserId);
+                    AccountName = $"{userDetails.Data.DisplayName} (@{userDetails.Data.Name})";
+                    AccountAvatarUrl = userDetails.Thumbnail.ImageUrl ?? "";
+                }
+
+                if (activity.UniverseId != 0)
+                {
+                    await UniverseDetails.FetchSingle(activity.UniverseId);
+                    var universeDetails = UniverseDetails.LoadFromCache(activity.UniverseId);
+
+                    if (universeDetails is not null)
+                    {
+                        GameName = universeDetails.Data.Name;
+                        PlayerCount = $"{universeDetails.Data.Playing:N0} playing";
+                    }
+                }
+
+                OnPropertyChanged(nameof(AccountName));
+                OnPropertyChanged(nameof(AccountAvatarUrl));
+                OnPropertyChanged(nameof(GameName));
+                OnPropertyChanged(nameof(PlayerCount));
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("ServerInformationViewModel::LoadRobloxDetails", ex);
+            }
         }
 
         public async void QueryServerLocation()

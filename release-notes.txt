@@ -1,4 +1,29 @@
-﻿## v2.29.5
+﻿## v2.29.8
+
+### Server information
+- Added the Roblox account display name and username in the Server Information window
+- Added the Roblox avatar headshot for the active account
+- Added the current game name and live player count
+- Added server location, uptime, current play time, and instance ID details
+- Kept the Copy invite link action available from the same window
+
+---
+
+## v2.29.7
+
+### ...
+- ...
+
+---
+
+## v2.29.6
+
+### ...
+- ...
+
+---
+
+## v2.29.5
 
 ### ...
 - ...

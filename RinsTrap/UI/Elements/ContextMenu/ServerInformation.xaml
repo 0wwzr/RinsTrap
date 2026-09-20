@@ -35,26 +35,52 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,16,10" VerticalAlignment="Center" Text="{x:Static resources:Strings.ContextMenu_ServerInformation_Type}" />
-            <TextBlock Grid.Row="0" Grid.Column="1" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding ServerType, Mode=OneWay}" />
+            <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,16" Padding="0,0,0,14" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" BorderThickness="0,0,0,1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="48" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20" Background="{DynamicResource ControlFillColorSecondaryBrush}">
+                        <Image Source="{Binding AccountAvatarUrl, Mode=OneWay, IsAsync=True}" Stretch="UniformToFill" />
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding AccountName, Mode=OneWay}" FontSize="15" FontWeight="SemiBold" />
+                        <TextBlock Text="Roblox account" Margin="0,3,0,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
 
-            <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,16,10" VerticalAlignment="Center" Text="{x:Static resources:Strings.ContextMenu_ServerInformation_InstanceId}" />
-            <TextBlock Grid.Row="1" Grid.Column="1" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding InstanceId, Mode=OneWay}" />
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,16,10" VerticalAlignment="Center" Text="Game" />
+            <TextBlock Grid.Row="1" Grid.Column="1" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding GameName, Mode=OneWay}" />
 
-            <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,0,16,10" VerticalAlignment="Center" Text="Server uptime" />
-            <TextBlock Grid.Row="2" Grid.Column="1" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding ServerUptime, Mode=OneWay}" />
+            <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,0,16,10" VerticalAlignment="Center" Text="{x:Static resources:Strings.ContextMenu_ServerInformation_Type}" />
+            <TextBlock Grid.Row="2" Grid.Column="1" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding ServerType, Mode=OneWay}" />
 
-            <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,0,16,10" VerticalAlignment="Center" Text="Current play time" />
-            <TextBlock Grid.Row="3" Grid.Column="1" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding CurrentPlayerPlaytime, Mode=OneWay}" />
+            <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,0,16,10" VerticalAlignment="Center" Text="Server uptime" />
+            <TextBlock Grid.Row="3" Grid.Column="1" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding ServerUptime, Mode=OneWay}" />
 
-            <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,0,16,0" VerticalAlignment="Center" Text="{x:Static resources:Strings.ContextMenu_ServerInformation_Location}" Visibility="{Binding ServerLocationVisibility, Mode=OneTime}" />
+            <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,0,16,10" VerticalAlignment="Center" Text="Server location" />
             <TextBlock Grid.Row="4" Grid.Column="1" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding ServerLocation, Mode=OneWay}" Visibility="{Binding ServerLocationVisibility, Mode=OneTime}" />
+
+            <TextBlock Grid.Row="5" Grid.Column="0" Margin="0,0,16,10" VerticalAlignment="Center" Text="Players" />
+            <TextBlock Grid.Row="5" Grid.Column="1" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding PlayerCount, Mode=OneWay}" />
+
+            <TextBlock Grid.Row="6" Grid.Column="0" Margin="0,0,16,10" VerticalAlignment="Center" Text="Current play time" />
+            <TextBlock Grid.Row="6" Grid.Column="1" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding CurrentPlayerPlaytime, Mode=OneWay}" />
+
+            <TextBlock Grid.Row="7" Grid.Column="0" Margin="0,0,16,0" VerticalAlignment="Center" Text="{x:Static resources:Strings.ContextMenu_ServerInformation_InstanceId}" />
+            <TextBlock Grid.Row="7" Grid.Column="1" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding InstanceId, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
         </Grid>
 
         <Border Grid.Row="2" Padding="15" Background="{ui:ThemeResource SolidBackgroundFillColorSecondaryBrush}">
