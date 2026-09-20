@@ -39,29 +39,6 @@ namespace RinsTrap.UI.Elements.Dialogs
             InitializeComponent();
         }
 
-        private void CheckForUpdates_Click(object sender, RoutedEventArgs e)
-        {
-            var result = System.Windows.MessageBox.Show(
-                "This will open the GitHub releases page in your browser.\n\nDo you want to continue?",
-                "Open GitHub Releases",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Information);
 
-            if (result == MessageBoxResult.Yes)
-            {
-                try
-                {
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = "https://github.com/0wwzr/RinsTrap/releases",
-                        UseShellExecute = true
-                    });
-                }
-                catch (Exception ex)
-                {
-                    System.Windows.MessageBox.Show($"Failed to open browser: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
     }
 }

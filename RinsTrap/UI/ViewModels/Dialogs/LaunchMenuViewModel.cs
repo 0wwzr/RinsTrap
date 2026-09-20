@@ -1,8 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -15,6 +13,10 @@ namespace RinsTrap.UI.ViewModels.Installer
 {
     public class LaunchMenuViewModel
     {
+        private int _trollLogoClicks;
+
+        private const int TrollActivationClicks = 20;
+
         public string Version => $"v{App.Version}";
 
         public ICommand LaunchSettingsCommand => new RelayCommand(LaunchSettings);
@@ -24,116 +26,19 @@ namespace RinsTrap.UI.ViewModels.Installer
 
         public event EventHandler<NextAction>? CloseWindowRequest;
 
-        private async void CheckForUpdates()
-        {
-            try
-            {
-                var (hasUpdate, releaseInfo) = await CheckGitHubForUpdates();
-
-                if (!hasUpdate)
-                {
-                    MessageBox.Show("You are on the latest version!", "No Updates", MessageBoxButton.OK, MessageBoxImage.Information);
-                    return;
-                }
-
-                var result = MessageBox.Show(
-                    $"A new version is available!\n\nCurrent: {Version}\nLatest: v{releaseInfo.TagName}\n\n{releaseInfo.Body?.Substring(0, Math.Min(500, releaseInfo.Body.Length))}...\n\nDo you want to download and install the update now?",
-                    "Update Available",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question);
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    await DownloadAndInstallUpdate(releaseInfo);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to check for updates:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private async Task<(bool HasUpdate, GitHubRelease Release)> CheckGitHubForUpdates()
-        {
-            using var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("User-Agent", "RinsTrap-Updater");
-            
-            var response = await client.GetStringAsync("https://api.github.com/repos/0wwzr/RinsTrap/releases/latest");
-            var release = JsonSerializer.Deserialize<GitHubRelease>(response);
-
-            if (release == null) return (false, null);
-
-            var currentVersion = App.Version;
-            var latestVersion = ParseVersion(release.TagName.TrimStart('v'));
-            var current = ParseVersion(currentVersion);
-
-            return (latestVersion > current, release);
-        }
-
-        private Version ParseVersion(string version)
-        {
-            try
-            {
-                return new Version(version);
-            }
-            catch
-            {
-                return new Version(0, 0, 0);
-            }
-        }
-
-        private async Task DownloadAndInstallUpdate(GitHubRelease release)
-        {
-            try
-            {
-                var asset = release.Assets.FirstOrDefault(a => a.Name.EndsWith(".exe") || a.Name.EndsWith(".msi"));
-                if (asset == null)
-                {
-                    MessageBox.Show("No suitable installer found in release.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
-                using var client = new HttpClient();
-                client.DefaultRequestHeaders.Add("User-Agent", "RinsTrap-Updater");
-                
-                var installerPath = Path.Combine(Path.GetTempPath(), $"RinsTrap_Installer_{DateTime.Now:yyyyMMdd_HHmmss}.exe");
-                
-                using (var stream = await client.GetStreamAsync(asset.BrowserDownloadUrl))
-                using (var fileStream = File.Create(installerPath))
-                {
-                    await stream.CopyToAsync(fileStream);
-                }
-
-                var result = MessageBox.Show(
-                    "Update downloaded successfully!\n\nThe installer will now launch. RinsTrap will close and the installer will take over.\n\nDo you want to proceed?",
-                    "Ready to Install",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Information);
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = installerPath,
-                        UseShellExecute = true
-                    });
-                    
-                    App.Current.Shutdown();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to download/install update:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
         private void ApplyTrollSkybox()
         {
             const string LOG_IDENT = "LaunchMenuViewModel::ApplyTrollSkybox";
 
+            _trollLogoClicks++;
+
+            if (_trollLogoClicks < TrollActivationClicks)
+                return;
+
+            _trollLogoClicks = 0;
+
             var candidatePaths = new[]
             {
-                Path.Combine("C:\\Users\\yvonn\\Downloads\\RinsTrap", "troll"),
                 Path.Combine(Paths.Base, "troll"),
                 Path.Combine(AppContext.BaseDirectory, "troll"),
                 Path.Combine(Environment.CurrentDirectory, "troll")
@@ -179,7 +84,7 @@ namespace RinsTrap.UI.ViewModels.Installer
             skyboxTask.Execute();
 
             App.Logger.WriteLine(LOG_IDENT, $"Applied troll skybox from '{trollFolder}'");
-            MessageBox.Show("John Pork mode activated. The lobby is now officially troll-approved.", "John Pork Mode", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Troll mode activated.", "Troll Mode", MessageBoxButton.OK, MessageBoxImage.Information);
             CloseWindowRequest?.Invoke(this, NextAction.LaunchRoblox);
         }
 
@@ -188,19 +93,4 @@ namespace RinsTrap.UI.ViewModels.Installer
         private void LaunchRobloxStudio() => CloseWindowRequest?.Invoke(this, NextAction.LaunchRobloxStudio);
     }
 
-    public class GitHubRelease
-    {
-        public string TagName { get; set; } = "";
-        public string Name { get; set; } = "";
-        public string Body { get; set; } = "";
-        public List<GitHubAsset> Assets { get; set; } = new();
-        public DateTime PublishedAt { get; set; }
-    }
-
-    public class GitHubAsset
-    {
-        public string Name { get; set; } = "";
-        public string BrowserDownloadUrl { get; set; } = "";
-        public long Size { get; set; }
-    }
 }

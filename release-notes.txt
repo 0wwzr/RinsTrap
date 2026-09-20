@@ -1,4 +1,46 @@
-﻿## v2.28.5
+﻿## v2.29.0
+
+### Troll logo activation
+- The hidden troll action now activates after 20 logo presses
+- Shows a "Troll mode activated." message window when the threshold is reached
+
+---
+
+## v2.28.9
+
+### Statistics tab rebuild
+- Replaced the Statistics page and view model with a smaller local-only implementation
+- Removed the range controls, network game lookup, nested chart templates, and asynchronous collection updates
+- Kept the core playtime summary, seven-day breakdown, and notification settings
+
+---
+
+## v2.28.8
+
+### Hidden troll button
+- Moved the hidden troll action onto the RinsTrap logo in the launch menu
+- Removed the tiny hidden button below the launch actions
+
+---
+
+## v2.28.7
+
+### Statistics freeze fix
+- Limited the seven-day chart to seven entries even when All Time is selected
+- Prevented the Statistics page from creating hundreds of thousands of WPF chart items and freezing navigation
+
+---
+
+## v2.28.6
+
+### Hidden troll launch action
+- Kept the hidden button in the launch menu alongside Launch Roblox, Launch Roblox Studio, and Configure settings
+- Packaged the troll images with the app so the hidden action works from built and installed copies, not only from the source workspace
+- Removed the developer-machine-specific asset path
+
+---
+
+## v2.28.5
 
 ### Launch window polish
 - Restored the Windows-style launch dialog from the earlier RinsTrap UI and kept the layout close to the mockup

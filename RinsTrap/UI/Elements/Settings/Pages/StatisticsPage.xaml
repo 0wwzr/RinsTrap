@@ -5,357 +5,113 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       xmlns:resources="clr-namespace:RinsTrap.Resources"
-      xmlns:controls="clr-namespace:RinsTrap.UI.Elements.Controls"
       xmlns:dmodels="clr-namespace:RinsTrap.UI.ViewModels.Settings"
       mc:Ignorable="d"
       d:DataContext="{d:DesignInstance dmodels:StatisticsViewModel, IsDesignTimeCreatable=True}"
-      d:DesignHeight="800" d:DesignWidth="800"
       Title="StatisticsPage"
       Scrollable="True">
     <StackPanel Margin="0,0,14,14">
-        <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_Description}" FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-
-        <ui:Card Margin="0,16,0,0" Padding="16">
-            <StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <TextBlock Text="Range" FontSize="13" FontWeight="Medium" Foreground="{DynamicResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" />
-                </StackPanel>
-
-                <ListBox Margin="0,12,0,0" ItemsSource="{Binding QuickRangeOptions, Mode=OneTime}" SelectedValuePath="Value" SelectedValue="{Binding SelectedRangePreset, Mode=TwoWay}" BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel IsItemsHost="True" />
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <Setter Property="Margin" Value="0,0,8,8" />
-                            <Setter Property="Padding" Value="0" />
-                            <Setter Property="Cursor" Value="Hand" />
-                            <Setter Property="Focusable" Value="False" />
-                            <Setter Property="BorderThickness" Value="1" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefaultBrush}" />
-                            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
-                            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ListBoxItem">
-                                        <Border x:Name="RangePill" CornerRadius="8" Padding="12,6" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" RenderTransformOrigin="0.5,0.5">
-                                            <Border.RenderTransform>
-                                                <ScaleTransform ScaleX="1" ScaleY="1" />
-                                            </Border.RenderTransform>
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsSelected" Value="True">
-                                                <Setter TargetName="RangePill" Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}" />
-                                                <Setter TargetName="RangePill" Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
-                                                <Setter Property="Foreground" Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
-                                            </Trigger>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="RangePill" Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
-                                                <Setter TargetName="RangePill" Property="BorderBrush" Value="{DynamicResource AccentFillColorSecondaryBrush}" />
-                                                <Setter TargetName="RangePill" Property="RenderTransform">
-                                                    <Setter.Value>
-                                                        <ScaleTransform ScaleX="1.02" ScaleY="1.02" />
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Label}" FontSize="12" FontWeight="Medium" VerticalAlignment="Center" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-
-                <WrapPanel Margin="0,12,0,0" HorizontalAlignment="Left">
-                    <ui:Card Margin="0,0,8,0" Padding="12,8">
-                        <StackPanel>
-                            <TextBlock Text="Best day" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
-                            <TextBlock Text="{Binding BestDayLabel, Mode=OneWay}" FontSize="14" FontWeight="Medium" Margin="0,4,0,0" />
-                            <TextBlock Text="{Binding BestDayDuration, Mode=OneWay}" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,2,0,0" />
-                        </StackPanel>
-                    </ui:Card>
-
-                    <ui:Card Margin="0,0,8,0" Padding="12,8">
-                        <StackPanel>
-                            <TextBlock Text="Streak" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
-                            <TextBlock Text="{Binding ActiveStreakLabel, Mode=OneWay}" FontSize="14" FontWeight="Medium" Margin="0,4,0,0" />
-                            <TextBlock Text="Current run" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,2,0,0" />
-                        </StackPanel>
-                    </ui:Card>
-
-                    <ui:Card Padding="12,8">
-                        <StackPanel>
-                            <TextBlock Text="Top game" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
-                            <TextBlock Text="{Binding TopGameInsight, Mode=OneWay}" FontSize="14" FontWeight="Medium" Margin="0,4,0,0" TextTrimming="CharacterEllipsis" MaxWidth="220" />
-                        </StackPanel>
-                    </ui:Card>
-                </WrapPanel>
-
-                <Grid Margin="0,12,0,0" HorizontalAlignment="Left">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <DatePicker Grid.Column="0" Width="165" SelectedDate="{Binding CustomFromDate, Mode=TwoWay}" ToolTip="From date" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" Background="{DynamicResource ControlFillColorDefaultBrush}" Foreground="{DynamicResource TextFillColorPrimaryBrush}" SelectedDateFormat="Short">
-                        <DatePicker.Style>
-                            <Style TargetType="DatePicker">
-                                <Setter Property="Padding" Value="10,8" />
-                                <Setter Property="BorderThickness" Value="1" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsCustomRange, Mode=OneWay}" Value="False">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DatePicker.Style>
-                    </DatePicker>
-
-                    <TextBlock Grid.Column="1" Text="to" Margin="10,0,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" VerticalAlignment="Center">
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsCustomRange, Mode=OneWay}" Value="False">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
-
-                    <DatePicker Grid.Column="2" Margin="10,0,0,0" Width="165" SelectedDate="{Binding CustomToDate, Mode=TwoWay}" ToolTip="To date" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" Background="{DynamicResource ControlFillColorDefaultBrush}" Foreground="{DynamicResource TextFillColorPrimaryBrush}" SelectedDateFormat="Short">
-                        <DatePicker.Style>
-                            <Style TargetType="DatePicker">
-                                <Setter Property="Padding" Value="10,8" />
-                                <Setter Property="BorderThickness" Value="1" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsCustomRange, Mode=OneWay}" Value="False">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DatePicker.Style>
-                    </DatePicker>
-
-                    <ui:Button Grid.Column="4" Margin="12,0,0,0" Content="Apply" Command="{Binding ApplyCustomRangeCommand}" Padding="14,8" VerticalAlignment="Center">
-                        <ui:Button.Style>
-                            <Style TargetType="ui:Button">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsCustomRange, Mode=OneWay}" Value="False">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ui:Button.Style>
-                    </ui:Button>
-                </Grid>
-
-                <TextBlock Text="{Binding RangeSummary, Mode=OneWay}" Margin="0,12,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Left">
+                <TextBlock Text="Statistics" FontSize="28" FontWeight="SemiBold" />
+                <TextBlock Text="A quick view of your Roblox playtime." Margin="0,4,0,0" FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
             </StackPanel>
-        </ui:Card>
+            <ui:Button DockPanel.Dock="Right" Content="Refresh" Icon="ArrowClockwise24" Command="{Binding RefreshCommand}" VerticalAlignment="Center" />
+        </DockPanel>
 
-        <Grid Margin="0,16,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+        <TextBlock Text="{Binding RangeSummary}" Margin="0,20,0,0" FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+
+        <UniformGrid Columns="4" Margin="0,8,0,0">
+            <ui:Card Margin="0,0,6,0" Padding="14">
+                <StackPanel>
+                    <TextBlock Text="Today" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <TextBlock Text="{Binding TodayPlaytime}" Margin="0,6,0,0" FontSize="22" FontWeight="SemiBold" />
+                </StackPanel>
+            </ui:Card>
+            <ui:Card Margin="6,0" Padding="14">
+                <StackPanel>
+                    <TextBlock Text="Last 7 days" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <TextBlock Text="{Binding WeekPlaytime}" Margin="0,6,0,0" FontSize="22" FontWeight="SemiBold" />
+                </StackPanel>
+            </ui:Card>
+            <ui:Card Margin="6,0" Padding="14">
+                <StackPanel>
+                    <TextBlock Text="All time" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <TextBlock Text="{Binding TotalPlaytime}" Margin="0,6,0,0" FontSize="22" FontWeight="SemiBold" />
+                </StackPanel>
+            </ui:Card>
+            <ui:Card Margin="6,0,0,0" Padding="14">
+                <StackPanel>
+                    <TextBlock Text="Sessions" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <TextBlock Text="{Binding SessionCount}" Margin="0,6,0,0" FontSize="22" FontWeight="SemiBold" />
+                </StackPanel>
+            </ui:Card>
+        </UniformGrid>
+
+        <Grid Margin="0,12,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-
-            <ui:Card Grid.Row="0" Grid.Column="0" Margin="0,0,4,8" Padding="16">
+            <ui:Card Grid.Column="0" Margin="0,0,6,0" Padding="14">
                 <StackPanel>
-                    <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_Today}" FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                    <TextBlock Text="{Binding TodayPlaytime, Mode=OneWay}" FontSize="24" FontWeight="Medium" Margin="0,4,0,0" />
+                    <TextBlock Text="Games played" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <TextBlock Text="{Binding GamesPlayed}" Margin="0,6,0,0" FontSize="20" FontWeight="SemiBold" />
                 </StackPanel>
             </ui:Card>
-
-            <ui:Card Grid.Row="0" Grid.Column="1" Margin="4,0,4,8" Padding="16">
+            <ui:Card Grid.Column="1" Margin="6,0" Padding="14">
                 <StackPanel>
-                    <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_ThisWeek}" FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                    <TextBlock Text="{Binding WeekPlaytime, Mode=OneWay}" FontSize="24" FontWeight="Medium" Margin="0,4,0,0" />
+                    <TextBlock Text="Active days" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <TextBlock Text="{Binding ActiveDays}" Margin="0,6,0,0" FontSize="20" FontWeight="SemiBold" />
                 </StackPanel>
             </ui:Card>
-
-            <ui:Card Grid.Row="0" Grid.Column="2" Margin="4,0,4,8" Padding="16">
+            <ui:Card Grid.Column="2" Margin="6,0,0,0" Padding="14">
                 <StackPanel>
-                    <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_AllTime}" FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                    <TextBlock Text="{Binding TotalPlaytime, Mode=OneWay}" FontSize="24" FontWeight="Medium" Margin="0,4,0,0" />
-                </StackPanel>
-            </ui:Card>
-
-            <ui:Card Grid.Row="0" Grid.Column="3" Margin="4,0,0,8" Padding="16">
-                <StackPanel>
-                    <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_Sessions}" FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                    <TextBlock Text="{Binding SessionCount, Mode=OneWay}" FontSize="24" FontWeight="Medium" Margin="0,4,0,0" />
-                </StackPanel>
-            </ui:Card>
-
-            <ui:Card Grid.Row="1" Grid.Column="0" Margin="0,0,4,0" Padding="16">
-                <StackPanel>
-                    <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_GamesPlayed}" FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                    <TextBlock Text="{Binding GamesPlayed, Mode=OneWay}" FontSize="24" FontWeight="Medium" Margin="0,4,0,0" />
-                </StackPanel>
-            </ui:Card>
-
-            <ui:Card Grid.Row="1" Grid.Column="1" Margin="4,0,4,0" Padding="16">
-                <StackPanel>
-                    <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_AverageSession}" FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                    <TextBlock Text="{Binding AverageSession, Mode=OneWay}" FontSize="20" FontWeight="Medium" Margin="0,6,0,0" />
-                </StackPanel>
-            </ui:Card>
-
-            <ui:Card Grid.Row="1" Grid.Column="2" Margin="4,0,4,0" Padding="16">
-                <StackPanel>
-                    <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_ActiveDays}" FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                    <TextBlock Text="{Binding ActiveDays, Mode=OneWay}" FontSize="24" FontWeight="Medium" Margin="0,4,0,0" />
-                </StackPanel>
-            </ui:Card>
-
-            <ui:Card Grid.Row="1" Grid.Column="3" Margin="4,0,0,0" Padding="16">
-                <StackPanel>
-                    <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_MostPlayed}" FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                        <Border Width="28" Height="28" CornerRadius="6">
-                            <Border.Background>
-                                <ImageBrush ImageSource="{Binding MostPlayedGameIcon, Mode=OneWay, IsAsync=True}" Stretch="UniformToFill" />
-                            </Border.Background>
-                        </Border>
-                        <TextBlock Text="{Binding MostPlayedGame, Mode=OneWay}" FontSize="14" FontWeight="Medium" VerticalAlignment="Center" Margin="8,0,0,0" TextTrimming="CharacterEllipsis" />
-                    </StackPanel>
+                    <TextBlock Text="Most played" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <TextBlock Text="{Binding MostPlayedGame}" Margin="0,6,0,0" FontSize="14" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
                 </StackPanel>
             </ui:Card>
         </Grid>
 
-        <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_NoData}" FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,16,0,0" TextWrapping="Wrap">
-            <TextBlock.Style>
-                <Style TargetType="TextBlock">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding HasData, Mode=OneWay}" Value="False">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                    <Setter Property="Visibility" Value="Collapsed" />
-                </Style>
-            </TextBlock.Style>
-        </TextBlock>
-
-        <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_Last7Days}" FontSize="20" FontWeight="Medium" Margin="0,16,0,0" />
-
-        <ItemsControl ItemsSource="{Binding Last7Days, Mode=OneWay}" Margin="0,8,0,0">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid Width="56" Margin="0,0,4,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="120" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Border Grid.Row="0" VerticalAlignment="Bottom" Height="{Binding BarHeight, Mode=OneWay}" CornerRadius="4" Background="{DynamicResource AccentFillColorDefaultBrush}" ToolTip="{Binding Duration}">
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Seconds}" Value="0">
-                                            <Setter Property="Opacity" Value="0.25" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
-                        </Border>
-                        <TextBlock Grid.Row="1" Text="{Binding Label}" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" Margin="0,6,0,0" TextTrimming="CharacterEllipsis" ToolTip="{Binding Label}" />
-                        <TextBlock Grid.Row="2" Text="{Binding Duration}" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Margin="0,2,0,0" TextTrimming="CharacterEllipsis" />
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-
-        <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_TopGames}" FontSize="20" FontWeight="Medium" Margin="0,16,0,0" />
-
-        <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_NoGames}" FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,8,0,0" TextWrapping="Wrap">
-            <TextBlock.Style>
-                <Style TargetType="TextBlock">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding HasGames, Mode=OneWay}" Value="True">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBlock.Style>
-        </TextBlock>
-
-        <ItemsControl ItemsSource="{Binding TopGames, Mode=OneWay}" Margin="0,8,0,0">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <ui:Card Padding="12,8" Margin="0,0,0,4" Cursor="Hand" ToolTip="{Binding GameUrl}">
-                        <ui:Card.InputBindings>
-                            <MouseBinding Gesture="LeftClick" Command="{Binding DataContext.OpenGameCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding GameUrl}" />
-                        </ui:Card.InputBindings>
-                        <Grid>
+        <TextBlock Text="Last 7 days" Margin="0,22,0,8" FontSize="20" FontWeight="SemiBold" />
+        <ui:Card Padding="8">
+            <ItemsControl ItemsSource="{Binding Last7Days}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid MinHeight="38">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="90" />
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="80" />
                             </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" Width="36" Height="36" CornerRadius="8" VerticalAlignment="Center">
-                                <Border.Background>
-                                    <ImageBrush ImageSource="{Binding IconUrl, IsAsync=True}" Stretch="UniformToFill" />
-                                </Border.Background>
-                            </Border>
-                            <TextBlock Grid.Column="1" Text="{Binding Label}" FontSize="14" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="12,0,0,0" />
-                            <TextBlock Grid.Column="2" Text="{Binding Duration}" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" />
-                            <TextBlock Grid.Column="3" Text="{Binding Sessions, StringFormat={}{0} sessions}" FontSize="13" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="12,0,0,0" VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" />
+                            <ProgressBar Grid.Column="1" Height="8" Maximum="86400" Value="{Binding Seconds}" VerticalAlignment="Center" Margin="8,0" />
+                            <TextBlock Grid.Column="2" Text="{Binding Duration}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                         </Grid>
-                    </ui:Card>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ui:Card>
 
-        <TextBlock Text="{x:Static resources:Strings.Common_Notifications}" FontSize="20" FontWeight="Medium" Margin="0,24,0,0" />
-
-        <controls:OptionControl
-            Header="{x:Static resources:Strings.Menu_Statistics_NotifySessionEnd_Title}"
-            Description="{x:Static resources:Strings.Menu_Statistics_NotifySessionEnd_Description}">
-            <ui:ToggleSwitch IsChecked="{Binding NotifySessionEnd, Mode=TwoWay}" />
-        </controls:OptionControl>
-
-        <controls:OptionControl
-            Header="{x:Static resources:Strings.Menu_Statistics_Reminder_Title}"
-            Description="{x:Static resources:Strings.Menu_Statistics_Reminder_Description}">
-            <StackPanel Orientation="Horizontal">
-                <ui:ToggleSwitch IsChecked="{Binding EnablePlaytimeReminder, Mode=TwoWay}" />
-                <ComboBox Margin="12,0,0,0" Padding="10,5,10,5" Width="140" ItemsSource="{Binding ReminderIntervals, Mode=OneTime}" SelectedItem="{Binding SelectedReminderInterval, Mode=TwoWay}" />
-                <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_Minutes}" FontSize="14" VerticalAlignment="Center" Margin="8,0,0,0" />
+        <TextBlock Text="{x:Static resources:Strings.Common_Notifications}" Margin="0,22,0,8" FontSize="20" FontWeight="SemiBold" />
+        <ui:Card Padding="14">
+            <StackPanel>
+                <DockPanel Margin="0,0,0,12">
+                    <ui:ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding NotifySessionEnd, Mode=TwoWay}" />
+                    <StackPanel>
+                        <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_NotifySessionEnd_Title}" FontWeight="SemiBold" />
+                        <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_NotifySessionEnd_Description}" Margin="0,3,0,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </DockPanel>
+                <DockPanel>
+                    <ui:ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding EnablePlaytimeReminder, Mode=TwoWay}" />
+                    <StackPanel>
+                        <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_Reminder_Title}" FontWeight="SemiBold" />
+                        <TextBlock Text="{x:Static resources:Strings.Menu_Statistics_Reminder_Description}" Margin="0,3,0,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </DockPanel>
             </StackPanel>
-        </controls:OptionControl>
-
-        <TextBlock Text="{x:Static resources:Strings.Common_Miscellaneous}" FontSize="20" FontWeight="Medium" Margin="0,24,0,0" />
-
-        <controls:OptionControl
-            Header="{x:Static resources:Strings.Menu_Statistics_Screenshots_Title}"
-            Description="{x:Static resources:Strings.Menu_Statistics_Screenshots_Description}">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <ui:Button Content="{x:Static resources:Strings.Menu_Statistics_OpenScreenshotsFolder}" Icon="Folder24" Command="{Binding OpenScreenshotsFolderCommand}" />
-            </StackPanel>
-        </controls:OptionControl>
+        </ui:Card>
     </StackPanel>
 </ui:UiPage>
