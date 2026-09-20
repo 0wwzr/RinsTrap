@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Numerics;
 
@@ -68,9 +69,34 @@ namespace RinsTrap.Utility
             App.Logger.WriteLine(LOG_IDENT, $"Converting '{sourcePath}' to '{outputPath}'");
 
             using var bitmap = new Bitmap(sourcePath);
-            using var resized = new Bitmap(bitmap, new Size(FaceSize, FaceSize));
+            using var resized = FitToFace(bitmap);
 
             ConvertBitmap(resized, outputPath);
+        }
+
+        private static Bitmap FitToFace(Bitmap source)
+        {
+            var result = new Bitmap(FaceSize, FaceSize, PixelFormat.Format32bppArgb);
+            result.SetResolution(source.HorizontalResolution, source.VerticalResolution);
+
+            float scale = Math.Max((float)FaceSize / source.Width, (float)FaceSize / source.Height);
+            int scaledWidth = Math.Max(FaceSize, (int)Math.Ceiling(source.Width * scale));
+            int scaledHeight = Math.Max(FaceSize, (int)Math.Ceiling(source.Height * scale));
+            int offsetX = (FaceSize - scaledWidth) / 2;
+            int offsetY = (FaceSize - scaledHeight) / 2;
+
+            using (Graphics graphics = Graphics.FromImage(result))
+            {
+                graphics.Clear(Color.Black);
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.DrawImage(source, new Rectangle(offsetX, offsetY, scaledWidth, scaledHeight));
+            }
+
+            return result;
         }
 
         private static Color SampleEquirectangular(Bitmap source, Vector3 direction)

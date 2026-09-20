@@ -76,6 +76,7 @@ namespace RinsTrap.UI.ViewModels.Installer
             var imageFiles = Directory.GetFiles(trollFolder)
                 .Where(file => new[] { ".png", ".jpg", ".jpeg", ".bmp", ".gif", ".webp" }
                     .Contains(Path.GetExtension(file).ToLowerInvariant()))
+                .OrderBy(file => file, StringComparer.OrdinalIgnoreCase)
                 .ToArray();
 
             if (imageFiles.Length == 0)

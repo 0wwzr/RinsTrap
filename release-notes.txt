@@ -1,4 +1,14 @@
-﻿## v2.29.8
+﻿## v2.29.9
+
+### Skybox quality
+- Improved skybox image fitting with high-quality bicubic scaling
+- Center-cropped non-square images instead of stretching them
+- Standardized skybox conversion input for cleaner, more consistent faces
+- Made the bundled skybox image selection deterministic
+
+---
+
+## v2.29.8
 
 ### Server information
 - Added the Roblox account display name and username in the Server Information window
