@@ -1,4 +1,64 @@
-﻿## v2.28.1
+﻿## v2.28.5
+
+### Launch window polish
+- Restored the Windows-style launch dialog from the earlier RinsTrap UI and kept the layout close to the mockup
+- Reordered the main actions so Launch Roblox appears first, followed by Launch Roblox Studio and Configure settings
+- Standardized the three action cards to the same height and made the dialog a little wider for a cleaner fit
+- Removed the visible update-check action from the main launch menu while keeping the app on a clean versioned release flow
+- This is a small but public-facing UI fix and is being released as a new patch version
+
+### Release workflow
+- Every UI change, fix, or polish pass now gets a fresh app version and a matching release note entry
+- Future releases should follow the same pattern: version bump, release notes update, build verification, then GitHub publish
+
+---
+
+## v2.28.4
+
+### Launch window polish
+- Kept the same overall window size while matching the cleaner second mockup layout more closely
+- Enlarged the branding area and adjusted the action cards to feel more like the Roblox launch-style panel
+- Reduced the internal spacing to keep the layout denser without shrinking the actual controls
+- This is the latest UI polish patch and remains versioned as part of the public release workflow
+
+### Release workflow
+- Every small design tweak now gets its own patch version and release note update
+- Future changes continue with: version bump, notes update, build, run, and publish GitHub release
+
+---
+
+## v2.28.3
+
+### UI spacing
+- Tightened the launch menu spacing again to make the actions sit closer together without changing their widths or sizes
+- Kept the same card layout and visual style while reducing vertical padding for a cleaner Roblox-inspired feel
+- This is treated as a patch release so even small UI refinements keep a versioned public update trail
+
+### Release workflow
+- Every app change, even small spacing adjustments, now gets a new patch version and updated release notes
+- Future updates should continue this pattern: version bump, notes update, build, launch, then publish the GitHub release
+
+---
+
+## v2.28.2
+
+### Release workflow
+- Added the new versioning rule: every app change, cleanup, fix, or feature update gets a new version and matching release notes
+- This build keeps the updater silent and removes the visible manual update button from the main launch menu
+- Release notes are now tracked in the repo and intended to be published alongside each version
+
+### UI cleanup
+- Restored the normal launch menu spacing and kept the interface consistent with the rest of the app
+- Removed the visible check-for-updates action from the launch menu and settings page
+- Kept the check flow silent so it does not interrupt the user with a popup window during update checks
+
+### Stability
+- Verified the project still builds cleanly after the UI cleanup and version bump
+- Release build is prepared for distribution and launch testing
+
+---
+
+## v2.28.1
 
 ### Highlights
 - Polished updater/loading window to match the smoother startup-style Roblox flow
