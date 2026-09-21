@@ -1,4 +1,12 @@
-﻿## v2.30.2
+﻿## v2.30.3
+
+### Discord navigation icon
+- Replaced the generic Discord settings icon with the official Discord logo
+- Kept the same monochrome Fluent navigation styling and sizing
+
+---
+
+## v2.30.2
 
 ### Discord Rich Presence
 - Added clearer server activity text for public, private, and reserved servers

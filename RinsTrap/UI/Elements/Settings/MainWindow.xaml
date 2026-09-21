@@ -54,7 +54,7 @@
             <ui:NavigationFluent x:Name="RootNavigation" Grid.Row="1" Grid.Column="0" Margin="0,0,12,0" Frame="{Binding ElementName=RootFrame}" SelectedPageIndex="0">
                 <ui:NavigationFluent.Items>
                     <ui:NavigationItem Content="{x:Static resources:Strings.Menu_Integrations_Title}" PageType="{x:Type pages:IntegrationsPage}" PageTag="integrations" Icon="Add28" Tag="integrations" />
-                    <ui:NavigationItem Content="Discord" PageType="{x:Type pages:DiscordPage}" PageTag="discord" Icon="ChatBubblesQuestion24" Tag="discord" />
+                    <ui:NavigationItem x:Name="DiscordNavigationItem" Content="Discord" PageType="{x:Type pages:DiscordPage}" PageTag="discord" Icon="ChatBubblesQuestion24" Tag="discord" />
                     <ui:NavigationItem Content="{x:Static resources:Strings.Menu_Statistics_Title}" PageType="{x:Type pages:StatisticsPage}" PageTag="statistics" Icon="Timer24" Tag="statistics" />
                     <ui:NavigationItem Content="{x:Static resources:Strings.Menu_Behaviour_Title}" PageType="{x:Type pages:BehaviourPage}" PageTag="bootstrapper" Icon="PlaySettings20" Tag="bootstrapper" />
                     <ui:NavigationItem Content="{x:Static resources:Strings.Menu_Mods_Title}" PageType="{x:Type pages:ModsPage}" PageTag="mods" Icon="WrenchScrewdriver20" Tag="mods" />
