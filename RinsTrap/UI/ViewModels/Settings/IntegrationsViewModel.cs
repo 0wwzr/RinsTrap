@@ -195,6 +195,12 @@ namespace RinsTrap.UI.ViewModels.Settings
             set => App.Settings.Prop.SyncTwitchToDiscord = value;
         }
 
+        public string DiscordAppId
+        {
+            get => App.Settings.Prop.DiscordAppId;
+            set => App.Settings.Prop.DiscordAppId = value;
+        }
+
         public ObservableCollection<CustomIntegration> CustomIntegrations
         {
             get => App.Settings.Prop.CustomIntegrations;

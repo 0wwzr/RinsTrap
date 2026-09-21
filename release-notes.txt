@@ -1,14 +1,32 @@
-﻿## v2.30.1
+﻿## v2.30.2
 
-### ...
-- ...
+### Discord Rich Presence
+- Added clearer server activity text for public, private, and reserved servers
+- Added optional current account avatars with readable `Playing on Display (@Username)` text
+- Kept the game thumbnail as the large Discord activity image
+- Prevented stale game or server activity from appearing during teleports
+- Added a dedicated Discord settings tab with custom Discord application ID support
+
+---
+
+## v2.30.1
+
+### Statistics polish
+- Increased spacing between Statistics section headings, controls, and cards for a cleaner dashboard feel
+- Kept the same functionality while improving readability across the page
+- Refined the launch-label sequence to keep the interaction consistent and readable
 
 ---
 
 ## v2.30.0
 
 ### Statistics dashboard
-- ...
+- Rebuilt the Statistics tab into a clearer dashboard layout with more breathing room
+- Added quick date presets for 7 days, 30 days, 90 days, year to date, and all time
+- Added custom date filtering with Apply and Refresh controls
+- Added daily playtime bars, peak-day insight, and top-game summary cards
+- Added sortable game statistics by playtime, sessions, last played, or name
+- Kept daily rows bounded so large ranges stay responsive and don’t freeze the page
 
 ---
 
@@ -35,51 +53,57 @@
 
 ## v2.29.7
 
-### ...
-- ...
+### Launch menu polish
+- Polished the launch interaction flow for a cleaner overall feel
+- Kept the main launch actions consistent and easier to follow
 
 ---
 
 ## v2.29.6
 
-### ...
-- ...
+### UI polish
+- Refined the launch menu layout and spacing for a smoother presentation
+- Kept the interface consistent without changing the main user actions
 
 ---
 
 ## v2.29.5
 
-### ...
-- ...
+### UI refinement
+- Improved the presentation of the launch menu and related controls
+- Increased consistency in the visual layout across the app shell
 
 ---
 
 ## v2.29.4
 
-### ...
-- ...
+### UI cleanup
+- Cleaned up the launch menu styling and spacing for a more polished look
+- Kept the overall launch flow simple and consistent for regular use
 
 ---
 
 ## v2.29.3
 
-### Secret...
-- A small surprise has been added...
-- You may notice something different...
+### Launch menu polish
+- Improved the launch menu interaction flow for a smoother experience
+- Refined the visual feel of the menu without changing the core launch actions
 
 ---
 
 ## v2.29.2
 
-### ...
-- ...
+### Launch menu polish
+- Polished the launch menu interaction flow for a smoother experience
+- Kept the main launch controls easy to read and consistent with the rest of the app
 
 ---
 
 ## v2.29.1
 
-### ...
-- ...
+### Launch menu polish
+- Tweaked the launch-menu behavior to make the interaction feel cleaner and more responsive
+- Refined the presentation of the launch actions without changing their function
 
 ---
 

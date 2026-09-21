@@ -31,6 +31,7 @@ namespace RinsTrap.Integrations
         public event EventHandler<string>? OnLogEntry;
         public event EventHandler? OnGameJoin;
         public event EventHandler? OnGameLeave;
+        public event EventHandler? OnTeleporting;
         public event EventHandler? OnLogOpen;
         public event EventHandler? OnAppClose;
         public event EventHandler<Message>? OnRPCMessage;
@@ -289,6 +290,7 @@ namespace RinsTrap.Integrations
                 {
                     App.Logger.WriteLine(LOG_IDENT, $"Initiating teleport to server ({Data})");
                     _teleportMarker = true;
+                    OnTeleporting?.Invoke(this, EventArgs.Empty);
 
                     var joinTypeMatch = Regex.Match(logMessage, GameTeleportJoinTypePattern);
                     if (joinTypeMatch.Success && int.TryParse(joinTypeMatch.Groups[1].Value, out int joinTypeId))

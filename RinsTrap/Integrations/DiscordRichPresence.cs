@@ -6,7 +6,10 @@ namespace RinsTrap.Integrations
 {
     public class DiscordRichPresence : IDisposable
     {
-        private readonly DiscordRpcClient _rpcClient = new("1005469189907173486");
+        private readonly DiscordRpcClient _rpcClient = new(
+            String.IsNullOrWhiteSpace(App.Settings.Prop.DiscordAppId)
+                ? "1005469189907173486"
+                : App.Settings.Prop.DiscordAppId);
         private readonly ActivityWatcher _activityWatcher;
         private readonly Queue<Message> _messageQueue = new();
 
@@ -18,6 +21,8 @@ namespace RinsTrap.Integrations
         private ulong? _smallImgBeingFetched = null;
         private ulong? _largeImgBeingFetched = null;
         private CancellationTokenSource? _fetchThumbnailsToken;
+        private CancellationTokenSource? _gameRefreshToken;
+        private int _gameRefreshVersion;
 
         private bool _visible = true;
 
@@ -27,8 +32,9 @@ namespace RinsTrap.Integrations
 
             _activityWatcher = activityWatcher;
 
-            _activityWatcher.OnGameJoin += (_, _) => Task.Run(() => SetCurrentGame());
-            _activityWatcher.OnGameLeave += (_, _) => Task.Run(() => SetCurrentGame());
+            _activityWatcher.OnGameJoin += (_, _) => StartCurrentGameRefresh();
+            _activityWatcher.OnGameLeave += (_, _) => ClearCurrentGame();
+            _activityWatcher.OnTeleporting += (_, _) => ClearCurrentGame();
             _activityWatcher.OnRPCMessage += (_, message) => ProcessRPCMessage(message);
 
             _rpcClient.OnReady += (_, e) =>
@@ -337,7 +343,36 @@ namespace RinsTrap.Integrations
                 _rpcClient.ClearPresence();
         }
 
-        public async Task<bool> SetCurrentGame()
+        private void StartCurrentGameRefresh()
+        {
+            _gameRefreshToken?.Cancel();
+            _gameRefreshToken?.Dispose();
+
+            var refreshToken = new CancellationTokenSource();
+            _gameRefreshToken = refreshToken;
+            int refreshVersion = Interlocked.Increment(ref _gameRefreshVersion);
+            _ = Task.Run(() => SetCurrentGame(refreshVersion, refreshToken.Token));
+        }
+
+        private void ClearCurrentGame()
+        {
+            _gameRefreshToken?.Cancel();
+            Interlocked.Increment(ref _gameRefreshVersion);
+            _currentPresence = _originalPresence = null;
+            _messageQueue.Clear();
+            UpdatePresence();
+        }
+
+        private bool IsCurrentGame(ActivityData activity, long placeId, int refreshVersion, CancellationToken token)
+        {
+            return !token.IsCancellationRequested
+                && refreshVersion == Volatile.Read(ref _gameRefreshVersion)
+                && _activityWatcher.InGame
+                && ReferenceEquals(_activityWatcher.Data, activity)
+                && placeId == activity.PlaceId;
+        }
+
+        private async Task<bool> SetCurrentGame(int refreshVersion, CancellationToken token)
         {
             const string LOG_IDENT = "DiscordRichPresence::SetCurrentGame";
             
@@ -359,6 +394,9 @@ namespace RinsTrap.Integrations
 
             var activity = _activityWatcher.Data;
             long placeId = activity.PlaceId;
+
+            if (!IsCurrentGame(activity, placeId, refreshVersion, token))
+                return false;
 
             App.Logger.WriteLine(LOG_IDENT, $"Setting presence for Place ID {placeId}");
 
@@ -384,6 +422,9 @@ namespace RinsTrap.Integrations
                 activity.UniverseDetails = UniverseDetails.LoadFromCache(activity.UniverseId);
             }
 
+            if (!IsCurrentGame(activity, placeId, refreshVersion, token))
+                return false;
+
             var universeDetails = activity.UniverseDetails!;
 
             icon = universeDetails.Thumbnail.ImageUrl!;
@@ -392,11 +433,14 @@ namespace RinsTrap.Integrations
             {
                 var userDetails = await UserDetails.Fetch(activity.UserId);
 
+                if (!IsCurrentGame(activity, placeId, refreshVersion, token))
+                    return false;
+
                 smallImage = userDetails.Thumbnail.ImageUrl!;
                 smallImageText = $"Playing on {userDetails.Data.DisplayName} (@{userDetails.Data.Name})"; // i.e. "axell (@Axelan_se)"
             }
 
-            if (!_activityWatcher.InGame || placeId != activity.PlaceId)
+            if (!IsCurrentGame(activity, placeId, refreshVersion, token))
             {
                 App.Logger.WriteLine(LOG_IDENT, "Aborting presence set because game activity has changed");
                 return false;
@@ -406,7 +450,7 @@ namespace RinsTrap.Integrations
             {
                 ServerType.Private => "In a private server",
                 ServerType.Reserved => "In a reserved server",
-                _ => $"by {universeDetails.Data.Creator.Name}" + (universeDetails.Data.Creator.HasVerifiedBadge ? " ☑️" : ""),
+                _ => "Playing",
             };
 
             if (App.Settings.Prop.ShowServerLocationOnRichPresence)
@@ -414,6 +458,9 @@ namespace RinsTrap.Integrations
                 try
                 {
                     string? location = await activity.QueryServerLocation();
+
+                    if (!IsCurrentGame(activity, placeId, refreshVersion, token))
+                        return false;
 
                     if (!String.IsNullOrEmpty(location))
                         status += $" • {location}";
@@ -425,6 +472,9 @@ namespace RinsTrap.Integrations
             }
 
             string universeName = universeDetails.Data.Name;
+
+            if (!IsCurrentGame(activity, placeId, refreshVersion, token))
+                return false;
 
             if (universeName.Length < 2)
                 universeName = $"{universeName}\x2800\x2800\x2800";
